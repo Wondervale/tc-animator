@@ -8,13 +8,10 @@
 import { Box, OrbitControls } from "@react-three/drei";
 
 import { Canvas } from "@react-three/fiber";
-import { useRef } from "react";
 
 function Preview() {
-	const parentRef = useRef<HTMLDivElement>(null);
-
 	return (
-		<div className="w-full h-full relative" ref={parentRef}>
+		<div className="w-full h-full relative">
 			<Canvas>
 				<ambientLight intensity={0.5} />
 
