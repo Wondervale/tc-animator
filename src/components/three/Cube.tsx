@@ -55,7 +55,7 @@ function Cube({ args, position }: { args: [number, number, number]; position: [n
 
 	return (
 		<Box args={args} position={position} castShadow receiveShadow>
-			<meshBasicMaterial map={texture} color={pastelColor} />
+			<meshStandardMaterial map={texture} color={pastelColor} />
 		</Box>
 	);
 }
