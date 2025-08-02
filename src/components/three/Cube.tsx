@@ -18,7 +18,7 @@ const MAX_HISTORY = 5;
 function getRandomPastelColor() {
 	const h = Math.floor(Math.random() * 360); // Hue
 	const s = 70 + Math.random() * 10; // Saturation
-	const l = 85 + Math.random() * 10; // Lightness
+	const l = 80 + Math.random() * 10; // Lightness
 	return `hsl(${h}, ${s}%, ${l}%)`;
 }
 

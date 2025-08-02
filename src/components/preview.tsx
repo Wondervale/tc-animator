@@ -8,7 +8,7 @@
 import * as THREE from "three";
 
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
-import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
+import { GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
 
 import { Canvas } from "@react-three/fiber";
 import Cube from "@/components/three/Cube";
@@ -24,8 +24,8 @@ function Preview() {
 				shadows
 				dpr={[1, 2]}
 				gl={{ powerPreference: "high-performance" }}>
-				<ambientLight intensity={0.5} />
-				<directionalLight position={[5, 5, 5]} intensity={0.5} castShadow />
+				<ambientLight intensity={2} />
+				<directionalLight position={[5, 5, 5]} intensity={3} castShadow />
 
 				<Suspense fallback={null}>
 					{Array.from({ length: 100 }, (_, i) => (
@@ -58,7 +58,7 @@ function Preview() {
 					side={THREE.DoubleSide}
 				/>
 
-				<Environment preset="city" />
+				{/* <Environment preset="studio" /> */}
 
 				<EffectComposer enableNormalPass>
 					{/* <SSAO
