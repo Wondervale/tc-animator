@@ -7,21 +7,21 @@
 
 import {
 	AlertDialog,
+	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
+	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import React, { useEffect, useState } from "react";
 
+import { supported } from "browser-fs-access";
+
 // Utility function to check browser feature support
 function CheckBrowserSupport(): string[] {
 	const unsupported: string[] = [];
-
-	// File System Access API
-	const hasFileSystemAPI = "showOpenFilePicker" in window;
-	if (!hasFileSystemAPI) unsupported.push("File System Access API");
 
 	// WebGL Support
 	const canvas = document.createElement("canvas");
@@ -30,9 +30,10 @@ function CheckBrowserSupport(): string[] {
 
 	// Wavesurfer.js dependencies
 	const hasAudioContext = "AudioContext" in window || "webkitAudioContext" in window;
-	const hasRAF = "requestAnimationFrame" in window;
 	if (!hasAudioContext) unsupported.push("Web Audio API (AudioContext)");
-	if (!hasRAF) unsupported.push("requestAnimationFrame");
+
+	const hasRAF = "requestAnimationFrame" in window;
+	if (!hasRAF) unsupported.push("Animation Frame API (requestAnimationFrame)");
 
 	return unsupported;
 }
@@ -43,7 +44,7 @@ const FeatureCheckDialog: React.FC = () => {
 
 	useEffect(() => {
 		const unsupported = CheckBrowserSupport();
-		if (unsupported.length > 0) {
+		if (unsupported.length > 0 || !supported) {
 			setUnsupportedFeatures(unsupported);
 			setOpen(true);
 		}
@@ -58,18 +59,36 @@ const FeatureCheckDialog: React.FC = () => {
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Unsupported Browser Features</AlertDialogTitle>
+					<AlertDialogTitle>Missing Browser Capabilities</AlertDialogTitle>
+
 					<AlertDialogDescription>
-						This application requires the following features to function properly:
+						This app requires certain browser features to work correctly. Your current browser is missing
+						the following capabilities:
 						<ul className="my-2 list-disc list-inside">
 							{unsupportedFeatures.map((feature) => (
 								<li key={feature}>{feature}</li>
 							))}
+
+							{!supported && (
+								<li>
+									File System Access API
+									<br />
+									<span className="text-xs text-muted-foreground">
+										Used for autosave and loading files directly. Without it, you'll need to
+										manually download and upload your files each time.
+									</span>
+								</li>
+							)}
 						</ul>
-						Please use a modern Chromium based browser (like Chrome, Edge, or Brave) to use this
-						application.
+						To use all features, switch to a modern Chromium-based browser like <strong>Chrome</strong>,{" "}
+						<strong>Edge</strong>, or <strong>Brave</strong>.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
+				{!supported && unsupportedFeatures.length === 0 && (
+					<AlertDialogFooter>
+						<AlertDialogCancel>Acknowledge</AlertDialogCancel>
+					</AlertDialogFooter>
+				)}
 			</AlertDialogContent>
 		</AlertDialog>
 	);

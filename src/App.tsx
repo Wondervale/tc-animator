@@ -1,11 +1,12 @@
 /** @format */
 
+import React, { Suspense } from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
 import Editor from "@monaco-editor/react";
 import { Input } from "@/components/ui/input";
 import Preview from "@/components/preview";
-import React from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Wave from "@/components/wave";
 import { parse } from "yaml";
 
@@ -47,9 +48,13 @@ function App() {
 									}
 								}}
 							/>
-							<Editor value={ymlString} language="yaml" theme="vs-dark" />
+							<Suspense fallback={<Skeleton className="h-full w-full" />}>
+								<Editor value={ymlString} language="yaml" theme="vs-dark" />
+							</Suspense>
 							<hr className="my-2" />
-							<Editor language="json" theme="vs-dark" value={JSON.stringify(ymlData, null, 2)} />
+							<Suspense fallback={<Skeleton className="h-full w-full" />}>
+								<Editor language="json" theme="vs-dark" value={JSON.stringify(ymlData, null, 2)} />
+							</Suspense>
 						</ResizablePanel>
 						<ResizableHandle />
 						<ResizablePanel minSize={5}>
@@ -60,7 +65,6 @@ function App() {
 				<ResizableHandle />
 				<ResizablePanel minSize={5} defaultSize={40} autoSave="tca-timeline" className="bg-card">
 					Timeline
-
 					<Wave />
 				</ResizablePanel>
 			</ResizablePanelGroup>
