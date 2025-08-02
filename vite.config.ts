@@ -24,6 +24,21 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			treeshake: true,
+			output: {
+				manualChunks(id) {
+					if (id.includes("node_modules")) {
+						if (id.includes("three")) {
+							return "three";
+						}
+						if (id.includes("@react-three")) {
+							return "@react-three";
+						}
+						if (id.includes("monaco-editor")) {
+							return "monaco-editor";
+						}
+					}
+				},
+			},
 		},
 	},
 });
