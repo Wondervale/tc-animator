@@ -21,4 +21,9 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	build: {
+		rollupOptions: {
+			treeshake: true,
+		},
+	},
 });
