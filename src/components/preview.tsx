@@ -17,14 +17,21 @@ import {
 	useGLTF,
 	useTexture,
 } from "@react-three/drei";
-import { EffectComposer, FXAA, SSAO } from "@react-three/postprocessing";
+import { EffectComposer, FXAA } from "@react-three/postprocessing";
 
 import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
+
+// import { SSAO } from "@react-three/postprocessing/ssao";
 
 function Preview() {
 	return (
 		<div className="w-full h-full relative">
-			<Canvas camera={{ position: [3, 3, 3], fov: 60 }} shadows>
+			<Canvas
+				camera={{ position: [3, 3, 3], fov: 60 }}
+				shadows
+				dpr={[1, 2]}
+				gl={{ powerPreference: "high-performance" }}>
 				<ambientLight intensity={0.5} />
 				<directionalLight
 					position={[5, 5, 5]}
@@ -40,9 +47,11 @@ function Preview() {
 					shadow-camera-bottom={-5}
 				/>
 
-				<Cube args={[1, 1, 1]} position={[0, 0.5, 0]} />
+				<Suspense fallback={null}>
+					<Cube args={[1, 1, 1]} position={[0, 0.5, 0]} />
 
-				<Dummy scale={1} position={[0, 0.5, 0]} />
+					<Dummy scale={1} position={[0, 0.5, 0]} />
+				</Suspense>
 
 				<Grid
 					position={[0.5, 0, 0.5]}
@@ -61,14 +70,14 @@ function Preview() {
 
 				<Environment preset="city" />
 
-				<EffectComposer>
-					<SSAO
+				<EffectComposer enableNormalPass>
+					{/* <SSAO
 						samples={31}
 						radius={20}
 						intensity={20}
 						luminanceInfluence={0.9}
 						color={new THREE.Color("black")}
-					/>
+					/> */}
 					<FXAA />
 				</EffectComposer>
 
