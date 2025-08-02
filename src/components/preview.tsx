@@ -24,7 +24,7 @@ import { Canvas } from "@react-three/fiber";
 function Preview() {
 	return (
 		<div className="w-full h-full relative">
-			<Canvas camera={{ position: [2, 2, 2], fov: 60 }} shadows>
+			<Canvas camera={{ position: [3, 3, 3], fov: 60 }} shadows>
 				<ambientLight intensity={0.5} />
 				<directionalLight
 					position={[5, 5, 5]}
