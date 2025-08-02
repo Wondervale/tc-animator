@@ -5,21 +5,11 @@
  * @format
  */
 
-import * as THREE from "three";
-
-import {
-	Box,
-	Environment,
-	GizmoHelper,
-	GizmoViewport,
-	Grid,
-	OrbitControls,
-	useGLTF,
-	useTexture,
-} from "@react-three/drei";
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
+import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
 
 import { Canvas } from "@react-three/fiber";
+import Cube from "@/components/three/Cube";
 import { Suspense } from "react";
 
 // import { SSAO } from "@react-three/postprocessing/ssao";
@@ -87,21 +77,6 @@ function Preview() {
 				</GizmoHelper>
 			</Canvas>
 		</div>
-	);
-}
-
-function Cube({ args, position }: { args: [number, number, number]; position: [number, number, number] }) {
-	// This is a simple cube component that can be used in the scene.
-
-	const originalTexture = useTexture("/textures/missing.png");
-	const texture = originalTexture.clone();
-	texture.magFilter = THREE.NearestFilter;
-	texture.minFilter = THREE.NearestFilter;
-
-	return (
-		<Box args={args} position={position} castShadow receiveShadow>
-			<meshBasicMaterial map={texture} color="#92a3bb" />
-		</Box>
 	);
 }
 
