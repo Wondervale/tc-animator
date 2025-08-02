@@ -5,7 +5,7 @@
  * @format
  */
 
-// import * as THREE from "three";
+import * as THREE from "three";
 
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
 import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
@@ -15,7 +15,6 @@ import Cube from "@/components/three/Cube";
 import { Suspense } from "react";
 
 // import { SSAO } from "@react-three/postprocessing";
-
 
 function Preview() {
 	return (
@@ -33,7 +32,7 @@ function Preview() {
 						<Cube
 							key={i}
 							args={[1, 1, 1]}
-							position={[Math.random() * 10 - 5, Math.random() * 2 + 0.5, Math.random() * 10 - 5]}
+							position={[Math.random() * 20 - 10, Math.random() * 2 + 0.5, Math.random() * 20 - 10]}
 						/>
 					))}
 
@@ -56,6 +55,7 @@ function Preview() {
 					infiniteGrid
 					castShadow={false}
 					receiveShadow={false}
+					side={THREE.DoubleSide}
 				/>
 
 				<Environment preset="city" />
