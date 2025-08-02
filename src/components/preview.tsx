@@ -5,6 +5,8 @@
  * @format
  */
 
+// import * as THREE from "three";
+
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
 import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
 
@@ -12,7 +14,8 @@ import { Canvas } from "@react-three/fiber";
 import Cube from "@/components/three/Cube";
 import { Suspense } from "react";
 
-// import { SSAO } from "@react-three/postprocessing/ssao";
+// import { SSAO } from "@react-three/postprocessing";
+
 
 function Preview() {
 	return (
@@ -23,21 +26,18 @@ function Preview() {
 				dpr={[1, 2]}
 				gl={{ powerPreference: "high-performance" }}>
 				<ambientLight intensity={0.5} />
-				<directionalLight
-					position={[5, 5, 5]}
-					intensity={1}
-					castShadow
-					shadow-mapSize-width={1024}
-					shadow-mapSize-height={1024}
-					shadow-camera-near={1}
-					shadow-camera-far={10}
-					shadow-camera-left={-5}
-					shadow-camera-right={5}
-					shadow-camera-top={5}
-					shadow-camera-bottom={-5}
-				/>
+				<directionalLight position={[5, 5, 5]} intensity={0.5} castShadow />
 
 				<Suspense fallback={null}>
+					{Array.from({ length: 100 }, (_, i) => (
+						<Cube
+							key={i}
+							args={[1, 1, 1]}
+							position={[Math.random() * 10 - 5, Math.random() * 2 + 0.5, Math.random() * 10 - 5]}
+						/>
+					))}
+
+					{/* Add a single cube at the center */}
 					<Cube args={[1, 1, 1]} position={[0, 0.5, 0]} />
 
 					<Dummy scale={1} position={[0, 0.5, 0]} />
