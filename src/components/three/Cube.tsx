@@ -41,7 +41,7 @@ function getUniquePastelColor(): string {
 
 function Cube({ args, position }: { args: [number, number, number]; position: [number, number, number] }) {
 	// This is a simple cube component that can be used in the scene.
-	const originalTexture = useTexture("/textures/missing.png");
+	const originalTexture = useTexture("./textures/missing.png");
 
 	const texture = useMemo(() => {
 		const clone = originalTexture.clone();
