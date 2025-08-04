@@ -84,7 +84,7 @@ function Preview() {
 }
 
 function Dummy({ scale = 0.01, position = [0, 0, 0] }: { scale?: number; position?: [number, number, number] }) {
-	const dummyModel = useGLTF("./models/dummy.glb");
+	const dummyModel = useGLTF(`${import.meta.env.BASE_URL}models/dummy.glb`);
 
 	return (
 		<primitive
