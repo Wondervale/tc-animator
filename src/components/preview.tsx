@@ -8,17 +8,17 @@
 import * as THREE from "three";
 
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
+import { FpsDisplay, FpsTracker } from "@/components/three/Stats";
 import { GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
 
 import { Canvas } from "@react-three/fiber";
 import Cube from "@/components/three/Cube";
+import { SSAO } from "@react-three/postprocessing";
 import { Suspense } from "react";
-
-// import { SSAO } from "@react-three/postprocessing";
 
 function Preview() {
 	return (
-		<div className="w-full h-full relative">
+		<>
 			<Canvas
 				camera={{ position: [3, 3, 3], fov: 60 }}
 				shadows
@@ -61,13 +61,13 @@ function Preview() {
 				{/* <Environment preset="studio" /> */}
 
 				<EffectComposer enableNormalPass>
-					{/* <SSAO
+					<SSAO
 						samples={31}
 						radius={20}
 						intensity={20}
 						luminanceInfluence={0.9}
 						color={new THREE.Color("black")}
-					/> */}
+					/>
 					<FXAA />
 				</EffectComposer>
 
@@ -75,8 +75,11 @@ function Preview() {
 				<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
 					<GizmoViewport axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]} labelColor="white" />
 				</GizmoHelper>
+
+				<FpsTracker />
 			</Canvas>
-		</div>
+			<FpsDisplay />
+		</>
 	);
 }
 
