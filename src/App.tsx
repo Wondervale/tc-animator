@@ -18,14 +18,10 @@ function App() {
 
 	return (
 		<div className="h-screen w-screen">
-			<ResizablePanelGroup direction="vertical">
+			<ResizablePanelGroup direction="vertical" autoSaveId="tca-project" autoSave="true">
 				<ResizablePanel>
-					<ResizablePanelGroup direction="horizontal">
-						<ResizablePanel
-							minSize={5}
-							defaultSize={20}
-							autoSave="tca-project"
-							className="bg-card flex flex-col gap-4">
+					<ResizablePanelGroup direction="horizontal" autoSaveId="tca-preview" autoSave="true">
+						<ResizablePanel minSize={5} defaultSize={20} className="bg-card flex flex-col gap-4">
 							Project
 							<Button
 								variant="outline"
@@ -64,7 +60,7 @@ function App() {
 					</ResizablePanelGroup>
 				</ResizablePanel>
 				<ResizableHandle />
-				<ResizablePanel minSize={5} defaultSize={40} autoSave="tca-timeline" className="bg-card">
+				<ResizablePanel minSize={5} defaultSize={40} className="bg-card">
 					Timeline
 					<Wave />
 				</ResizablePanel>
