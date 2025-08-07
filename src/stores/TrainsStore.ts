@@ -13,6 +13,7 @@ import {
 
 import { create } from "zustand";
 import { parse } from "yaml";
+import { toast } from "sonner";
 
 interface TrainStore {
 	trains: SavedTrainProperties;
@@ -40,11 +41,24 @@ export const useTrainsStore = create<TrainStore>((set) => ({
 				set({ trains: data as SavedTrainProperties });
 			} else {
 				console.error("Invalid YAML data:", valid.errors);
+				toast.error(
+					"We couldn't load your trains. Please check that you uploaded the SavedTrainProperties YAML file from TrainCarts. See the browser console for more details.",
+					{
+						duration: 10000,
+					}
+				);
 
 				set({ trains: {}, parseErrors: valid.errors });
 			}
 		} catch (error) {
 			console.error("Error parsing YAML:", error);
+			toast.error(
+				"We couldn't read your file. Please make sure it's a valid YAML and try again. See the browser console for more details.",
+				{
+					duration: 10000,
+				}
+			);
+
 			set({ trains: {}, parseErrors: ["Failed to parse YAML.", String(error)] });
 			return;
 		}

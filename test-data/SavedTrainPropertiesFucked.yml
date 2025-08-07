@@ -1,0 +1,2663 @@
+# @format
+#
+plathorm:
+    carts:
+        0:
+            model:
+                type: PLATFORM
+                entityType: MINECART
+                attachments:
+                    0:
+                        type: HITBOX
+                        firstPersonViewMode: DYNAMIC
+                        displayMode: DEFAULT
+                        firstPersonViewLockMode: "OFF"
+                        lockRotation: false
+                        displayItem:
+                            enabled: false
+                        text: " "
+                position:
+                    transform: HYBRID_ARMORSTAND_HEAD
+                    posX: 0.0
+                    posY: 0.0
+                    posZ: 0adasdas
+                    rotX: 0.0asdasdasdasd
+                    rotY: 0.0
+                    rotZ: 0.0asdasdasd
+                item:
+                    ==: org.bukkit.inventory.ItemStack
+                    v: 41ada89
+                    type: PUMPKIN
+                shulkerColor: LIGHT_BLUE
+                editor:
+                    selectedIndex: 0
+            entityType: MINECART
+            flipped: false
+    savedName: plathorm
+    claims:
+        - RemcoPl 0cf81044-2917-4a37-bf49-c5e029b28b20
+DevTowerHotel:
+    carts:
+        model:
+            type: ITEM
+            entityType: MINECART
+            attachments:
+                    type: ITEM
+                    item:
+                        ==: org.bukkit.inventory.ItemStack
+                        v: 4189
+                        type: PAPER
+                        meta:
+                            ==: ItemMeta
+                            meta-type: UNSPECIFIC
+                            custom-model-data:
+                                ==: CustomModelData
+                                floats:
+                                    - 40001.0
+                                flags: []
+                                strings: []
+                                colors: []
+                            ItemFlags:
+                                - HIDE_UNBREAKABLE
+                            Unbreakable: true
+                    position:
+                        transform: DISPLAY_NONE
+                        posX: 0.0
+                        posY: 0.0
+                        posZ: 6.0
+                        rotX: 0.0
+                        rotY: -133.0
+                        rotZ: 0.0
+                    attachments:
+                        0:
+                          -  type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.1
+
+                          -  type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.2
+
+                          - type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.3
+                        3:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.1
+                        4:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.2
+                            animations: {}
+                        5:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.3
+                        6:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.1
+                        7:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.2
+                        8:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.3
+                        9:
+                            type: HITBOX
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.4
+                                posZ: 0.0
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                                sizeX: 3.0000000000000004
+                                sizeY: 1.1
+                                sizeZ: 3.0
+                                anchor: default
+                            entityType: MINECART
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: DEFAULT
+                            firstPersonViewLockMode: "OFF"
+                            lockRotation: false
+                            displayItem:
+                                enabled: false
+                            text: " "
+                    names:
+                        - Bank 2
+                    animations:
+                        DTH_S2_ShowStart:
+                            nodes:
+                                - t=5.0
+                                - t=5.0 yaw=90.0
+                                - t=5.0 yaw=180.0
+                        DTH_S2_Home:
+                            nodes:
+                                - t=0.25
+                    editor:
+                        animNodeSelectedOption: 9
+                        expanded: false
+                1:
+                    type: ITEM
+                    item:
+                        ==: org.bukkit.inventory.ItemStack
+                        v: 4189
+                        type: PAPER
+                        meta:
+                            ==: ItemMeta
+                            meta-type: UNSPECIFIC
+                            custom-model-data:
+                                ==: CustomModelData
+                                floats:
+                                    - 40001.0
+                                flags: []
+                                strings: []
+                                colors: []
+                            ItemFlags:
+                                - HIDE_UNBREAKABLE
+                            Unbreakable: true
+                    position:
+                        transform: DISPLAY_NONE
+                        posX: 6.0
+                        posY: 0.0
+                        posZ: 0.0
+                        rotX: 0.0
+                        rotY: -133.0
+                        rotZ: 0.0
+                    attachments:
+                        0:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.1
+                        1:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.2
+                        2:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.3
+                        3:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.1
+                        4:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.2
+                            animations: {}
+                        5:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.3
+                        6:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.1
+                        7:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.2
+                        8:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.3
+                        9:
+                            type: HITBOX
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.4
+                                posZ: 0.0
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                                sizeX: 3.0000000000000004
+                                sizeY: 1.1
+                                sizeZ: 3.0
+                                anchor: default
+                            entityType: MINECART
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: DEFAULT
+                            firstPersonViewLockMode: "OFF"
+                            lockRotation: false
+                            displayItem:
+                                enabled: false
+                            text: " "
+                    names:
+                        - Bank 1
+                    animations:
+                        DTH_S1_ShowStart:
+                            nodes:
+                                - t=5.0
+                                - t=5.0 yaw=90.0
+                                - t=5.0 yaw=180.0
+                        DTH_S1_Home:
+                            nodes:
+                                - t=0.25
+                        Test:
+                            nodes:
+                                - t=1.5
+                                - t=1.5 yaw=-90.0
+                                - t=1.5 yaw=-180.0
+                                - t=1.5 yaw=-270.0
+                            looped: false
+                            speed: 2.06
+                    editor:
+                        animNodeSelectedOption: 20
+                        expanded: false
+                3:
+                    type: ITEM
+                    item:
+                        ==: org.bukkit.inventory.ItemStack
+                        v: 4189
+                        type: PAPER
+                        meta:
+                            ==: ItemMeta
+                            meta-type: UNSPECIFIC
+                            custom-model-data:
+                                ==: CustomModelData
+                                floats:
+                                    - 40001.0
+                                flags: []
+                                strings: []
+                                colors: []
+                            ItemFlags:
+                                - HIDE_UNBREAKABLE
+                            Unbreakable: true
+                    position:
+                        transform: DISPLAY_NONE
+                        posX: -6.0
+                        posY: 0.0
+                        posZ: 0.0
+                        rotX: 0.0
+                        rotY: -133.0
+                        rotZ: 0.0
+                    attachments:
+                        0:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.1
+                        1:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.2
+                        2:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.3
+                        3:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.1
+                        4:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.2
+                            animations: {}
+                        5:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.3
+                        6:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.1
+                        7:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.2
+                        8:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.3
+                        9:
+                            type: HITBOX
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.4
+                                posZ: 0.0
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                                sizeX: 3.0000000000000004
+                                sizeY: 1.1
+                                sizeZ: 3.0
+                                anchor: default
+                            entityType: MINECART
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: DEFAULT
+                            firstPersonViewLockMode: "OFF"
+                            lockRotation: false
+                            displayItem:
+                                enabled: false
+                            text: " "
+                    editor:
+                        expanded: false
+                        animNodeSelectedOption: 10
+                    names:
+                        - Bank 3
+                    animations:
+                        DTH_S3_ShowStart:
+                            nodes:
+                                - t=5.0
+                                - t=5.0 yaw=90.0
+                                - t=5.0 yaw=180.0
+                        DTH_S3_Home:
+                            nodes:
+                                - t=0.0
+                4:
+                    type: ITEM
+                    item:
+                        ==: org.bukkit.inventory.ItemStack
+                        v: 4189
+                        type: PAPER
+                        meta:
+                            ==: ItemMeta
+                            meta-type: UNSPECIFIC
+                            custom-model-data:
+                                ==: CustomModelData
+                                floats:
+                                    - 40001.0
+                                flags: []
+                                strings: []
+                                colors: []
+                            ItemFlags:
+                                - HIDE_UNBREAKABLE
+                            Unbreakable: true
+                    position:
+                        transform: DISPLAY_NONE
+                        posX: 0.0
+                        posY: 0.0
+                        posZ: -6.0
+                        rotX: 0.0
+                        rotY: -133.0
+                        rotZ: 0.0
+                    attachments:
+                        0:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.1
+                        1:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.2
+                        2:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: -0.1
+                                posZ: 0.74
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 1.3
+                        3:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.1
+                        4:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.2
+                            animations: {}
+                        5:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.03
+                                posZ: -0.26
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            names:
+                                - Stoel 2.3
+                        6:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: -0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.1
+                        7:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.2
+                        8:
+                            type: SEAT
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.98
+                                posY: 0.16
+                                posZ: -1.2
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: NO_NAMETAG
+                            firstPersonViewLockMode: MOVE
+                            lockRotation: true
+                            displayItem:
+                                enabled: false
+                            animations: {}
+                            names:
+                                - Stoel 3.3
+                        9:
+                            type: HITBOX
+                            item:
+                                ==: org.bukkit.inventory.ItemStack
+                                v: 4189
+                                type: OAK_PLANKS
+                            position:
+                                transform: HYBRID_ARMORSTAND_HEAD
+                                posX: 0.0
+                                posY: -0.4
+                                posZ: 0.0
+                                rotX: 0.0
+                                rotY: 0.0
+                                rotZ: 0.0
+                                sizeX: 3.0000000000000004
+                                sizeY: 1.1
+                                sizeZ: 3.0
+                                anchor: default
+                            entityType: MINECART
+                            shulkerColor: DEFAULT
+                            schematic: ""
+                            firstPersonViewMode: DYNAMIC
+                            displayMode: DEFAULT
+                            firstPersonViewLockMode: "OFF"
+                            lockRotation: false
+                            displayItem:
+                                enabled: false
+                            text: " "
+                    editor:
+                        expanded: false
+                        animNodeSelectedOption: 9
+                    names:
+                        - Bank 4
+                    animations:
+                        DTH_S4_ShowStart:
+                            nodes:
+                                - t=5.0
+                                - t=5.0 yaw=90.0
+                                - t=5.0 yaw=180.0
+                        DTH_S4_Home:
+                            nodes:
+                                - t=0.25
+                    entityType: MINECART
+            position:
+                transform: DISPLAY_NONE
+                posX: 0.0
+                posY: 7.430000000000001
+                posZ: 0.0
+                rotX: 0.0
+                rotY: -90.0
+                rotZ: 0.0
+                sizeX: 9.0
+                sizeY: 1.0
+                sizeZ: 9.0
+            item:
+                ==: org.bukkit.inventory.ItemStack
+                v: 4189
+                type: PAPER
+                meta:
+                    ==: ItemMeta
+                    meta-type: UNSPECIFIC
+                    custom-model-data:
+                        ==: CustomModelData
+                        floats:
+                            - 40000.0
+                        flags: []
+                        strings: []
+                        colors: []
+                    ItemFlags:
+                        - HIDE_UNBREAKABLE
+                    Unbreakable: true
+            editor:
+                selectedIndex: 0
+                animNodeSelectedOption: 22
+                scrollOffset: 0
+            animations:
+                DTH_S0_First:
+                    nodes:
+                        - t=7.0 y=0.02 pitch=0.1
+                        - t=7.0 y=0.02
+                        - t=7.0 y=0.02 yaw=10.2
+                        - t=7.0 y=0.02 yaw=40.0
+                        - t=7.0 y=0.6 yaw=100.0
+                        - t=7.0 y=1.2 yaw=180.0
+                DTH_S0_Second:
+                    nodes:
+                        - t=0.01 y=1.2 yaw=180.0
+                        - t=4.4 y=1.2 yaw=180.0
+                        - t=4.3999999999999995 y=1.2 yaw=270.0
+                        - t=4.3999999999999995 y=1.2
+                        - t=1.5 y=2.5 yaw=68.5
+                        - t=0.25 y=2.5 yaw=150.0
+                        - t=0.25 y=1.75 yaw=152.0
+                        - t=0.25 y=-1.25 yaw=158.0
+                        - t=0.33 y=-1.75 yaw=165.0
+                        - t=0.75 y=-2.0 yaw=180.0
+                        - t=2.0000000000000004 y=-2.25 yaw=215.0
+                    looped: false
+                DTH_S0_Pre:
+                    nodes:
+                        - t=0.25 y=0.02
+                DTH_S0_TEST:
+                    nodes:
+                        - t=2.0
+                        - t=0.25 y=2.5 yaw=150.0
+                        - t=0.25 y=1.75 yaw=152.0
+                        - t=0.25 y=-1.25 yaw=158.0
+                        - t=0.33 y=-1.75 yaw=165.0
+                        - t=0.75 y=-2.0 yaw=180.0
+                        - t=2.0000000000000004 y=-2.25 yaw=215.0
+                DTH_S0_Rotatie:
+                    looped: false
+                    nodes:
+                        - t=2.0000000000000004
+                        - t=2.0000000000000004 y=0.9 pitch=20.0 yaw=90.0
+                        - t=2.0 y=-0.8 yaw=180.0 roll=20.0
+                        - t=2.0 yaw=270.0
+                        - t=2.0000000000000004 pitch=-20.0 roll=20.0
+                        - t=2.0000000000000004 y=0.9 pitch=-20.0 yaw=90.0
+                        - t=2.0 y=-0.8 yaw=180.0 roll=-20.0
+                        - t=2.0 yaw=270.0
+                    speed: 0.8
+                DTH_S0_Home:
+                    nodes:
+                        - t=0.01
+        entityType: MINECART
+        flipped: true
+    savedName: DevTowerHotel
+    claims:
+        - RemcoPl 0cf81044-2917-4a37-bf49-c5e029b28b20
+    name: DTH
+dth_v1:
+    savedName: dth_v1
+    claims:
+        - Articca 40a5b2c9-8693-47cd-b0af-d1aef8c7df20
+DTH_spots:
+    name: dth_lights
+    carts:
+        0:
+            model:
+                type: EMPTY
+                entityType: MINECART
+                attachments:
+                    0:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: LEATHER_HORSE_ARMOR
+                            meta:
+                                ==: ItemMeta
+                                meta-type: LEATHER_ARMOR
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 10000.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: 0.0
+                            posY: -2.9
+                            posZ: -2.0000000000000004
+                            rotX: 27.0
+                            rotY: 0.0
+                            rotZ: 0.0
+                            sizeX: 0.5
+                            sizeY: 3.0
+                            sizeZ: 0.5
+                        shulkerColor: DEFAULT
+                        schematic: ""
+                        firstPersonViewMode: DYNAMIC
+                        displayMode: DEFAULT
+                        firstPersonViewLockMode: "OFF"
+                        lockRotation: false
+                        displayItem:
+                            enabled: false
+                        text: " "
+                        brightness:
+                            block: 15
+                            sky: 0
+                    1:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: LEATHER_HORSE_ARMOR
+                            meta:
+                                ==: ItemMeta
+                                meta-type: LEATHER_ARMOR
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 10000.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: 0.0
+                            posY: -2.9
+                            posZ: 2.0
+                            rotX: -27.000000000000004
+                            rotY: 0.0
+                            rotZ: 0.0
+                            sizeX: 0.5
+                            sizeY: 3.0
+                            sizeZ: 0.5
+                        shulkerColor: DEFAULT
+                        schematic: ""
+                        firstPersonViewMode: DYNAMIC
+                        displayMode: DEFAULT
+                        firstPersonViewLockMode: "OFF"
+                        lockRotation: false
+                        displayItem:
+                            enabled: false
+                        text: " "
+                        brightness:
+                            block: 15
+                            sky: 0
+                    2:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: LEATHER_HORSE_ARMOR
+                            meta:
+                                ==: ItemMeta
+                                meta-type: LEATHER_ARMOR
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 10000.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: -2.0
+                            posY: -2.9
+                            posZ: 0.0
+                            rotX: 0.0
+                            rotY: 0.0
+                            rotZ: -27.0
+                            sizeX: 0.5
+                            sizeY: 3.0
+                            sizeZ: 0.5
+                        shulkerColor: DEFAULT
+                        schematic: ""
+                        firstPersonViewMode: DYNAMIC
+                        displayMode: DEFAULT
+                        firstPersonViewLockMode: "OFF"
+                        lockRotation: false
+                        displayItem:
+                            enabled: false
+                        text: " "
+                        brightness:
+                            block: 15
+                            sky: 0
+                    3:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: LEATHER_HORSE_ARMOR
+                            meta:
+                                ==: ItemMeta
+                                meta-type: LEATHER_ARMOR
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 10000.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: 2.0000000000000004
+                            posY: -2.9
+                            posZ: 0.0
+                            rotX: 0.0
+                            rotY: 0.0
+                            rotZ: 27.000000000000004
+                            sizeX: 0.5
+                            sizeY: 3.0
+                            sizeZ: 0.5
+                        shulkerColor: DEFAULT
+                        schematic: ""
+                        firstPersonViewMode: DYNAMIC
+                        displayMode: DEFAULT
+                        firstPersonViewLockMode: "OFF"
+                        lockRotation: false
+                        displayItem:
+                            enabled: false
+                        text: " "
+                        brightness:
+                            block: 15
+                            sky: 0
+                physical:
+                    cartLength: 1.0
+                    wheelCenter: 0.0
+                    wheelDistance: 0.0
+                editor:
+                    selectedIndex: 0
+                    scrollOffset: 0
+            entityType: MINECART
+            flipped: false
+    savedName: DTH_spots
+    claims:
+        - Articca 40a5b2c9-8693-47cd-b0af-d1aef8c7df20
+DTH:
+    claims:
+        - RemcoPl 0cf81044-2917-4a37-bf49-c5e029b28b20
+    name: DTH
+    carts:
+        0:
+            model:
+                type: ITEM
+                entityType: MINECART
+                attachments:
+                    0:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: PAPER
+                            meta:
+                                ==: ItemMeta
+                                meta-type: UNSPECIFIC
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 40001.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: 6.0
+                            posY: 0.0
+                            posZ: 0.0
+                            rotX: 0.0
+                            rotY: -133.0
+                            rotZ: 0.0
+                        attachments:
+                            0:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.1
+                            1:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.2
+                            2:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.3
+                            3:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.1
+                            4:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.2
+                                animations: {}
+                            5:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.3
+                            6:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.1
+                            7:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.2
+                            8:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.3
+                            9:
+                                type: HITBOX
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.4
+                                    posZ: 0.0
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                    sizeX: 3.0000000000000004
+                                    sizeY: 1.1
+                                    sizeZ: 3.0
+                                    anchor: default
+                                entityType: MINECART
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: DEFAULT
+                                firstPersonViewLockMode: "OFF"
+                                lockRotation: false
+                                displayItem:
+                                    enabled: false
+                                text: " "
+                        names:
+                            - Bank 1
+                    1:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: PAPER
+                            meta:
+                                ==: ItemMeta
+                                meta-type: UNSPECIFIC
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 40001.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: 0.0
+                            posY: 0.0
+                            posZ: 6.0
+                            rotX: 0.0
+                            rotY: -133.0
+                            rotZ: 0.0
+                        attachments:
+                            0:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.1
+                            1:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.2
+                            2:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.3
+                            3:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.1
+                            4:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.2
+                                animations: {}
+                            5:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.3
+                            6:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.1
+                            7:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.2
+                            8:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.3
+                            9:
+                                type: HITBOX
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.4
+                                    posZ: 0.0
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                    sizeX: 3.0000000000000004
+                                    sizeY: 1.1
+                                    sizeZ: 3.0
+                                    anchor: default
+                                entityType: MINECART
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: DEFAULT
+                                firstPersonViewLockMode: "OFF"
+                                lockRotation: false
+                                displayItem:
+                                    enabled: false
+                                text: " "
+                        names:
+                            - Bank 2
+                    2:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: PAPER
+                            meta:
+                                ==: ItemMeta
+                                meta-type: UNSPECIFIC
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 40001.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: -6.0
+                            posY: 0.0
+                            posZ: 0.0
+                            rotX: 0.0
+                            rotY: -133.0
+                            rotZ: 0.0
+                        attachments:
+                            0:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.1
+                            1:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.2
+                            2:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.3
+                            3:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.1
+                            4:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.2
+                                animations: {}
+                            5:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.3
+                            6:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.1
+                            7:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.2
+                            8:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.3
+                            9:
+                                type: HITBOX
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.4
+                                    posZ: 0.0
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                    sizeX: 3.0000000000000004
+                                    sizeY: 1.1
+                                    sizeZ: 3.0
+                                    anchor: default
+                                entityType: MINECART
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: DEFAULT
+                                firstPersonViewLockMode: "OFF"
+                                lockRotation: false
+                                displayItem:
+                                    enabled: false
+                                text: " "
+                        names:
+                            - Bank 3
+                    3:
+                        type: ITEM
+                        item:
+                            ==: org.bukkit.inventory.ItemStack
+                            v: 4189
+                            type: PAPER
+                            meta:
+                                ==: ItemMeta
+                                meta-type: UNSPECIFIC
+                                custom-model-data:
+                                    ==: CustomModelData
+                                    floats:
+                                        - 40001.0
+                                    flags: []
+                                    strings: []
+                                    colors: []
+                                ItemFlags:
+                                    - HIDE_UNBREAKABLE
+                                Unbreakable: true
+                        position:
+                            transform: DISPLAY_NONE
+                            posX: 0.0
+                            posY: 0.0
+                            posZ: -6.0
+                            rotX: 0.0
+                            rotY: -133.0
+                            rotZ: 0.0
+                        attachments:
+                            0:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.1
+                            1:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.2
+                            2:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: -0.1
+                                    posZ: 0.74
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 1.3
+                            3:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.1
+                            4:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.2
+                                animations: {}
+                            5:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.03
+                                    posZ: -0.26
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                names:
+                                    - Stoel 2.3
+                            6:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: -0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.1
+                            7:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.2
+                            8:
+                                type: SEAT
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.98
+                                    posY: 0.16
+                                    posZ: -1.2
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: NO_NAMETAG
+                                firstPersonViewLockMode: MOVE
+                                lockRotation: true
+                                displayItem:
+                                    enabled: false
+                                animations: {}
+                                names:
+                                    - Stoel 3.3
+                            9:
+                                type: HITBOX
+                                item:
+                                    ==: org.bukkit.inventory.ItemStack
+                                    v: 4189
+                                    type: OAK_PLANKS
+                                position:
+                                    transform: HYBRID_ARMORSTAND_HEAD
+                                    posX: 0.0
+                                    posY: -0.4
+                                    posZ: 0.0
+                                    rotX: 0.0
+                                    rotY: 0.0
+                                    rotZ: 0.0
+                                    sizeX: 3.0000000000000004
+                                    sizeY: 1.1
+                                    sizeZ: 3.0
+                                    anchor: default
+                                entityType: MINECART
+                                shulkerColor: DEFAULT
+                                schematic: ""
+                                firstPersonViewMode: DYNAMIC
+                                displayMode: DEFAULT
+                                firstPersonViewLockMode: "OFF"
+                                lockRotation: false
+                                displayItem:
+                                    enabled: false
+                                text: " "
+                        editor:
+                            expanded: false
+                        names:
+                            - Bank 4
+                position:
+                    transform: DISPLAY_HEAD
+                    posX: 0.0
+                    posY: 7.430000000000001
+                    posZ: 0.0
+                    rotX: 0.0
+                    rotY: -90.0
+                    rotZ: 0.0
+                    sizeX: 9.0
+                    sizeY: 1.0
+                    sizeZ: 9.0
+                item:
+                    ==: org.bukkit.inventory.ItemStack
+                    v: 4189
+                    type: PAPER
+                    meta:
+                        ==: ItemMeta
+                        meta-type: UNSPECIFIC
+                        custom-model-data:
+                            ==: CustomModelData
+                            floats:
+                                - 40000.0
+                            flags: []
+                            strings: []
+                            colors: []
+                        ItemFlags:
+                            - HIDE_UNBREAKABLE
+                        Unbreakable: true
+                editor:
+                    selectedIndex: 0
+                    animNodeSelectedOption: 20
+                    scrollOffset: 0
+                animations:
+                    Formendtostart:
+                        nodes:
+                            - t=1.0 y=0.3
+                            - t=1.0 y=1.35
+                            - t=1.0 y=3.65
+                            - t=1.0 y=4.99
+                    Verse 1:
+                        nodes:
+                            - t=4.6000000000000005 y=4.99
+                            - t=6.0 y=5.14 yaw=90.0
+                            - t=6.0 y=5.14 yaw=180.0
+            entityType: MINECART
+            flipped: true
+    savedName: DTH

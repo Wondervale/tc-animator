@@ -31,6 +31,8 @@ function App() {
 										description: "Select a YAML file",
 										mimeTypes: ["application/x-yaml", "text/yaml"],
 										extensions: [".yaml", ".yml"],
+										id: "load-saved-train-properties",
+										startIn: "documents",
 									});
 
 									if (fileHandle) {
