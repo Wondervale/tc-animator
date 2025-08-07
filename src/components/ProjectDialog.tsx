@@ -84,28 +84,30 @@ function NewProjectDialog() {
 							</Select>
 
 							<Label htmlFor="cart" className="mt-4">
-								Cart{" "}
-								<span className="text-xs text-muted-foreground">
-									(0 to{" "}
-									{trainsStore.currentTrain?.carts
-										? Object.entries(trainsStore.currentTrain.carts).length - 1
-										: 0}
-									)
-								</span>
+								Cart
 							</Label>
-							<Input
+							<Select
 								disabled={!trainsStore.currentTrain?.carts}
-								id="cart"
-								placeholder="Select a train first"
-								min={0}
-								max={
-									trainsStore.currentTrain?.carts
-										? Object.entries(trainsStore.currentTrain.carts).length - 1
-										: 0
-								}
-								type="number"
-								value={trainsStore.currentTrain?.carts ? 0 : ""}
-							/>
+								onValueChange={(value) => {
+									const train = trainsStore.trains[value];
+									if (train) {
+										trainsStore.setCurrentTrain(train);
+									}
+								}}>
+								<SelectTrigger className="w-full" id="cart">
+									<SelectValue placeholder="Select a cart" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Carts</SelectLabel>
+										{Object.values(trainsStore.currentTrain?.carts || {}).map((_, index) => (
+											<SelectItem key={index} value={index.toString()}>
+												{index + 1}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
 						</div>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
