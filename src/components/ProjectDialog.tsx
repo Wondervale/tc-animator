@@ -9,10 +9,11 @@ import {
 	AlertDialog,
 	AlertDialogContent,
 	AlertDialogDescription,
+	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { FolderOpen, Import } from "lucide-react";
+import { ExternalLink, FolderOpen, Import } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useProjectStore } from "@/stores/ProjectStore";
@@ -46,6 +47,16 @@ function ProjectDialog() {
 						</div>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
+				<AlertDialogFooter className="text-sm text-muted-foreground">
+					<a
+						href="https://foxxite.com"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="flex items-center gap-1">
+						Made with ❤️ by Foxxite | Articca
+						<ExternalLink className="inline-block size-4" />
+					</a>
+				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>
 	);
