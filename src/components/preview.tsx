@@ -55,8 +55,6 @@ function Preview() {
 					cellColor="#92a3bb"
 					sectionColor="#47566c"
 					infiniteGrid
-					castShadow={false}
-					receiveShadow={false}
 					side={THREE.DoubleSide}
 				/>
 

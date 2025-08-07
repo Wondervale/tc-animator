@@ -13,7 +13,6 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import React, { useEffect, useState } from "react";
 
@@ -46,7 +45,9 @@ const FeatureCheckDialog: React.FC = () => {
 		const unsupported = CheckBrowserSupport();
 		if (unsupported.length > 0 || !supported) {
 			setUnsupportedFeatures(unsupported);
-			setOpen(true);
+			setTimeout(() => {
+				setOpen(true);
+			}, 10);
 		}
 	}, []);
 
@@ -54,9 +55,6 @@ const FeatureCheckDialog: React.FC = () => {
 
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
-			<AlertDialogTrigger asChild>
-				<span />
-			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Missing Browser Capabilities</AlertDialogTitle>

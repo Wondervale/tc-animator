@@ -100,11 +100,12 @@ const ModelSchema = z.looseObject({
 		.optional(),
 });
 
-const CartSchema = z.looseObject({
+export const CartSchema = z.looseObject({
 	model: ModelSchema.optional(),
 	entityType: z.string(),
 	flipped: z.boolean().optional(),
 });
+export type Cart = z.infer<typeof CartSchema>;
 
 export const SavedTrainSchema = z.looseObject({
 	savedName: z.string(),
