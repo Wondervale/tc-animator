@@ -164,7 +164,10 @@ function ProjectDialog() {
 									<Import className="block size-24 mx-auto" />
 									Import SavedTrainProperties
 								</Button>
-								<Button variant="secondary" className="aspect-square w-full h-auto flex flex-col">
+								<Button
+									disabled
+									variant="secondary"
+									className="aspect-square w-full h-auto flex flex-col">
 									<FolderOpen className="block size-24 mx-auto" />
 									Open TCA-Project
 								</Button>
