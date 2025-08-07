@@ -32,26 +32,28 @@ function Preview() {
 						<Cube
 							key={i}
 							args={[1, 1, 1]}
-							position={[Math.random() * 20 - 10, Math.random() * 2 + 0.5, Math.random() * 20 - 10]}
+							position={[
+								Math.floor(Math.random() * 20 - 10),
+								Math.floor(Math.random() * 2 + 0.5),
+								Math.floor(Math.random() * 20 - 10),
+							]}
 						/>
 					))}
 
 					{/* Add a single cube at the center */}
-					<Cube args={[1, 1, 1]} position={[0, 0.5, 0]} />
+					<Cube args={[1, 1, 1]} position={[0, 0, 0]} />
 
-					<Dummy scale={1} position={[0, 0.5, 0]} />
+					<Dummy scale={1} position={[0, 0, 0]} />
 				</Suspense>
 
 				<Grid
-					position={[0.5, 0, 0.5]}
+					position={[0.5, -0.5, 0.5]}
 					cellSize={1 / 16}
 					sectionSize={1}
 					cellThickness={0.5}
 					sectionThickness={1.5}
 					cellColor="#92a3bb"
 					sectionColor="#47566c"
-					fadeDistance={100}
-					followCamera={false}
 					infiniteGrid
 					castShadow={false}
 					receiveShadow={false}
