@@ -1,18 +1,17 @@
 /** @format */
 
-import React, { Suspense } from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
-import { Button } from "@/components/ui/button";
 import Editor from "@monaco-editor/react";
 import Preview from "@/components/Preview";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
 import Wave from "@/components/Wave";
-import { fileOpen } from "browser-fs-access";
+import { useProjectStore } from "@/stores/ProjectStore";
 import { useTrainsStore } from "@/stores/TrainsStore";
 
 function App() {
-	const [ymlString, setYmlString] = React.useState<string>("");
+	const projectStore = useProjectStore();
 
 	const trainsStore = useTrainsStore();
 
@@ -22,31 +21,8 @@ function App() {
 				<ResizablePanel>
 					<ResizablePanelGroup direction="horizontal" autoSaveId="tca-preview" autoSave="true">
 						<ResizablePanel minSize={5} defaultSize={20} className="bg-card flex flex-col gap-4 p-4">
-							Project
-							<Button
-								variant="outline"
-								className="w-full"
-								onClick={async () => {
-									const fileHandle = await fileOpen({
-										description: "Select a YAML file",
-										mimeTypes: ["application/x-yaml", "text/yaml"],
-										extensions: [".yaml", ".yml"],
-										id: "load-saved-train-properties",
-										startIn: "documents",
-									});
+							{projectStore.metadata.projectName}
 
-									if (fileHandle) {
-										const text = await fileHandle.text();
-										trainsStore.setTrainsFromYml(text);
-										setYmlString(text);
-									}
-								}}>
-								Load SavedTrainProperties
-							</Button>
-							<Suspense fallback={<Skeleton className="h-full w-full" />}>
-								<Editor value={ymlString} language="yaml" theme="vs-dark" />
-							</Suspense>
-							<hr className="my-2" />
 							<Suspense fallback={<Skeleton className="h-full w-full" />}>
 								<Editor
 									language="json"

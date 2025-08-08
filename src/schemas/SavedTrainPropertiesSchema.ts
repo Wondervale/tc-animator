@@ -27,8 +27,46 @@ const ItemSchema = z.looseObject({
 	meta: z.any().optional(),
 });
 
-const AttachmentSchema: z.ZodType<unknown> = z.lazy(() =>
-	z.looseObject({
+export type InternalAttachment = {
+	type: string;
+	item?: unknown; // You can refine this if you know ItemSchema
+	position: {
+		posX: number;
+		posY: number;
+		posZ: number;
+		rotX?: number;
+		rotY?: number;
+		rotZ?: number;
+		sizeX?: number;
+		sizeY?: number;
+		sizeZ?: number;
+	};
+	attachments?: Record<string, Attachment>;
+	displayItem?: unknown;
+	shulkerColor?: string;
+	schematic?: string;
+	displayMode?: string;
+	firstPersonViewMode?: string;
+	firstPersonViewLockMode?: string;
+	lockRotation?: boolean;
+	names?: string[];
+	text?: string;
+	animations?: Record<
+		string,
+		{
+			nodes: string[];
+			looped?: boolean;
+			speed?: number;
+		}
+	>;
+	brightness?: {
+		block: number;
+		sky: number;
+	};
+};
+
+export const AttachmentSchema: z.ZodType<InternalAttachment> = z.lazy(() =>
+	z.object({
 		type: z.string(),
 		item: ItemSchema.optional(),
 		position: PositionSchema,
@@ -60,8 +98,9 @@ const AttachmentSchema: z.ZodType<unknown> = z.lazy(() =>
 			.optional(),
 	})
 );
+export type Attachment = z.infer<typeof AttachmentSchema>;
 
-const ModelSchema = z.looseObject({
+export const ModelSchema = z.looseObject({
 	type: z.string(),
 	entityType: z.string(),
 	attachments: z.record(z.string(), AttachmentSchema),
@@ -99,6 +138,7 @@ const ModelSchema = z.looseObject({
 		.passthrough()
 		.optional(),
 });
+export type Model = z.infer<typeof ModelSchema>;
 
 export const CartSchema = z.looseObject({
 	model: ModelSchema.optional(),
