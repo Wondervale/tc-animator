@@ -91,8 +91,8 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 			.promise(
 				fileSave(blob, {
 					fileName,
-					extensions: [".tcaproj", ".zip"],
-					mimeTypes: ["application/zip"],
+					extensions: [".tcaproj"],
+					mimeTypes: ["application/binary"],
 					id: "save-tca-project",
 				}),
 				{
