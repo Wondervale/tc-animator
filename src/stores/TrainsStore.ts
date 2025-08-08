@@ -26,6 +26,8 @@ interface TrainStore {
 
 	setCurrentTrain: (train: SavedTrain) => void;
 	clearCurrentTrain: () => void;
+
+	reset: () => void;
 }
 
 export const useTrainsStore = create<TrainStore>((set) => ({
@@ -67,4 +69,11 @@ export const useTrainsStore = create<TrainStore>((set) => ({
 	setTrains: (trains) => set({ trains }),
 	setCurrentTrain: (train) => set({ currentTrain: train }),
 	clearCurrentTrain: () => set({ currentTrain: undefined }),
+
+	reset: () =>
+		set({
+			trains: {},
+			currentTrain: undefined,
+			parseErrors: undefined,
+		}),
 }));

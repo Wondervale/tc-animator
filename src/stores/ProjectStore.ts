@@ -5,24 +5,111 @@
  * @format
  */
 
+import { strToU8, zipSync } from "fflate";
+
 import type { Cart } from "@/schemas/SavedTrainPropertiesSchema";
 import { create } from "zustand";
+import { fileSave } from "browser-fs-access";
+import superjson from "superjson";
+import { toast } from "sonner";
+
+export const fileHeader = strToU8("🦊🚂🎬");
 
 interface ProjectStore {
-	projectName: string;
+	metadata: {
+		projectName: string;
+		createdAt: Date | null;
+	};
 
 	cart: Cart | null;
+
+	fileHandle?: FileSystemFileHandle;
 
 	setProjectName: (name: string) => void;
 	setCart: (cart: Cart | null) => void;
 	clearCart: () => void;
+
+	saveProject: () => Promise<void>;
+
+	reset: () => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set) => ({
-	projectName: "",
+	metadata: {
+		projectName: "",
+		createdAt: null,
+	},
+
 	cart: null,
 
-	setProjectName: (name) => set({ projectName: name }),
+	setProjectName: (name) =>
+		set((state) => ({
+			metadata: {
+				...state.metadata,
+				projectName: name,
+			},
+		})),
 	setCart: (cart) => set({ cart }),
 	clearCart: () => set({ cart: null }),
+
+	saveProject: async () => {
+		const projectStore = useProjectStore.getState();
+
+		if (!projectStore.cart) {
+			throw new Error("No cart data to save.");
+		}
+
+		const fileName = `${projectStore.metadata.projectName || "TCA-Project"}.tcaproj`;
+
+		// Setup the metadata with the current date if not set
+		const localMetadata = {
+			...projectStore.metadata,
+			createdAt: projectStore.metadata.createdAt || new Date(),
+		};
+
+		// Create the zip file with fflate
+		const zipDataRaw = zipSync(
+			{
+				"metadata.json": strToU8(superjson.stringify(localMetadata)),
+				"cart.json": strToU8(superjson.stringify(projectStore.cart)),
+			},
+			{ level: 9 }
+		);
+
+		// Prepend the file header
+		const header = new Uint8Array(fileHeader.length + zipDataRaw.length);
+		header.set(fileHeader);
+		header.set(zipDataRaw, fileHeader.length);
+
+		const fixedBuffer = new Uint8Array(header.length);
+		fixedBuffer.set(header);
+
+		const blob = new Blob([fixedBuffer], { type: "application/binary" });
+
+		// Save using browser-fs-access
+		const fileHandle = await toast
+			.promise(
+				fileSave(blob, {
+					fileName,
+					extensions: [".tcaproj", ".zip"],
+					mimeTypes: ["application/zip"],
+					id: "save-tca-project",
+				}),
+				{
+					loading: "Saving project...",
+					success: "Project saved successfully!",
+					error: "Failed to save the project.",
+				}
+			)
+			.unwrap();
+
+		if (fileHandle) {
+			set({
+				fileHandle,
+				metadata: { ...localMetadata },
+			});
+		}
+	},
+
+	reset: () => set({ metadata: { projectName: "", createdAt: null }, cart: null, fileHandle: undefined }),
 }));

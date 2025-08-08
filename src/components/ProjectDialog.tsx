@@ -13,7 +13,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ExternalLink, FolderOpen, Import } from "lucide-react";
+import { ChevronLeft, ExternalLink, FolderOpen, Import } from "lucide-react";
 import {
 	Select,
 	SelectContent,
@@ -29,11 +29,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fileOpen } from "browser-fs-access";
 import { useProjectStore } from "@/stores/ProjectStore";
+import { useState } from "react";
 import { useTrainsStore } from "@/stores/TrainsStore";
 
 function NewProjectDialog() {
 	const projectStore = useProjectStore();
 	const trainsStore = useTrainsStore();
+
+	const [currentTrain, setCurrentTrain] = useState(trainsStore.currentTrain);
+	const [currentCart, setCurrentCart] = useState(projectStore.cart);
+	const [projectName, setProjectName] = useState(projectStore.metadata.projectName);
 
 	return (
 		<AlertDialog open={true}>
@@ -47,7 +52,7 @@ function NewProjectDialog() {
 								id="projectName"
 								placeholder="My TCA Project"
 								className="mt-2"
-								onChange={(e) => projectStore.setProjectName(e.target.value)}
+								onChange={(e) => setProjectName(e.target.value)}
 							/>
 
 							<hr className="my-4" />
@@ -59,11 +64,11 @@ function NewProjectDialog() {
 
 							<Label htmlFor="train">Train</Label>
 							<Select
-								defaultValue={trainsStore.currentTrain?.savedName || ""}
 								onValueChange={(value) => {
 									const train = trainsStore.trains[value];
 									if (train) {
-										trainsStore.setCurrentTrain(train);
+										setCurrentTrain(train);
+										setCurrentCart(null);
 									}
 								}}>
 								<SelectTrigger className="w-full" id="train">
@@ -87,11 +92,18 @@ function NewProjectDialog() {
 								Cart
 							</Label>
 							<Select
-								disabled={!trainsStore.currentTrain?.carts}
+								value={
+									currentTrain?.carts
+										? Object.entries(currentTrain.carts).find(
+												([, cart]) => cart === currentCart
+										  )?.[0] ?? ""
+										: ""
+								}
+								disabled={!currentTrain?.carts}
 								onValueChange={(value) => {
-									const train = trainsStore.trains[value];
-									if (train) {
-										trainsStore.setCurrentTrain(train);
+									const cart = currentTrain?.carts?.[value];
+									if (cart) {
+										setCurrentCart(cart);
 									}
 								}}>
 								<SelectTrigger className="w-full" id="cart">
@@ -100,9 +112,9 @@ function NewProjectDialog() {
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Carts</SelectLabel>
-										{Object.values(trainsStore.currentTrain?.carts || {}).map((_, index) => (
-											<SelectItem key={index} value={index.toString()}>
-												{index + 1}
+										{Object.entries(currentTrain?.carts || {}).map(([key]) => (
+											<SelectItem key={key} value={key}>
+												{key}
 											</SelectItem>
 										))}
 									</SelectGroup>
@@ -111,8 +123,30 @@ function NewProjectDialog() {
 						</div>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter className="text-sm text-muted-foreground">
-					Made with ❤️ by Foxxite | Articca
+				<AlertDialogFooter className="flex justify-between">
+					<Button
+						variant="secondary"
+						onClick={() => {
+							projectStore.reset();
+							trainsStore.reset();
+						}}>
+						<ChevronLeft />
+						Back
+					</Button>
+
+					<Button
+						onClick={async () => {
+							if (projectName && currentTrain && currentCart) {
+								projectStore.setProjectName(projectName);
+								trainsStore.setCurrentTrain(currentTrain);
+								projectStore.setCart(currentCart);
+
+								await projectStore.saveProject();
+							}
+						}}
+						disabled={!(projectName && currentTrain && currentCart)}>
+						Create Project
+					</Button>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -139,12 +173,12 @@ function ProjectDialog() {
 		}
 	};
 
-	if (Object.entries(trainsStore.trains).length > 0 && !projectStore.cart) {
+	if (Object.entries(trainsStore.trains).length > 0 && !projectStore.metadata.createdAt) {
 		return <NewProjectDialog />;
 	}
 
 	return (
-		<AlertDialog open={!projectStore.cart}>
+		<AlertDialog open={!projectStore.metadata.createdAt}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Welcome to TC Animator!</AlertDialogTitle>
