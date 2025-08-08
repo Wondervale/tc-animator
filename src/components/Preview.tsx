@@ -9,10 +9,10 @@ import * as THREE from "three";
 
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
 import { FpsDisplay, FpsTracker } from "@/components/three/Stats";
-import { GizmoHelper, GizmoViewport, Grid, OrbitControls, useGLTF } from "@react-three/drei";
+import { GizmoHelper, GizmoViewport, Grid, OrbitControls } from "@react-three/drei";
 
 import { Canvas } from "@react-three/fiber";
-import Cube from "@/components/three/Cube";
+import CartRender from "@/components/three/CartRender";
 import { SSAO } from "@react-three/postprocessing";
 import { Suspense } from "react";
 
@@ -28,22 +28,7 @@ function Preview() {
 				<directionalLight position={[5, 5, 5]} intensity={3} castShadow />
 
 				<Suspense fallback={null}>
-					{Array.from({ length: 100 }, (_, i) => (
-						<Cube
-							key={i}
-							args={[1, 1, 1]}
-							position={[
-								Math.floor(Math.random() * 20 - 10),
-								Math.floor(Math.random() * 2 + 0.5),
-								Math.floor(Math.random() * 20 - 10),
-							]}
-						/>
-					))}
-
-					{/* Add a single cube at the center */}
-					<Cube args={[1, 1, 1]} position={[0, 0, 0]} />
-
-					<Dummy scale={1} position={[0, 0, 0]} />
+					<CartRender />
 				</Suspense>
 
 				<Grid
@@ -80,21 +65,6 @@ function Preview() {
 			</Canvas>
 			<FpsDisplay />
 		</>
-	);
-}
-
-function Dummy({ scale = 0.01, position = [0, 0, 0] }: { scale?: number; position?: [number, number, number] }) {
-	const dummyModel = useGLTF(`${import.meta.env.BASE_URL}models/dummy.glb`);
-
-	return (
-		<primitive
-			object={dummyModel.scene}
-			scale={scale}
-			position={position}
-			castShadow
-			receiveShadow
-			dispose={null}
-		/>
 	);
 }
 

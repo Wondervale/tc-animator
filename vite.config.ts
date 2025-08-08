@@ -27,14 +27,24 @@ export default defineConfig({
 			output: {
 				manualChunks(id) {
 					if (id.includes("node_modules")) {
+						if (id.includes("react-three")) {
+							return "react-three";
+						}
+
 						if (id.includes("three")) {
 							return "three";
 						}
-						if (id.includes("@react-three")) {
-							return "@react-three";
-						}
+
 						if (id.includes("monaco-editor")) {
 							return "monaco-editor";
+						}
+
+						if (id.includes("react")) {
+							return "react";
+						}
+
+						if (id.includes("lucide")) {
+							return "lucide";
 						}
 					}
 				},
