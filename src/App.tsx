@@ -8,12 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import Wave from "@/components/Wave";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { useTrainsStore } from "@/stores/TrainsStore";
 
 function App() {
 	const projectStore = useProjectStore();
-
-	const trainsStore = useTrainsStore();
 
 	return (
 		<div className="h-screen w-screen">
@@ -27,7 +24,23 @@ function App() {
 								<Editor
 									language="json"
 									theme="vs-dark"
-									value={JSON.stringify(trainsStore.trains || trainsStore.parseErrors, null, 2)}
+									value={JSON.stringify(projectStore.cart, null, 2)}
+									options={{
+										minimap: { enabled: true },
+										scrollbar: { alwaysConsumeMouseWheel: false },
+										wordWrap: "on",
+										automaticLayout: true,
+									}}
+									onChange={(value) => {
+										if (value) {
+											try {
+												const parsed = JSON.parse(value);
+												projectStore.setCart(parsed);
+											} catch (e) {
+												console.error("Failed to parse JSON:", e);
+											}
+										}
+									}}
 								/>
 							</Suspense>
 						</ResizablePanel>

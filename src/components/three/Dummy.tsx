@@ -5,19 +5,26 @@
  * @format
  */
 
+import { degreeToRadian, type Vector3 } from "@/lib/utils";
 import { useGLTF } from "@react-three/drei";
+import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
 
-function Dummy({ scale = 0.01, position = [0, 0, 0] }: { scale?: number; position?: [number, number, number] }) {
-	const dummyModel = useGLTF(`${import.meta.env.BASE_URL}models/dummy.glb`);
+const DUMMY_PATH = `${import.meta.env.BASE_URL}models/dummy.glb`;
+
+useGLTF.preload(DUMMY_PATH);
+
+function Dummy({ scale = 1, position = [0, 0, 0] }: { scale?: number; position?: Vector3 }) {
+	const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/dummy.glb`);
+	const dummyModel = clone(scene);
 
 	return (
 		<primitive
-			object={dummyModel.scene}
+			object={dummyModel}
 			scale={scale}
 			position={position}
 			castShadow
 			receiveShadow
-			dispose={null}
+			rotation={[0, degreeToRadian(180), 0]}
 		/>
 	);
 }

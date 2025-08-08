@@ -32,7 +32,7 @@ function Preview() {
 				</Suspense>
 
 				<Grid
-					position={[0.5, -0.5, 0.5]}
+					position={[0.5, -0.501, 0.5]}
 					cellSize={1 / 16}
 					sectionSize={1}
 					cellThickness={0.5}

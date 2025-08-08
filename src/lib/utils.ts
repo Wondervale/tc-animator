@@ -3,6 +3,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+export type Vector3 = [number, number, number];
+
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
