@@ -87,24 +87,46 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 
 		const blob = new Blob([fixedBuffer], { type: "application/binary" });
 
-		// Save using browser-fs-access
-		const fileHandle = await toast
-			.promise(
-				fileSave(blob, {
-					fileName,
-					extensions: [".tcaproj"],
-					mimeTypes: ["application/binary"],
-					id: "tca-project",
+		const fileHandle = projectStore.fileHandle;
+
+		if (!fileHandle) {
+			// Save using browser-fs-access
+			const localFileHandle = await toast
+				.promise(
+					fileSave(blob, {
+						fileName,
+						extensions: [".tcaproj"],
+						mimeTypes: ["application/binary"],
+						id: "tca-project",
+					}),
+					{
+						loading: "Saving project...",
+						success: "Project saved successfully!",
+						error: "Failed to save the project.",
+					}
+				)
+				.unwrap();
+
+			if (localFileHandle) {
+				set({
+					fileHandle: localFileHandle,
+					metadata: { ...localMetadata },
+				});
+			}
+		} else {
+			// Save to the existing file handle
+			await toast.promise(
+				fileHandle.createWritable().then(async (writer) => {
+					await writer.write(fixedBuffer);
+					await writer.close();
 				}),
 				{
 					loading: "Saving project...",
 					success: "Project saved successfully!",
 					error: "Failed to save the project.",
 				}
-			)
-			.unwrap();
+			);
 
-		if (fileHandle) {
 			set({
 				fileHandle,
 				metadata: { ...localMetadata },
@@ -148,7 +170,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 			}
 		}
 
-		toast.success("Project loaded successfully!");
+		set({ fileHandle: fileHandle.handle });
 	},
 
 	reset: () => set({ metadata: { projectName: "", createdAt: null }, cart: null, fileHandle: undefined }),

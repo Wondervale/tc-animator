@@ -1,16 +1,31 @@
 /** @format */
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { Suspense, useEffect } from "react";
 
 import Editor from "@monaco-editor/react";
 import Preview from "@/components/Preview";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Suspense } from "react";
 import Wave from "@/components/Wave";
 import { useProjectStore } from "@/stores/ProjectStore";
 
 function App() {
 	const projectStore = useProjectStore();
+
+	useEffect(() => {
+		// Register some keybinds
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "s" && (event.ctrlKey || event.metaKey)) {
+				event.preventDefault();
+				projectStore.saveProject();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [projectStore]);
 
 	return (
 		<div className="h-screen w-screen">
