@@ -16,6 +16,8 @@ import { toast } from "sonner";
 export const fileHeader = strToU8("🦊🚂🎬");
 
 interface ProjectStore {
+	saved: boolean;
+
 	metadata: {
 		projectName: string;
 		createdAt: Date | null;
@@ -43,145 +45,181 @@ interface ProjectStore {
 	reset: () => void;
 }
 
-export const useProjectStore = create<ProjectStore>((set) => ({
-	metadata: {
-		projectName: "",
-		createdAt: null,
-	},
+export const useProjectStore = create<ProjectStore>((setOrg, get) => {
+	const set: typeof setOrg = (partial) => {
+		const update = typeof partial === "function" ? partial(get()) : partial;
 
-	cart: null,
-
-	setMetadata: (metadata) => set({ metadata }),
-
-	setProjectName: (name) =>
-		set((state) => ({
-			metadata: {
-				...state.metadata,
-				projectName: name,
-			},
-		})),
-	setCart: (cart) => set({ cart }),
-	clearCart: () => set({ cart: null }),
-
-	saveProject: async () => {
-		const projectStore = useProjectStore.getState();
-
-		if (!projectStore.cart) {
-			throw new Error("No cart data to save.");
+		// enforce saved = false unless explicitly true
+		const nextState: Partial<ProjectStore> = { ...update };
+		if ("saved" in nextState && nextState.saved === true) {
+			nextState.saved = true;
+		} else {
+			// Don't set saved to false if the orbit controls are being updated
+			if (!nextState.metadata?.orbitControls) {
+				nextState.saved = false;
+			}
 		}
 
-		const fileName = `${projectStore.metadata.projectName || "TCA-Project"}.tcaproj`;
+		// always do partial update -> omit replace
+		return setOrg(nextState);
+	};
 
-		// Setup the metadata with the current date if not set
-		const localMetadata = {
-			...projectStore.metadata,
-			createdAt: projectStore.metadata.createdAt || new Date(),
-		};
+	return {
+		saved: false,
 
-		// Create the zip file with fflate
-		const zipDataRaw = zipSync(
-			{
-				"metadata.json": strToU8(superjson.stringify(localMetadata)),
-				"cart.json": strToU8(superjson.stringify(projectStore.cart)),
-			},
-			{ level: 9 }
-		);
+		metadata: {
+			projectName: "",
+			createdAt: null,
+			orbitControls: undefined,
+		},
 
-		// Prepend the file header
-		const header = new Uint8Array(fileHeader.length + zipDataRaw.length);
-		header.set(fileHeader);
-		header.set(zipDataRaw, fileHeader.length);
+		cart: null,
 
-		const fixedBuffer = new Uint8Array(header.length);
-		fixedBuffer.set(header);
+		setMetadata: (metadata) => set({ metadata }),
 
-		const blob = new Blob([fixedBuffer], { type: "application/binary" });
+		setProjectName: (name) =>
+			set((state) => ({
+				metadata: {
+					...state.metadata,
+					projectName: name,
+				},
+			})),
+		setCart: (cart) => set({ cart }),
+		clearCart: () => set({ cart: null }),
 
-		const fileHandle = projectStore.fileHandle;
+		saveProject: async () => {
+			const projectStore = useProjectStore.getState();
 
-		if (!fileHandle) {
-			// Save using browser-fs-access
-			const localFileHandle = await toast
-				.promise(
-					fileSave(blob, {
-						fileName,
-						extensions: [".tcaproj"],
-						mimeTypes: ["application/binary"],
-						id: "tca-project",
-					}),
-					{
-						loading: "Saving project...",
-						success: "Project saved successfully!",
-						error: "Failed to save the project.",
-					}
-				)
-				.unwrap();
-
-			if (localFileHandle) {
-				set({
-					fileHandle: localFileHandle,
-					metadata: { ...localMetadata },
-				});
+			if (!projectStore.cart) {
+				throw new Error("No cart data to save.");
 			}
-		} else {
-			// Save to the existing file handle
-			await toast.promise(
-				fileHandle.createWritable().then(async (writer) => {
-					await writer.write(fixedBuffer);
-					await writer.close();
-				}),
+
+			const fileName = `${projectStore.metadata.projectName || "TCA-Project"}.tcaproj`;
+
+			// Setup the metadata with the current date if not set
+			const localMetadata = {
+				...projectStore.metadata,
+				createdAt: projectStore.metadata.createdAt || new Date(),
+			};
+
+			// Create the zip file with fflate
+			const zipDataRaw = zipSync(
 				{
-					loading: "Saving project...",
-					success: "Project saved successfully!",
-					error: "Failed to save the project.",
-				}
+					"metadata.json": strToU8(superjson.stringify(localMetadata)),
+					"cart.json": strToU8(superjson.stringify(projectStore.cart)),
+				},
+				{ level: 9 }
 			);
 
-			set({
-				fileHandle,
-				metadata: { ...localMetadata },
-			});
-		}
-	},
+			// Prepend the file header
+			const header = new Uint8Array(fileHeader.length + zipDataRaw.length);
+			header.set(fileHeader);
+			header.set(zipDataRaw, fileHeader.length);
 
-	loadProjectFromFile: async (fileHandle) => {
-		if (!fileHandle) {
-			throw new Error("No file handle provided.");
-		}
+			const fixedBuffer = new Uint8Array(header.length);
+			fixedBuffer.set(header);
 
-		const buffer = await fileHandle.arrayBuffer();
+			const blob = new Blob([fixedBuffer], { type: "application/binary" });
 
-		const header = new Uint8Array(fileHeader.length);
-		header.set(fileHeader);
-		const bufferHeader = new Uint8Array(buffer.slice(0, fileHeader.length));
-		if (!bufferHeader.every((value: number, index: number) => value === header[index])) {
-			throw new Error("Invalid TCA-Project file format.");
-		}
+			const fileHandle = projectStore.fileHandle;
 
-		const zipData = new Uint8Array(buffer.slice(fileHeader.length));
-		const unzipped = await unzipSync(zipData);
+			if (!fileHandle) {
+				// Save using browser-fs-access
+				const localFileHandle = await toast
+					.promise(
+						fileSave(blob, {
+							fileName,
+							extensions: [".tcaproj"],
+							mimeTypes: ["application/binary"],
+							id: "tca-project",
+						}),
+						{
+							loading: "Saving project...",
+							success: "Project saved successfully!",
+							error: "Failed to save the project.",
+						}
+					)
+					.unwrap();
 
-		for (const [filename, fileData] of Object.entries(unzipped)) {
-			switch (filename) {
-				case "metadata.json": {
+				if (localFileHandle) {
 					set({
-						metadata: superjson.parse(strFromU8(fileData)),
+						saved: true,
+						fileHandle: localFileHandle,
+						metadata: { ...localMetadata },
 					});
-					break;
 				}
-				case "cart.json": {
-					const cart = superjson.parse(strFromU8(fileData)) as Cart;
-					set({ cart });
-					break;
+			} else {
+				// Save to the existing file handle
+				const success = await toast
+					.promise(
+						fileHandle
+							.createWritable()
+							.then(async (writer) => {
+								await writer.write(fixedBuffer);
+								await writer.close();
+
+								return true;
+							})
+							.catch(() => {
+								return false;
+							}),
+						{
+							loading: "Saving project...",
+							success: "Project saved successfully!",
+							error: "Failed to save the project.",
+						}
+					)
+					.unwrap();
+
+				if (success) {
+					set({
+						saved: true,
+						fileHandle,
+						metadata: { ...localMetadata },
+					});
 				}
-				default:
-					console.warn(`Unknown file in TCA-Project: ${filename}`);
-					break;
 			}
-		}
+		},
 
-		set({ fileHandle: fileHandle.handle });
-	},
+		loadProjectFromFile: async (fileHandle) => {
+			if (!fileHandle) {
+				throw new Error("No file handle provided.");
+			}
 
-	reset: () => set({ metadata: { projectName: "", createdAt: null }, cart: null, fileHandle: undefined }),
-}));
+			const buffer = await fileHandle.arrayBuffer();
+
+			const header = new Uint8Array(fileHeader.length);
+			header.set(fileHeader);
+			const bufferHeader = new Uint8Array(buffer.slice(0, fileHeader.length));
+			if (!bufferHeader.every((value: number, index: number) => value === header[index])) {
+				throw new Error("Invalid TCA-Project file format.");
+			}
+
+			const zipData = new Uint8Array(buffer.slice(fileHeader.length));
+			const unzipped = await unzipSync(zipData);
+
+			for (const [filename, fileData] of Object.entries(unzipped)) {
+				switch (filename) {
+					case "metadata.json": {
+						set({
+							metadata: superjson.parse(strFromU8(fileData)),
+						});
+						break;
+					}
+					case "cart.json": {
+						const cart = superjson.parse(strFromU8(fileData)) as Cart;
+						set({ cart });
+						break;
+					}
+					default:
+						console.warn(`Unknown file in TCA-Project: ${filename}`);
+						break;
+				}
+			}
+
+			set({ saved: true, fileHandle: fileHandle.handle });
+		},
+
+		reset: () => set({ metadata: { projectName: "", createdAt: null }, cart: null, fileHandle: undefined }),
+	};
+});

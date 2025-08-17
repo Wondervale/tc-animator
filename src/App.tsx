@@ -27,14 +27,39 @@ function App() {
 		};
 	}, [projectStore]);
 
+	useEffect(() => {
+		// Warn on unsaved changes
+		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			event.preventDefault();
+			event.returnValue = ""; // Chrome requires this to show the dialog
+		};
+		window.addEventListener("beforeunload", handleBeforeUnload);
+		return () => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
+		};
+	}, [projectStore.saved]);
+
+	useEffect(() => {
+		// Auto-save project every 5 minutes
+		const interval = setInterval(() => {
+			if (!projectStore.saved && projectStore.cart) {
+				projectStore.saveProject().catch((error) => {
+					console.error("Auto-save failed:", error);
+				});
+			}
+		}, 5 * 60 * 1000); // 5 minutes
+		return () => {
+			clearInterval(interval);
+		};
+	}, [projectStore]);
+
 	return (
 		<div className="h-screen w-screen">
 			<ResizablePanelGroup direction="vertical" autoSaveId="tca-project" autoSave="true">
 				<ResizablePanel>
 					<ResizablePanelGroup direction="horizontal" autoSaveId="tca-preview" autoSave="true">
 						<ResizablePanel minSize={5} defaultSize={20} className="bg-card flex flex-col gap-4 p-4">
-							{projectStore.metadata.projectName}
-
+							{projectStore.metadata.projectName} {projectStore.saved ? "✓" : "✗"}
 							<Suspense fallback={<Skeleton className="h-full w-full" />}>
 								<Editor
 									language="json"

@@ -60,7 +60,7 @@ function Preview() {
 	return (
 		<>
 			<Canvas
-				camera={{ position: [3, 3, 3], fov: 60 }}
+				camera={{ position: [3, 3, 3], fov: 45 }}
 				shadows
 				dpr={[1, 2]}
 				gl={{ powerPreference: "high-performance" }}>
