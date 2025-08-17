@@ -19,11 +19,19 @@ interface ProjectStore {
 	metadata: {
 		projectName: string;
 		createdAt: Date | null;
+
+		orbitControls?: {
+			position: [number, number, number];
+			target: [number, number, number];
+			zoom?: number;
+		};
 	};
 
 	cart: Cart | null;
 
 	fileHandle?: FileSystemFileHandle;
+
+	setMetadata: (metadata: ProjectStore["metadata"]) => void;
 
 	setProjectName: (name: string) => void;
 	setCart: (cart: Cart | null) => void;
@@ -42,6 +50,8 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 	},
 
 	cart: null,
+
+	setMetadata: (metadata) => set({ metadata }),
 
 	setProjectName: (name) =>
 		set((state) => ({

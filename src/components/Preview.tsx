@@ -10,13 +10,53 @@ import * as THREE from "three";
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
 import { FpsDisplay, FpsTracker } from "@/components/three/Stats";
 import { GizmoHelper, GizmoViewport, Grid, OrbitControls } from "@react-three/drei";
+import { useEffect, useRef } from "react";
 
 import { Canvas } from "@react-three/fiber";
 import CartRender from "@/components/three/CartRender";
+import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { SSAO } from "@react-three/postprocessing";
 import { Suspense } from "react";
+import { useProjectStore } from "@/stores/ProjectStore";
 
 function Preview() {
+	const controlsRef = useRef<OrbitControlsImpl>(null);
+	const projectStore = useProjectStore();
+
+	// Restore controls state on mount
+	useEffect(() => {
+		const controls = controlsRef.current;
+		const meta = projectStore.metadata.orbitControls;
+		if (controls && meta) {
+			controls.object.position.set(...meta.position);
+			controls.target.set(...meta.target);
+			if (meta.zoom && controls.object.zoom !== undefined) {
+				controls.object.zoom = meta.zoom;
+				controls.object.updateProjectionMatrix();
+			}
+			controls.update();
+		}
+	}, [projectStore.metadata.orbitControls]);
+
+	// Save controls state on change
+	useEffect(() => {
+		const controls = controlsRef.current;
+		if (!controls) return;
+		const handleChange = () => {
+			projectStore.setProjectName(projectStore.metadata.projectName); // trigger update
+			projectStore.setMetadata({
+				...projectStore.metadata,
+				orbitControls: {
+					position: [controls.object.position.x, controls.object.position.y, controls.object.position.z],
+					target: [controls.target.x, controls.target.y, controls.target.z],
+					zoom: controls.object.zoom,
+				},
+			});
+		};
+		controls.addEventListener("change", handleChange);
+		return () => controls.removeEventListener("change", handleChange);
+	}, [projectStore]);
+
 	return (
 		<>
 			<Canvas
@@ -56,7 +96,7 @@ function Preview() {
 					<FXAA />
 				</EffectComposer>
 
-				<OrbitControls makeDefault enableDamping={false} />
+				<OrbitControls ref={controlsRef} makeDefault enableDamping={false} />
 				<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
 					<GizmoViewport axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]} labelColor="white" />
 				</GizmoHelper>

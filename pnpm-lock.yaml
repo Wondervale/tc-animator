@@ -116,6 +116,9 @@ importers:
       three:
         specifier: ^0.178.0
         version: 0.178.0
+      three-stdlib:
+        specifier: ^2.36.0
+        version: 2.36.0(three@0.178.0)
       wavesurfer.js:
         specifier: ^7.10.1
         version: 7.10.1
