@@ -16,7 +16,7 @@ function App() {
 		// Register some keybinds
 
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.ctrlKey || event.metaKey)) {
+			if (event.key === "s" && (event.ctrlKey || event.metaKey) && projectStore.cart) {
 				event.preventDefault();
 				projectStore.saveProject();
 			}
