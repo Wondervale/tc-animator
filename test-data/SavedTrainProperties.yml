@@ -2673,3 +2673,107 @@ DTH:
       entityType: MINECART
       flipped: true
   savedName: DTH
+parkbench:
+  carts:
+    0:
+      model:
+        type: ITEM
+        entityType: MINECART
+        attachments:
+          0:
+            type: SEAT
+            position:
+              posY: 0.09999999999999999
+              posX: 0.0
+              posZ: 0.0
+              rotX: 0.0
+              rotY: 0.0
+              rotZ: 0.0
+            displayItem:
+              enabled: false
+          1:
+            type: SEAT
+            position:
+              posY: 0.09999999999999999
+              posX: 0.85
+              posZ: 0.0
+              rotX: 0.0
+              rotY: 0.0
+              rotZ: 0.0
+            displayItem:
+              enabled: false
+          2:
+            type: SEAT
+            position:
+              posX: -0.85
+              posY: 0.1
+              posZ: 0.0
+              rotX: 0.0
+              rotY: 0.0
+              rotZ: 0.0
+            displayItem:
+              enabled: false
+          3:
+            type: HITBOX
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              v: 4189
+              type: OAK_PLANKS
+            position:
+              transform: HYBRID_ARMORSTAND_HEAD
+              posX: 0.0
+              posY: -0.19999999999999998
+              posZ: 0.0
+              rotX: 0.0
+              rotY: 0.0
+              rotZ: 0.0
+              sizeX: 3.0
+              sizeY: 1.0
+              sizeZ: 1.0
+            shulkerColor: DEFAULT
+            schematic: ''
+            firstPersonViewMode: DYNAMIC
+            displayMode: DEFAULT
+            firstPersonViewLockMode: 'OFF'
+            lockRotation: false
+            displayItem:
+              enabled: false
+            text: ' '
+        position:
+          transform: DISPLAY_NONE
+          posX: 0.0
+          posY: 2.43
+          posZ: 0.0
+          rotX: 0.0
+          rotY: 0.0
+          rotZ: 0.0
+        item:
+          ==: org.bukkit.inventory.ItemStack
+          v: 4189
+          type: PAPER
+          meta:
+            ==: ItemMeta
+            meta-type: UNSPECIFIC
+            custom-model-data:
+              ==: CustomModelData
+              floats:
+              - 20010.0
+              flags: []
+              strings: []
+              colors: []
+            ItemFlags:
+            - HIDE_UNBREAKABLE
+            Unbreakable: true
+        editor:
+          selectedIndex: 0
+          scrollOffset: 0
+        shulkerColor: DEFAULT
+        schematic: ''
+        physical:
+          cartLength: 1.0
+          wheelCenter: 0.0
+          wheelDistance: 0.0
+      entityType: MINECART
+      flipped: false
+  savedName: parkbench
+  claims: []
