@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fileOpen } from "browser-fs-access";
+import { toast } from "sonner";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { useState } from "react";
 import { useTrainsStore } from "@/stores/TrainsStore";
@@ -164,6 +165,8 @@ function ProjectDialog() {
 			extensions: [".yaml", ".yml"],
 			id: "load-saved-train-properties",
 			startIn: "documents",
+		}).catch(() => {
+			return null;
 		});
 
 		if (fileHandle) {
@@ -171,6 +174,28 @@ function ProjectDialog() {
 			trainsStore.setTrainsFromYml(text);
 			trainsStore.setCurrentTrain(Object.values(trainsStore.trains)[0]);
 		}
+	};
+
+	const loadProjectFromFile = async () => {
+		const fileHandle = await fileOpen({
+			description: "Select a TCA-Project file",
+			extensions: [".tcaproj"],
+			mimeTypes: ["application/binary"],
+			id: "tca-project",
+			startIn: "documents",
+		}).catch(() => {
+			return null;
+		});
+
+		if (!fileHandle) {
+			return;
+		}
+
+		toast.promise(projectStore.loadProjectFromFile(fileHandle), {
+			loading: "Loading project...",
+			success: "Project loaded successfully!",
+			error: "Failed to load project.",
+		});
 	};
 
 	if (Object.entries(trainsStore.trains).length > 0 && !projectStore.metadata.createdAt) {
@@ -199,9 +224,9 @@ function ProjectDialog() {
 									Import SavedTrainProperties
 								</Button>
 								<Button
-									disabled
 									variant="secondary"
-									className="aspect-square w-full h-auto flex flex-col">
+									className="aspect-square w-full h-auto flex flex-col"
+									onClick={loadProjectFromFile}>
 									<FolderOpen className="block size-24 mx-auto" />
 									Open TCA-Project
 								</Button>

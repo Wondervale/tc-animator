@@ -5,11 +5,11 @@
  * @format
  */
 
-import { strToU8, zipSync } from "fflate";
+import { strToU8, zipSync, unzipSync, strFromU8 } from "fflate";
 
 import type { Cart } from "@/schemas/SavedTrainPropertiesSchema";
 import { create } from "zustand";
-import { fileSave } from "browser-fs-access";
+import { fileSave, type FileWithHandle } from "browser-fs-access";
 import superjson from "superjson";
 import { toast } from "sonner";
 
@@ -30,6 +30,7 @@ interface ProjectStore {
 	clearCart: () => void;
 
 	saveProject: () => Promise<void>;
+	loadProjectFromFile: (fileHandle: FileWithHandle) => Promise<void>;
 
 	reset: () => void;
 }
@@ -93,7 +94,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 					fileName,
 					extensions: [".tcaproj"],
 					mimeTypes: ["application/binary"],
-					id: "save-tca-project",
+					id: "tca-project",
 				}),
 				{
 					loading: "Saving project...",
@@ -109,6 +110,45 @@ export const useProjectStore = create<ProjectStore>((set) => ({
 				metadata: { ...localMetadata },
 			});
 		}
+	},
+
+	loadProjectFromFile: async (fileHandle) => {
+		if (!fileHandle) {
+			throw new Error("No file handle provided.");
+		}
+
+		const buffer = await fileHandle.arrayBuffer();
+
+		const header = new Uint8Array(fileHeader.length);
+		header.set(fileHeader);
+		const bufferHeader = new Uint8Array(buffer.slice(0, fileHeader.length));
+		if (!bufferHeader.every((value: number, index: number) => value === header[index])) {
+			throw new Error("Invalid TCA-Project file format.");
+		}
+
+		const zipData = new Uint8Array(buffer.slice(fileHeader.length));
+		const unzipped = await unzipSync(zipData);
+
+		for (const [filename, fileData] of Object.entries(unzipped)) {
+			switch (filename) {
+				case "metadata.json": {
+					set({
+						metadata: superjson.parse(strFromU8(fileData)),
+					});
+					break;
+				}
+				case "cart.json": {
+					const cart = superjson.parse(strFromU8(fileData)) as Cart;
+					set({ cart });
+					break;
+				}
+				default:
+					console.warn(`Unknown file in TCA-Project: ${filename}`);
+					break;
+			}
+		}
+
+		toast.success("Project loaded successfully!");
 	},
 
 	reset: () => set({ metadata: { projectName: "", createdAt: null }, cart: null, fileHandle: undefined }),
