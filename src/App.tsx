@@ -7,9 +7,12 @@ import Editor from "@monaco-editor/react";
 import Preview from "@/components/Preview";
 import { Skeleton } from "@/components/ui/skeleton";
 import Wave from "@/components/Wave";
+import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 
 function App() {
+	const preferences = usePreferences();
+
 	const projectStore = useProjectStore();
 
 	useEffect(() => {
@@ -30,6 +33,8 @@ function App() {
 	useEffect(() => {
 		// Warn on unsaved changes
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			if (projectStore.saved || !projectStore.cart) return;
+
 			event.preventDefault();
 			event.returnValue = ""; // Chrome requires this to show the dialog
 		};
@@ -37,7 +42,7 @@ function App() {
 		return () => {
 			window.removeEventListener("beforeunload", handleBeforeUnload);
 		};
-	}, [projectStore.saved]);
+	}, [projectStore]);
 
 	useEffect(() => {
 		// Auto-save project every 5 minutes
@@ -47,11 +52,11 @@ function App() {
 					console.error("Auto-save failed:", error);
 				});
 			}
-		}, 5 * 60 * 1000); // 5 minutes
+		}, preferences.saveInterval * 1000);
 		return () => {
 			clearInterval(interval);
 		};
-	}, [projectStore]);
+	}, [projectStore, preferences.saveInterval]);
 
 	return (
 		<div className="h-screen w-screen">

@@ -15,6 +15,7 @@ import { useProjectStore } from "@/stores/ProjectStore";
 import { useThree, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
+import { usePreferences } from "@/stores/PreferencesStore";
 
 function CartRender() {
 	const { cart } = useProjectStore();
@@ -43,6 +44,8 @@ function CartRender() {
 }
 
 function AttachmentRender({ attachments }: { attachments: Attachment | Model }) {
+	const preferences = usePreferences();
+
 	return (
 		<>
 			{Object.entries(attachments.attachments || {}).map(([key, attachment]) => {
@@ -71,16 +74,18 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 									case "SEAT":
 										return (
 											<>
-												{/* <CameraFacingText
-													fontSize={0.3}
-													color="white"
-													anchorX="center"
-													anchorY="middle"
-													outlineWidth={0.05}
-													outlineColor="black"
-													position={[0, 3.5, 0]}>
-													{`S: ${key}\nPos:${pos.map((v) => `\n${v.toFixed(2)}`)}`}
-												</CameraFacingText> */}
+												{preferences.debugText && (
+													<CameraFacingText
+														fontSize={0.3}
+														color="white"
+														anchorX="center"
+														anchorY="middle"
+														outlineWidth={0.05}
+														outlineColor="black"
+														position={[0, 3.5, 0]}>
+														{`S: ${key}\nPos:${pos.map((v) => `\n${v.toFixed(2)}`)}`}
+													</CameraFacingText>
+												)}
 												<Dummy position={[0, 0, 0]} />
 											</>
 										);
@@ -93,7 +98,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 						</group>
 
 						{/* Debug text - NOT scaled */}
-						{/* {!["SEAT", "HITBOX"].includes(attachment.type) && (
+						{preferences.debugText && !["SEAT", "HITBOX"].includes(attachment.type) && (
 							<CameraFacingText
 								position={[0, 1.5, 0]} // follows position/rotation but not scale
 								fontSize={0.3}
@@ -107,7 +112,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 									v.toFixed(2)
 								)}\nscale:${scale.map((v) => v.toFixed(2))}`}
 							</CameraFacingText>
-						)} */}
+						)}
 
 						{/* Recurse down */}
 						{attachment.attachments && <AttachmentRender attachments={attachment} />}

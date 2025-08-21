@@ -17,9 +17,12 @@ import CartRender from "@/components/three/CartRender";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { SSAO } from "@react-three/postprocessing";
 import { Suspense } from "react";
+import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 
 function Preview() {
+	const preferences = usePreferences();
+
 	const controlsRef = useRef<OrbitControlsImpl>(null);
 	const projectStore = useProjectStore();
 
@@ -77,23 +80,26 @@ function Preview() {
 					sectionSize={1}
 					cellThickness={0.5}
 					sectionThickness={1.5}
-					cellColor="#92a3bb"
-					sectionColor="#47566c"
+					cellColor={preferences.gridColor}
+					sectionColor={preferences.getComplementaryGridColor()}
 					infiniteGrid
 					side={THREE.DoubleSide}
 				/>
 
-				{/* <Environment preset="studio" /> */}
-
 				<EffectComposer enableNormalPass>
-					<SSAO
-						samples={31}
-						radius={20}
-						intensity={20}
-						luminanceInfluence={0.9}
-						color={new THREE.Color("black")}
-					/>
-					<FXAA />
+					{preferences.SSAOEnabled ? (
+						<SSAO
+							samples={31}
+							radius={20}
+							intensity={20}
+							luminanceInfluence={0.9}
+							color={new THREE.Color("black")}
+						/>
+					) : (
+						<></>
+					)}
+
+					{preferences.FXAAEnabled ? <FXAA /> : <></>}
 				</EffectComposer>
 
 				<OrbitControls ref={controlsRef} makeDefault enableDamping={false} />
