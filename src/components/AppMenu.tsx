@@ -36,7 +36,6 @@ import { Switch } from "@/components/ui/switch";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 
-// ...existing code...
 function AppMenu() {
 	const projectStore = useProjectStore();
 
@@ -158,7 +157,6 @@ function AppMenu() {
 	);
 }
 
-// Update PreferencesPanel to accept open/setOpen props
 function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
 	const preferences = usePreferences();
 
