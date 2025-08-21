@@ -88,7 +88,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 															.map((v) => `\n${v.toFixed(2)}`)}`}
 													</CameraFacingText>
 												)}
-												<Dummy position={[0, 0, 0]} />
+												<Dummy position={new Vector3(0, 0, 0)} />
 											</>
 										);
 									case "HITBOX":

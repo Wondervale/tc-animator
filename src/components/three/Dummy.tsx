@@ -5,15 +5,16 @@
  * @format
  */
 
-import { degreeToRadian, type Vector3 } from "@/lib/utils";
-import { useGLTF } from "@react-three/drei";
+import { Vector3 } from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+import { degreeToRadian } from "@/lib/utils";
+import { useGLTF } from "@react-three/drei";
 
 const DUMMY_PATH = `${import.meta.env.BASE_URL}models/dummy.glb`;
 
 useGLTF.preload(DUMMY_PATH);
 
-function Dummy({ scale = 1, position = [0, 0, 0] }: { scale?: number; position?: Vector3 }) {
+function Dummy({ scale = 1, position = new Vector3(0, 0, 0) }: { scale?: number; position?: Vector3 }) {
 	const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/dummy.glb`);
 	const dummyModel = clone(scene);
 
