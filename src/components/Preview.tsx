@@ -63,6 +63,7 @@ function Preview() {
 	return (
 		<>
 			<Canvas
+				className="three-bg"
 				camera={{ position: [3, 3, 3], fov: 45 }}
 				shadows
 				dpr={[1, 2]}

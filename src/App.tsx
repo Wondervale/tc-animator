@@ -25,21 +25,6 @@ function App() {
 	}, [preferences.theme]);
 
 	useEffect(() => {
-		// Register some keybinds
-
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.ctrlKey || event.metaKey) && projectStore.cart) {
-				event.preventDefault();
-				projectStore.saveProject();
-			}
-		};
-		window.addEventListener("keydown", handleKeyDown);
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown);
-		};
-	}, [projectStore]);
-
-	useEffect(() => {
 		// Warn on unsaved changes
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
 			if (projectStore.saved || !projectStore.cart) return;
