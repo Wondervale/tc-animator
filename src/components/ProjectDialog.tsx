@@ -177,21 +177,7 @@ function ProjectDialog() {
 	};
 
 	const loadProjectFromFile = async () => {
-		const fileHandle = await fileOpen({
-			description: "Select a TCA-Project file",
-			extensions: [".tcaproj"],
-			mimeTypes: ["application/binary"],
-			id: "tca-project",
-			startIn: "documents",
-		}).catch(() => {
-			return null;
-		});
-
-		if (!fileHandle) {
-			return;
-		}
-
-		toast.promise(projectStore.loadProjectFromFile(fileHandle), {
+		toast.promise(projectStore.loadProjectFromFile(), {
 			loading: "Loading project...",
 			success: "Project loaded successfully!",
 			error: "Failed to load project.",

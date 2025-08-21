@@ -5,11 +5,11 @@
  * @format
  */
 
-import { strToU8, zipSync, unzipSync, strFromU8 } from "fflate";
+import { fileOpen, fileSave } from "browser-fs-access";
+import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 
 import type { Cart } from "@/schemas/SavedTrainPropertiesSchema";
 import { create } from "zustand";
-import { fileSave, type FileWithHandle } from "browser-fs-access";
 import superjson from "superjson";
 import { toast } from "sonner";
 
@@ -39,8 +39,8 @@ interface ProjectStore {
 	setCart: (cart: Cart | null) => void;
 	clearCart: () => void;
 
-	saveProject: () => Promise<void>;
-	loadProjectFromFile: (fileHandle: FileWithHandle) => Promise<void>;
+	saveProject: (newFile?: boolean) => Promise<void>;
+	loadProjectFromFile: () => Promise<void>;
 
 	reset: () => void;
 }
@@ -87,7 +87,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 		setCart: (cart) => set({ cart }),
 		clearCart: () => set({ cart: null }),
 
-		saveProject: async () => {
+		saveProject: async (newFile) => {
 			const projectStore = useProjectStore.getState();
 
 			if (!projectStore.cart) {
@@ -123,7 +123,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 
 			const fileHandle = projectStore.fileHandle;
 
-			if (!fileHandle) {
+			if (!fileHandle || newFile) {
 				// Save using browser-fs-access
 				const localFileHandle = await toast
 					.promise(
@@ -147,6 +147,15 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 						fileHandle: localFileHandle,
 						metadata: { ...localMetadata },
 					});
+
+					if (localFileHandle.name !== fileName) {
+						set({
+							metadata: {
+								...localMetadata,
+								projectName: localFileHandle.name.replace(/\.tcaproj$/, ""),
+							},
+						});
+					}
 				}
 			} else {
 				// Save to the existing file handle
@@ -181,9 +190,19 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			}
 		},
 
-		loadProjectFromFile: async (fileHandle) => {
+		loadProjectFromFile: async () => {
+			const fileHandle = await fileOpen({
+				description: "Select a TCA-Project file",
+				extensions: [".tcaproj"],
+				mimeTypes: ["application/binary"],
+				id: "tca-project",
+				startIn: "documents",
+			}).catch(() => {
+				return null;
+			});
+
 			if (!fileHandle) {
-				throw new Error("No file handle provided.");
+				throw new Error("No file selected.");
 			}
 
 			const buffer = await fileHandle.arrayBuffer();

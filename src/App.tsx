@@ -3,6 +3,7 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Suspense, useEffect } from "react";
 
+import AppMenu from "@/components/AppMenu";
 import Editor from "@monaco-editor/react";
 import Preview from "@/components/Preview";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,6 +15,14 @@ function App() {
 	const preferences = usePreferences();
 
 	const projectStore = useProjectStore();
+
+	useEffect(() => {
+		const root = window.document.documentElement;
+
+		root.classList.remove("light", "dark");
+
+		root.classList.add(preferences.theme);
+	}, [preferences.theme]);
 
 	useEffect(() => {
 		// Register some keybinds
@@ -64,7 +73,7 @@ function App() {
 				<ResizablePanel>
 					<ResizablePanelGroup direction="horizontal" autoSaveId="tca-preview" autoSave="true">
 						<ResizablePanel minSize={5} defaultSize={20} className="bg-card flex flex-col gap-4 p-4">
-							{projectStore.metadata.projectName} {projectStore.saved ? "✓" : "✗"}
+							<AppMenu />
 							<Suspense fallback={<Skeleton className="h-full w-full" />}>
 								<Editor
 									language="json"
