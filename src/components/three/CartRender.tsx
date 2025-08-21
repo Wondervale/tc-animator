@@ -71,7 +71,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 									case "SEAT":
 										return (
 											<>
-												<CameraFacingText
+												{/* <CameraFacingText
 													fontSize={0.3}
 													color="white"
 													anchorX="center"
@@ -80,7 +80,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 													outlineColor="black"
 													position={[0, 3.5, 0]}>
 													{`S: ${key}\nPos:${pos.map((v) => `\n${v.toFixed(2)}`)}`}
-												</CameraFacingText>
+												</CameraFacingText> */}
 												<Dummy position={[0, 0, 0]} />
 											</>
 										);
@@ -93,7 +93,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 						</group>
 
 						{/* Debug text - NOT scaled */}
-						{!["SEAT", "HITBOX"].includes(attachment.type) && (
+						{/* {!["SEAT", "HITBOX"].includes(attachment.type) && (
 							<CameraFacingText
 								position={[0, 1.5, 0]} // follows position/rotation but not scale
 								fontSize={0.3}
@@ -107,7 +107,7 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 									v.toFixed(2)
 								)}\nscale:${scale.map((v) => v.toFixed(2))}`}
 							</CameraFacingText>
-						)}
+						)} */}
 
 						{/* Recurse down */}
 						{attachment.attachments && <AttachmentRender attachments={attachment} />}
