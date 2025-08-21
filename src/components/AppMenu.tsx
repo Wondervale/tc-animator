@@ -5,7 +5,15 @@
  * @format
  */
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Maximize, Minimize, X } from "lucide-react";
 import {
 	Menubar,
@@ -28,6 +36,8 @@ import {
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import ColorPicker from "@/components/ColorPicker";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
@@ -191,8 +201,44 @@ function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: bo
 								</SelectContent>
 							</Select>
 						</div>
+						<div className="mt-4">
+							<Label htmlFor="save-interval" className="block mb-2">
+								Auto-save Interval (seconds):
+							</Label>
+							<Input
+								id="save-interval"
+								type="number"
+								min={1}
+								value={preferences.saveInterval}
+								onChange={(e) => {
+									const value = parseInt(e.target.value, 10);
+									if (isNaN(value) || value < 1) {
+										console.warn("Invalid save interval:", e.target.value);
+										return;
+									}
+									preferences.setSaveInterval(value);
+								}}
+								className="w-full"
+							/>
+						</div>
+						<div className="mt-4">
+							<Label htmlFor="grid-color" className="block mb-2">
+								Grid Color:
+							</Label>
+							<ColorPicker
+								defaultColor={preferences.gridColor}
+								onChangeComplete={(color) => {
+									preferences.setGridColor(color.hex);
+								}}
+							/>
+						</div>
 					</DialogDescription>
 				</DialogHeader>
+				<DialogFooter>
+					<DialogClose asChild>
+						<Button type="button">Save</Button>
+					</DialogClose>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);
