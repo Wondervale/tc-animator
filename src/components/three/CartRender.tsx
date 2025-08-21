@@ -10,12 +10,12 @@ import type { Attachment, Model } from "@/schemas/SavedTrainPropertiesSchema";
 import Cube from "@/components/three/Cube";
 import Dummy from "@/components/three/Dummy";
 import { Text, type TextProps } from "@react-three/drei";
-import { degreeToRadian, type Vector3 } from "@/lib/utils";
+import { degreeToRadian } from "@/lib/utils";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { useThree, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
-import * as THREE from "three";
 import { usePreferences } from "@/stores/PreferencesStore";
+import { Euler, Quaternion, Vector3, type Object3D } from "three";
 
 function CartRender() {
 	const { cart } = useProjectStore();
@@ -24,13 +24,13 @@ function CartRender() {
 
 	const { position } = cart.model;
 
-	const pos: Vector3 = [position?.posX || 0, position?.posY || 0, position?.posZ || 0];
-	const rot: Vector3 = [
+	const pos: Vector3 = new Vector3(position?.posX || 0, position?.posY || 0, position?.posZ || 0);
+	const rot: Euler = new Euler(
 		degreeToRadian(position?.rotX || 0),
 		degreeToRadian(position?.rotY || 0),
-		degreeToRadian(position?.rotZ || 0),
-	];
-	const scale: Vector3 = [position?.sizeX || 1, position?.sizeY || 1, position?.sizeZ || 1];
+		degreeToRadian(position?.rotZ || 0)
+	);
+	const scale: Vector3 = new Vector3(position?.sizeX || 1, position?.sizeY || 1, position?.sizeZ || 1);
 
 	return (
 		<group position={pos} rotation={rot}>
@@ -49,21 +49,21 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 	return (
 		<>
 			{Object.entries(attachments.attachments || {}).map(([key, attachment]) => {
-				const pos: Vector3 = [
+				const pos: Vector3 = new Vector3(
 					attachment.position?.posX || 0,
 					attachment.position?.posY || 0,
-					attachment.position?.posZ || 0,
-				];
-				const rot: Vector3 = [
+					attachment.position?.posZ || 0
+				);
+				const rot: Euler = new Euler(
 					degreeToRadian(attachment.position?.rotX || 0),
 					degreeToRadian(attachment.position?.rotY || 0),
-					degreeToRadian(attachment.position?.rotZ || 0),
-				];
-				const scale: Vector3 = [
+					degreeToRadian(attachment.position?.rotZ || 0)
+				);
+				const scale: Vector3 = new Vector3(
 					attachment.position?.sizeX || 1,
 					attachment.position?.sizeY || 1,
-					attachment.position?.sizeZ || 1,
-				];
+					attachment.position?.sizeZ || 1
+				);
 
 				return (
 					<group key={key} position={pos} rotation={rot}>
@@ -83,7 +83,9 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 														outlineWidth={0.05}
 														outlineColor="black"
 														position={[0, 3.5, 0]}>
-														{`S: ${key}\nPos:${pos.map((v) => `\n${v.toFixed(2)}`)}`}
+														{`S: ${key}\nPos:${pos
+															.toArray()
+															.map((v) => `\n${v.toFixed(2)}`)}`}
 													</CameraFacingText>
 												)}
 												<Dummy position={[0, 0, 0]} />
@@ -108,9 +110,10 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 								scale={[1, 1, 1]} // ensure no accidental scaling
 								outlineWidth={0.05}
 								outlineColor="black">
-								{`${key}\npos:${pos.map((v) => v.toFixed(2))}\nrot:${rot.map((v) =>
-									v.toFixed(2)
-								)}\nscale:${scale.map((v) => v.toFixed(2))}`}
+								{`${key}\npos:${pos.toArray().map((v) => v.toFixed(2))}\nrot:${rot
+									.toArray()
+									.filter((v): v is number => typeof v === "number")
+									.map((v) => v.toFixed(2))}\nscale:${scale.toArray().map((v) => v.toFixed(2))}`}
 							</CameraFacingText>
 						)}
 
@@ -124,13 +127,13 @@ function AttachmentRender({ attachments }: { attachments: Attachment | Model }) 
 }
 
 function CameraFacingText(props: TextProps & { children: React.ReactNode }) {
-	const ref = useRef<THREE.Object3D>(null);
+	const ref = useRef<Object3D>(null);
 	const { camera } = useThree();
 
 	useFrame(() => {
 		if (!ref.current) return;
 
-		const textPos = ref.current.getWorldPosition(new THREE.Vector3());
+		const textPos = ref.current.getWorldPosition(new Vector3());
 		const camPos = camera.position.clone();
 		camPos.y = textPos.y;
 
@@ -138,10 +141,10 @@ function CameraFacingText(props: TextProps & { children: React.ReactNode }) {
 		let angle = Math.atan2(dir.x, dir.z);
 
 		if (ref.current.parent) {
-			const parentQuat = new THREE.Quaternion();
+			const parentQuat = new Quaternion();
 			ref.current.parent.getWorldQuaternion(parentQuat);
 
-			const parentEuler = new THREE.Euler().setFromQuaternion(parentQuat, "YXZ");
+			const parentEuler = new Euler().setFromQuaternion(parentQuat, "YXZ");
 			const parentRotationY = parentEuler.y;
 
 			angle = angle - parentRotationY + Math.PI;

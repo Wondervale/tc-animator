@@ -5,10 +5,9 @@
  * @format
  */
 
-import * as THREE from "three";
-
 import { Box, useTexture } from "@react-three/drei";
 
+import { NearestFilter } from "three";
 import { useMemo } from "react";
 
 // Keep a global history and color generator (move to separate file if needed)
@@ -45,8 +44,8 @@ function Cube({ args, position }: { args: [number, number, number]; position: [n
 
 	const texture = useMemo(() => {
 		const clone = originalTexture.clone();
-		clone.magFilter = THREE.NearestFilter;
-		clone.minFilter = THREE.NearestFilter;
+		clone.magFilter = NearestFilter;
+		clone.minFilter = NearestFilter;
 		return clone;
 	}, [originalTexture]);
 

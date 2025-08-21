@@ -5,11 +5,10 @@
  * @format
  */
 
-import * as THREE from "three";
-
 import { EffectComposer, FXAA } from "@react-three/postprocessing";
 import { FpsDisplay, FpsTracker } from "@/components/three/Stats";
 import { GizmoHelper, GizmoViewport, Grid, OrbitControls } from "@react-three/drei";
+import { Color as THREEColor, DoubleSide as THREEDoubleSide } from "three";
 import { useEffect, useRef } from "react";
 
 import { Canvas } from "@react-three/fiber";
@@ -84,7 +83,7 @@ function Preview() {
 					cellColor={preferences.gridColor}
 					sectionColor={preferences.getComplementaryGridColor()}
 					infiniteGrid
-					side={THREE.DoubleSide}
+					side={THREEDoubleSide}
 				/>
 
 				<EffectComposer enableNormalPass>
@@ -94,7 +93,7 @@ function Preview() {
 							radius={20}
 							intensity={20}
 							luminanceInfluence={0.9}
-							color={new THREE.Color("black")}
+							color={new THREEColor("black")}
 						/>
 					) : (
 						<></>
