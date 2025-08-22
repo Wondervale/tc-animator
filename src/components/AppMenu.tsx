@@ -219,13 +219,8 @@ function PreferencesPanel({
 							Here you can adjust your preferences for the
 							application.
 							<div className="mt-4 flex flex-col gap-4">
-								<div className="flex flex-col gap-2">
-									<Label
-										htmlFor="theme-select"
-										className="mb-2 block"
-									>
-										Theme:
-									</Label>
+								<div className="flex flex-col">
+									<Label htmlFor="theme-select">Theme:</Label>
 									<Select
 										value={preferences.theme}
 										onValueChange={(value) => {
@@ -263,11 +258,8 @@ function PreferencesPanel({
 										</SelectContent>
 									</Select>
 								</div>
-								<div className="flex flex-col gap-2">
-									<Label
-										htmlFor="save-interval"
-										className="mb-2 block"
-									>
+								<div className="flex flex-col">
+									<Label htmlFor="save-interval">
 										Auto-save Interval (seconds):
 									</Label>
 									<Input
@@ -292,7 +284,7 @@ function PreferencesPanel({
 										className="h-10 w-full"
 									/>
 								</div>
-								<div className="flex flex-col gap-2">
+								<div className="flex flex-col">
 									<Label
 										htmlFor="grid-color"
 										className="mb-2 block"
@@ -306,10 +298,10 @@ function PreferencesPanel({
 										}}
 									/>
 								</div>
-								<div className="flex flex-col gap-2">
+								<div className="flex flex-col">
 									<Label
 										htmlFor="antialiasing-select"
-										className="mb-2 block"
+										className="block"
 									>
 										<Tooltip>
 											<TooltipTrigger asChild>
@@ -436,7 +428,8 @@ function PreferencesPanel({
 										</SelectContent>
 									</Select>
 								</div>
-								<div className="flex flex-col gap-2">
+
+								<div className="flex flex-row gap-2">
 									<Label
 										htmlFor="debug-text"
 										className="mb-2 block"
@@ -467,7 +460,7 @@ function PreferencesPanel({
 										}
 									/>
 								</div>
-								<div className="flex flex-col gap-2">
+								<div className="flex flex-row gap-2">
 									<Label
 										htmlFor="ssao-enabled"
 										className="mb-2 block"
@@ -496,6 +489,38 @@ function PreferencesPanel({
 										checked={preferences.SSAOEnabled}
 										onCheckedChange={(checked) =>
 											preferences.setSSAOEnabled(checked)
+										}
+									/>
+								</div>
+								<div className="flex flex-row gap-2">
+									<Label
+										htmlFor="dof-enabled"
+										className="mb-2 block"
+									>
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<Info className="mr-[0.5] inline h-3" />
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													Depth of Field (DOF) creates
+													a blurred effect on objects
+													outside the focus area,
+													simulating camera lens
+													behavior. It enhances
+													realism but can be
+													resource-intensive and may
+													affect performance.
+												</p>
+											</TooltipContent>
+										</Tooltip>
+										Depth of Field Enabled:
+									</Label>
+									<Switch
+										id="dof-enabled"
+										checked={preferences.DOFEnabled}
+										onCheckedChange={(checked) =>
+											preferences.setDOFEnabled(checked)
 										}
 									/>
 								</div>
