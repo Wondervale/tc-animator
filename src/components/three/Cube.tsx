@@ -6,8 +6,8 @@
  */
 
 import { Box, useTexture } from "@react-three/drei";
+import { NearestFilter, Vector3 } from "three";
 
-import { NearestFilter } from "three";
 import { useMemo } from "react";
 
 // Keep a global history and color generator (move to separate file if needed)
@@ -38,9 +38,17 @@ function getUniquePastelColor(): string {
 	return color;
 }
 
-function Cube({ args, position }: { args: [number, number, number]; position: [number, number, number] }) {
+function Cube({
+	args = new Vector3(1, 1, 1),
+	position = new Vector3(0, 0, 0),
+}: {
+	args?: Vector3;
+	position?: Vector3;
+}) {
 	// This is a simple cube component that can be used in the scene.
-	const originalTexture = useTexture(`${import.meta.env.BASE_URL}textures/missing.png`);
+	const originalTexture = useTexture(
+		`${import.meta.env.BASE_URL}textures/missing.png`,
+	);
 
 	const texture = useMemo(() => {
 		const clone = originalTexture.clone();
@@ -53,7 +61,7 @@ function Cube({ args, position }: { args: [number, number, number]; position: [n
 	const pastelColor = useMemo(() => getUniquePastelColor(), []);
 
 	return (
-		<Box args={args} position={position} castShadow receiveShadow>
+		<Box args={args.toArray()} position={position} castShadow receiveShadow>
 			<meshStandardMaterial map={texture} color={pastelColor} />
 		</Box>
 	);

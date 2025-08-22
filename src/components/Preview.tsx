@@ -5,13 +5,26 @@
  * @format
  */
 
-import { DepthOfField, EffectComposer, FXAA, SMAA, SSAO } from "@react-three/postprocessing";
+import {
+	DepthOfField,
+	EffectComposer,
+	FXAA,
+	SMAA,
+	SSAO,
+} from "@react-three/postprocessing";
 import { FpsDisplay, FpsTracker } from "@/components/three/Stats";
-import { GizmoHelper, GizmoViewport, Grid, OrbitControls } from "@react-three/drei";
+import {
+	GizmoHelper,
+	GizmoViewport,
+	Grid,
+	OrbitControls,
+} from "@react-three/drei";
 import { useEffect, useRef } from "react";
 
 import { Canvas } from "@react-three/fiber";
 import CartRender from "@/components/three/CartRender";
+import Cube from "@/components/three/Cube";
+import Dummy from "@/components/three/Dummy";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Suspense } from "react";
 import { DoubleSide as THREEDoubleSide } from "three";
@@ -48,8 +61,16 @@ function Preview() {
 			projectStore.setMetadata({
 				...projectStore.metadata,
 				orbitControls: {
-					position: [controls.object.position.x, controls.object.position.y, controls.object.position.z],
-					target: [controls.target.x, controls.target.y, controls.target.z],
+					position: [
+						controls.object.position.x,
+						controls.object.position.y,
+						controls.object.position.z,
+					],
+					target: [
+						controls.target.x,
+						controls.target.y,
+						controls.target.z,
+					],
 					zoom: controls.object.zoom,
 				},
 			});
@@ -65,16 +86,24 @@ function Preview() {
 				camera={{ position: [3, 3, 3], fov: 45 }}
 				shadows
 				dpr={[1, 2]}
-				gl={{ powerPreference: "high-performance", antialias: false, stencil: false, depth: false }}>
+				gl={{
+					powerPreference: "high-performance",
+					antialias: false,
+					stencil: false,
+					depth: false,
+				}}
+			>
 				<Suspense fallback={null}>
 					<FpsTracker />
 
 					<ambientLight intensity={2} />
-					<directionalLight position={[5, 5, 5]} intensity={3} castShadow />
+					<directionalLight
+						position={[5, 5, 5]}
+						intensity={3}
+						castShadow
+					/>
 
-					<Suspense fallback={null}>
-						<CartRender />
-					</Suspense>
+					<CartRender />
 
 					<Grid
 						position={[0.5, -0.501, 0.5]}
@@ -88,12 +117,30 @@ function Preview() {
 						side={THREEDoubleSide}
 					/>
 
-					<OrbitControls ref={controlsRef} makeDefault enableDamping={false} />
+					<OrbitControls
+						ref={controlsRef}
+						makeDefault
+						enableDamping={false}
+					/>
 					<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-						<GizmoViewport axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]} labelColor="white" />
+						<GizmoViewport
+							axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]}
+							labelColor="white"
+						/>
 					</GizmoHelper>
 
-					<EffectComposer enableNormalPass depthBuffer stencilBuffer enabled>
+					{/* Small trick to make loading things a bit quicker */}
+					<group position={[-1000, -1000, -1000]}>
+						<Cube />
+						<Dummy />
+					</group>
+
+					<EffectComposer
+						enableNormalPass
+						depthBuffer
+						stencilBuffer
+						enabled
+					>
 						{preferences.SSAOEnabled ? <SSAO /> : <></>}
 
 						{(() => {
@@ -109,7 +156,11 @@ function Preview() {
 						})()}
 
 						{preferences.DOFEnabled ? (
-							<DepthOfField focusDistance={2} focalLength={5} bokehScale={2} />
+							<DepthOfField
+								focusDistance={2}
+								focalLength={5}
+								bokehScale={2}
+							/>
 						) : (
 							<></>
 						)}
