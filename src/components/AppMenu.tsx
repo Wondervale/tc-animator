@@ -5,7 +5,13 @@
  * @format
  */
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Info, Maximize, Minimize, X } from "lucide-react";
 import {
 	Menubar,
@@ -25,7 +31,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -39,7 +49,9 @@ import { useProjectStore } from "@/stores/ProjectStore";
 function AppMenu() {
 	const projectStore = useProjectStore();
 
-	const [isFullscreen, setIsFullscreen] = useState(document.fullscreenElement);
+	const [isFullscreen, setIsFullscreen] = useState(
+		document.fullscreenElement,
+	);
 	const [saving, setSaving] = useState(false);
 	const [preferencesOpen, setPreferencesOpen] = useState(false); // <-- Add state
 
@@ -61,7 +73,10 @@ function AppMenu() {
 		};
 		document.addEventListener("fullscreenchange", handleFullscreenChange);
 		return () => {
-			document.removeEventListener("fullscreenchange", handleFullscreenChange);
+			document.removeEventListener(
+				"fullscreenchange",
+				handleFullscreenChange,
+			);
 		};
 	}, []);
 
@@ -76,7 +91,11 @@ function AppMenu() {
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.ctrlKey || event.metaKey) && projectStore.cart) {
+			if (
+				event.key === "s" &&
+				(event.ctrlKey || event.metaKey) &&
+				projectStore.cart
+			) {
 				event.preventDefault();
 				projectStore.saveProject().catch((error) => {
 					console.error("Save failed:", error);
@@ -98,11 +117,18 @@ function AppMenu() {
 				padding: "-1em",
 				margin: "-1em",
 			}}
-			className="rounded-none">
-			<div className="flex items-center gap-2 bg-card px-2">
+			className="rounded-none"
+		>
+			<div className="bg-card flex items-center gap-2 px-2">
 				{projectStore.metadata.projectName || "Untitled Project"}
 
-				<Button className="h-4 w-4" variant="ghost" size="icon" disabled={saving} onClick={saveAndNew}>
+				<Button
+					className="h-4 w-4"
+					variant="ghost"
+					size="icon"
+					disabled={saving}
+					onClick={saveAndNew}
+				>
 					{!projectStore.saved ? (
 						<span
 							style={{
@@ -124,14 +150,23 @@ function AppMenu() {
 			<MenubarMenu>
 				<MenubarTrigger>File</MenubarTrigger>
 				<MenubarContent>
-					<MenubarItem disabled={saving} onClick={async () => projectStore.saveProject()}>
+					<MenubarItem
+						disabled={saving}
+						onClick={async () => projectStore.saveProject()}
+					>
 						Save Project <MenubarShortcut>CTRL + S</MenubarShortcut>
 					</MenubarItem>
-					<MenubarItem disabled={saving} onClick={async () => projectStore.saveProject(true)}>
+					<MenubarItem
+						disabled={saving}
+						onClick={async () => projectStore.saveProject(true)}
+					>
 						Save Project As
 					</MenubarItem>
 					<MenubarSeparator />
-					<MenubarItem disabled={saving} onClick={async () => projectStore.loadProjectFromFile()}>
+					<MenubarItem
+						disabled={saving}
+						onClick={async () => projectStore.loadProjectFromFile()}
+					>
 						Load Project
 					</MenubarItem>
 					<MenubarItem disabled={saving} onClick={saveAndNew}>
@@ -147,17 +182,31 @@ function AppMenu() {
 				</MenubarContent>
 			</MenubarMenu>
 			<MenubarMenu>
-				<Button className="ml-auto" variant="ghost" size="icon" onClick={toggleFullscreen}>
+				<Button
+					className="ml-auto"
+					variant="ghost"
+					size="icon"
+					onClick={toggleFullscreen}
+				>
 					{!isFullscreen ? <Maximize /> : <Minimize />}
 				</Button>
 			</MenubarMenu>
 
-			<PreferencesPanel open={preferencesOpen} setOpen={setPreferencesOpen} />
+			<PreferencesPanel
+				open={preferencesOpen}
+				setOpen={setPreferencesOpen}
+			/>
 		</Menubar>
 	);
 }
 
-function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
+function PreferencesPanel({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+}) {
 	const preferences = usePreferences();
 
 	return (
@@ -167,35 +216,58 @@ function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: bo
 					<DialogTitle>Preferences</DialogTitle>
 					<DialogDescription asChild>
 						<div>
-							Here you can adjust your preferences for the application.
-							<div className="grid grid-cols-3 gap-4 mt-4">
-								<div className="flex flex-col gap-2  justify-evenly">
-									<Label htmlFor="theme-select" className="block mb-2">
+							Here you can adjust your preferences for the
+							application.
+							<div className="mt-4 flex flex-col gap-4">
+								<div className="flex flex-col gap-2">
+									<Label
+										htmlFor="theme-select"
+										className="mb-2 block"
+									>
 										Theme:
 									</Label>
 									<Select
 										value={preferences.theme}
 										onValueChange={(value) => {
-											if (value !== "light" && value !== "dark") {
-												console.warn("Invalid theme selected:", value);
+											if (
+												value !== "light" &&
+												value !== "dark"
+											) {
+												console.warn(
+													"Invalid theme selected:",
+													value,
+												);
 												return;
 											}
 											preferences.setTheme(value);
-										}}>
-										<SelectTrigger className="w-full h-10" id="theme-select">
+										}}
+									>
+										<SelectTrigger
+											className="h-10 w-full"
+											id="theme-select"
+										>
 											<SelectValue placeholder="Select theme" />
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
-												<SelectLabel>Available Themes</SelectLabel>
-												<SelectItem value="light">Light</SelectItem>
-												<SelectItem value="dark">Dark</SelectItem>
+												<SelectLabel>
+													Available Themes
+												</SelectLabel>
+												<SelectItem value="light">
+													Light
+												</SelectItem>
+												<SelectItem value="dark">
+													Dark
+												</SelectItem>
 											</SelectGroup>
 										</SelectContent>
 									</Select>
 								</div>
-								<div className="flex flex-col gap-2  justify-evenly">
-									<Label htmlFor="save-interval" className="block mb-2">
+								<div className="flex flex-col gap-2">
+									<Label
+										htmlFor="save-interval"
+										className="mb-2 block"
+									>
 										Auto-save Interval (seconds):
 									</Label>
 									<Input
@@ -204,18 +276,27 @@ function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: bo
 										min={1}
 										value={preferences.saveInterval}
 										onChange={(e) => {
-											const value = parseInt(e.target.value, 10);
+											const value = parseInt(
+												e.target.value,
+												10,
+											);
 											if (isNaN(value) || value < 1) {
-												console.warn("Invalid save interval:", e.target.value);
+												console.warn(
+													"Invalid save interval:",
+													e.target.value,
+												);
 												return;
 											}
 											preferences.setSaveInterval(value);
 										}}
-										className="w-full h-10"
+										className="h-10 w-full"
 									/>
 								</div>
-								<div className="flex flex-col gap-2  justify-evenly">
-									<Label htmlFor="grid-color" className="block mb-2">
+								<div className="flex flex-col gap-2">
+									<Label
+										htmlFor="grid-color"
+										className="mb-2 block"
+									>
 										Grid Color:
 									</Label>
 									<ColorPicker
@@ -225,17 +306,154 @@ function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: bo
 										}}
 									/>
 								</div>
-								<div className="flex flex-col gap-2  justify-evenly">
-									<Label htmlFor="debug-text" className="block mb-2">
+								<div className="flex flex-col gap-2">
+									<Label
+										htmlFor="antialiasing-select"
+										className="mb-2 block"
+									>
 										<Tooltip>
 											<TooltipTrigger asChild>
-												<Info className="inline mr-[0.5] h-3" />
+												<Info className="mr-[0.5] inline h-3" />
 											</TooltipTrigger>
 											<TooltipContent>
 												<p>
-													Debug text displays additional information about the 3D scene, such
-													as object coordinates and rendering details. It can be useful for
-													troubleshooting but may clutter the view.
+													Antialiasing smooths jagged
+													edges in 3D graphics.
+													Different methods have
+													varying impacts on
+													performance and visual
+													quality. Choose the one that
+													best fits your needs.
+												</p>
+											</TooltipContent>
+										</Tooltip>
+										Antialiasing:
+									</Label>
+
+									<Select
+										value={preferences.antialiasing}
+										onValueChange={(value) => {
+											if (
+												value !== "none" &&
+												value !== "FXAA" &&
+												value !== "SMAA"
+											) {
+												console.warn(
+													"Invalid antialiasing selected:",
+													value,
+												);
+												return;
+											}
+											preferences.setAntialiasing(value);
+										}}
+									>
+										<SelectTrigger
+											className="h-10 w-full"
+											id="antialiasing-select"
+										>
+											<SelectValue placeholder="Select antialiasing" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectLabel>
+													Available Antialiasing
+													Methods
+												</SelectLabel>
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<SelectItem value="none">
+															None
+														</SelectItem>
+													</TooltipTrigger>
+													<TooltipContent>
+														<p>
+															No antialiasing is
+															applied. This may
+															result in jagged
+															edges on 3D objects,
+															especially at lower
+															resolutions, but
+															offers the best
+															performance.
+														</p>
+													</TooltipContent>
+												</Tooltip>
+
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<SelectItem value="FXAA">
+															FXAA
+														</SelectItem>
+													</TooltipTrigger>
+													<TooltipContent>
+														<p>
+															Fast Approximate
+															Anti-Aliasing (FXAA)
+															is a screen-space
+															antialiasing
+															technique that
+															smooths jagged edges
+															with minimal
+															performance impact.
+															It is less
+															resource-intensive
+															than other methods
+															but may produce
+															slightly blurrier
+															results.
+														</p>
+													</TooltipContent>
+												</Tooltip>
+
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<SelectItem value="SMAA">
+															SMAA
+														</SelectItem>
+													</TooltipTrigger>
+													<TooltipContent>
+														<p>
+															Subpixel
+															Morphological
+															Anti-Aliasing (SMAA)
+															is an advanced
+															antialiasing
+															technique that
+															provides
+															high-quality edge
+															smoothing with
+															moderate performance
+															cost. It combines
+															multiple methods to
+															effectively reduce
+															jagged edges while
+															preserving image
+															detail.
+														</p>
+													</TooltipContent>
+												</Tooltip>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+								</div>
+								<div className="flex flex-col gap-2">
+									<Label
+										htmlFor="debug-text"
+										className="mb-2 block"
+									>
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<Info className="mr-[0.5] inline h-3" />
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													Debug text displays
+													additional information about
+													the 3D scene, such as object
+													coordinates and rendering
+													details. It can be useful
+													for troubleshooting but may
+													clutter the view.
 												</p>
 											</TooltipContent>
 										</Tooltip>
@@ -244,20 +462,30 @@ function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: bo
 									<Switch
 										id="debug-text"
 										checked={preferences.debugText}
-										onCheckedChange={(checked) => preferences.setDebugText(checked)}
+										onCheckedChange={(checked) =>
+											preferences.setDebugText(checked)
+										}
 									/>
 								</div>
-								<div className="flex flex-col gap-2  justify-evenly">
-									<Label htmlFor="ssao-enabled" className="block mb-2">
+								<div className="flex flex-col gap-2">
+									<Label
+										htmlFor="ssao-enabled"
+										className="mb-2 block"
+									>
 										<Tooltip>
 											<TooltipTrigger asChild>
-												<Info className="inline mr-[0.5] h-3" />
+												<Info className="mr-[0.5] inline h-3" />
 											</TooltipTrigger>
 											<TooltipContent>
 												<p>
-													Screen Space Ambient Occlusion (SSAO) is a shading method that adds
-													soft shadows to enhance depth perception in 3D scenes. It can
-													improve visual realism but may impact performance.
+													Screen Space Ambient
+													Occlusion (SSAO) is a
+													shading method that adds
+													soft shadows to enhance
+													depth perception in 3D
+													scenes. It can improve
+													visual realism but may
+													impact performance.
 												</p>
 											</TooltipContent>
 										</Tooltip>
@@ -266,30 +494,9 @@ function PreferencesPanel({ open, setOpen }: { open: boolean; setOpen: (open: bo
 									<Switch
 										id="ssao-enabled"
 										checked={preferences.SSAOEnabled}
-										onCheckedChange={(checked) => preferences.setSSAOEnabled(checked)}
-									/>
-								</div>
-								<div className="flex flex-col gap-2 justify-evenly">
-									<Label htmlFor="fxaa-enabled" className="block mb-2">
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<Info className="inline mr-[0.5] h-3" />
-											</TooltipTrigger>
-											<TooltipContent>
-												<p>
-													Fast Approximate Anti-Aliasing (FXAA) is a post-processing technique
-													that smooths out jagged edges in 3D graphics. It can improve visual
-													quality but may impact performance.
-												</p>
-											</TooltipContent>
-										</Tooltip>
-										FXAA Enabled:
-									</Label>
-
-									<Switch
-										id="fxaa-enabled"
-										checked={preferences.FXAAEnabled}
-										onCheckedChange={(checked) => preferences.setFXAAEnabled(checked)}
+										onCheckedChange={(checked) =>
+											preferences.setSSAOEnabled(checked)
+										}
 									/>
 								</div>
 							</div>

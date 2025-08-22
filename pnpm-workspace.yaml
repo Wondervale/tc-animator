@@ -1,7 +1,5 @@
-# @format
-
 onlyBuiltDependencies:
-    - "@tailwindcss/oxide"
-    - esbuild
-
+  - '@tailwindcss/oxide'
+  - core-js
+  - esbuild
 packages: []

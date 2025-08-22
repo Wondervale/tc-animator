@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { useFrame } from "@react-three/fiber";
+import { usePreferences } from "@/stores/PreferencesStore";
 
 let fpsSubscribers: ((fps: number) => void)[] = [];
 
@@ -41,6 +42,8 @@ export function FpsDisplay({
 }: {
 	position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 }) {
+	const preferences = usePreferences();
+
 	const [fps, setFps] = useState(0);
 
 	useEffect(() => {
@@ -56,9 +59,18 @@ export function FpsDisplay({
 
 	return (
 		<div
-			className="fixed pointer-events-none z-10 text-sm font-mono text-muted-foreground"
+			className="fixed pointer-events-none z-10 text-sm font-mono text-muted-foreground text-right"
 			style={{ ...positionStyle }}>
-			{fps} FPS
+			<p>{fps} FPS</p>
+
+			{preferences.debugText && (
+				<>
+					<p>Debug Text: {preferences.debugText ? "On" : "Off"}</p>
+					<p>SSAO: {preferences.SSAOEnabled ? "On" : "Off"}</p>
+					<p>Antialiasing: {preferences.antialiasing}</p>
+					<p>Depth of Field: {preferences.DOFEnabled ? "On" : "Off"}</p>
+				</>
+			)}
 		</div>
 	);
 }

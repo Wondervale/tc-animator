@@ -16,14 +16,16 @@ interface PreferencesStore {
 	debugText: boolean;
 	gridColor: string;
 	SSAOEnabled: boolean;
-	FXAAEnabled: boolean;
+	DOFEnabled: boolean;
+	antialiasing: "none" | "FXAA" | "SMAA";
 
 	setTheme: (theme: "light" | "dark") => void;
 	setSaveInterval: (interval: number) => void;
 	setDebugText: (enabled: boolean) => void;
 	setGridColor: (color: string) => void;
 	setSSAOEnabled: (enabled: boolean) => void;
-	setFXAAEnabled: (enabled: boolean) => void;
+	setDOFEnabled: (enabled: boolean) => void;
+	setAntialiasing: (mode: "none" | "FXAA" | "SMAA") => void;
 
 	getComplementaryGridColor: () => string;
 }
@@ -36,14 +38,16 @@ export const usePreferences = create<PreferencesStore>()(
 			debugText: false,
 			gridColor: "#92a3bb",
 			SSAOEnabled: true,
-			FXAAEnabled: true,
+			DOFEnabled: true,
+			antialiasing: "SMAA",
 
 			setTheme: (theme) => set({ theme }),
 			setSaveInterval: (interval) => set({ saveInterval: interval }),
 			setDebugText: (enabled) => set({ debugText: enabled }),
 			setGridColor: (color) => set({ gridColor: color }),
 			setSSAOEnabled: (enabled) => set({ SSAOEnabled: enabled }),
-			setFXAAEnabled: (enabled) => set({ FXAAEnabled: enabled }),
+			setDOFEnabled: (enabled) => set({ DOFEnabled: enabled }),
+			setAntialiasing: (mode) => set({ antialiasing: mode }),
 
 			getComplementaryGridColor: () => {
 				const color = Color(get().gridColor);
