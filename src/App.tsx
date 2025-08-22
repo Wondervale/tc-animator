@@ -1,6 +1,10 @@
 /** @format */
 
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import {
+	ResizableHandle,
+	ResizablePanel,
+	ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { Suspense, useEffect } from "react";
 
 import AppMenu from "@/components/AppMenu";
@@ -54,29 +58,55 @@ function App() {
 
 	return (
 		<div className="h-screen w-screen">
-			<ResizablePanelGroup direction="vertical" autoSaveId="tca-project" autoSave="true">
+			<ResizablePanelGroup
+				direction="vertical"
+				autoSaveId="tca-project"
+				autoSave="true"
+			>
 				<ResizablePanel>
-					<ResizablePanelGroup direction="horizontal" autoSaveId="tca-preview" autoSave="true">
-						<ResizablePanel minSize={5} defaultSize={20} className="bg-card flex flex-col gap-4 p-4">
+					<ResizablePanelGroup
+						direction="horizontal"
+						autoSaveId="tca-preview"
+						autoSave="true"
+					>
+						<ResizablePanel
+							minSize={5}
+							defaultSize={20}
+							className="bg-card flex flex-col gap-4 p-4"
+						>
 							<AppMenu />
-							<Suspense fallback={<Skeleton className="h-full w-full" />}>
+							<Suspense
+								fallback={
+									<Skeleton className="h-full w-full" />
+								}
+							>
 								<Editor
 									language="json"
 									theme="vs-dark"
-									value={JSON.stringify(projectStore.cart, null, 2)}
+									value={JSON.stringify(
+										projectStore.cart,
+										null,
+										2,
+									)}
 									options={{
 										minimap: { enabled: true },
-										scrollbar: { alwaysConsumeMouseWheel: false },
+										scrollbar: {
+											alwaysConsumeMouseWheel: false,
+										},
 										wordWrap: "on",
 										automaticLayout: true,
 									}}
 									onChange={(value) => {
 										if (value) {
 											try {
-												const parsed = JSON.parse(value);
+												const parsed =
+													JSON.parse(value);
 												projectStore.setCart(parsed);
 											} catch (e) {
-												console.error("Failed to parse JSON:", e);
+												console.error(
+													"Failed to parse JSON:",
+													e,
+												);
 											}
 										}
 									}}
@@ -90,7 +120,11 @@ function App() {
 					</ResizablePanelGroup>
 				</ResizablePanel>
 				<ResizableHandle />
-				<ResizablePanel minSize={5} defaultSize={40} className="bg-card p-4">
+				<ResizablePanel
+					minSize={5}
+					defaultSize={40}
+					className="bg-card p-4"
+				>
 					Timeline
 					<Wave />
 				</ResizablePanel>

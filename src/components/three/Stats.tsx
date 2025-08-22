@@ -59,8 +59,9 @@ export function FpsDisplay({
 
 	return (
 		<div
-			className="fixed pointer-events-none z-10 text-sm font-mono text-muted-foreground text-right"
-			style={{ ...positionStyle }}>
+			className="text-muted-foreground pointer-events-none fixed z-10 text-right font-mono text-sm"
+			style={{ ...positionStyle }}
+		>
 			<p>{fps} FPS</p>
 
 			{preferences.debugText && (
@@ -68,7 +69,9 @@ export function FpsDisplay({
 					<p>Debug Text: {preferences.debugText ? "On" : "Off"}</p>
 					<p>SSAO: {preferences.SSAOEnabled ? "On" : "Off"}</p>
 					<p>Antialiasing: {preferences.antialiasing}</p>
-					<p>Depth of Field: {preferences.DOFEnabled ? "On" : "Off"}</p>
+					<p>
+						Depth of Field: {preferences.DOFEnabled ? "On" : "Off"}
+					</p>
 				</>
 			)}
 		</div>

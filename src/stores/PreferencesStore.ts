@@ -58,6 +58,6 @@ export const usePreferences = create<PreferencesStore>()(
 			version: 0,
 			name: "preferences",
 			storage: createJSONStorage(() => localStorage),
-		}
-	)
+		},
+	),
 );
