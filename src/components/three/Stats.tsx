@@ -67,8 +67,8 @@ export function FpsDisplay({
 			{preferences.debugText && (
 				<>
 					<p>Debug Text: {preferences.debugText ? "On" : "Off"}</p>
-					<p>SSAO: {preferences.SSAOEnabled ? "On" : "Off"}</p>
 					<p>Antialiasing: {preferences.antialiasing}</p>
+					<p>SSAO: {preferences.SSAOEnabled ? "On" : "Off"}</p>
 					<p>
 						Depth of Field: {preferences.DOFEnabled ? "On" : "Off"}
 					</p>
