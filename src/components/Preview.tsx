@@ -19,7 +19,7 @@ import {
 	Grid,
 	OrbitControls,
 } from "@react-three/drei";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { Canvas } from "@react-three/fiber";
 import CartRender from "@/components/three/CartRender";
@@ -79,6 +79,14 @@ function Preview() {
 		return () => controls.removeEventListener("change", handleChange);
 	}, [projectStore]);
 
+	const postProcessingEnabled = useMemo(() => {
+		return (
+			preferences.antialiasing !== "none" ||
+			preferences.SSAOEnabled ||
+			preferences.DOFEnabled
+		);
+	}, [preferences]);
+
 	return (
 		<>
 			<Canvas
@@ -88,9 +96,9 @@ function Preview() {
 				dpr={[1, 2]}
 				gl={{
 					powerPreference: "high-performance",
-					antialias: false,
-					stencil: false,
-					depth: false,
+					antialias: preferences.antialiasing == "none",
+					stencil: !postProcessingEnabled,
+					depth: !postProcessingEnabled,
 				}}
 			>
 				<Suspense fallback={null}>
@@ -139,7 +147,7 @@ function Preview() {
 						enableNormalPass
 						depthBuffer
 						stencilBuffer
-						enabled
+						enabled={postProcessingEnabled}
 					>
 						{preferences.SSAOEnabled ? <SSAO /> : <></>}
 
