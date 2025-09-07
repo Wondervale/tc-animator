@@ -36,8 +36,10 @@ plathorm:
           rotZ: 0.0
         item:
           ==: org.bukkit.inventory.ItemStack
-          v: 4189
-          type: PUMPKIN
+          DataVersion: 4325
+          id: minecraft:pumpkin
+          count: 1
+          schema_version: 1
         shulkerColor: LIGHT_BLUE
         editor:
           selectedIndex: 0
@@ -57,21 +59,14 @@ DevTowerHotel:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 0.0
@@ -85,8 +80,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -109,8 +106,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -133,8 +132,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -157,8 +158,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -181,8 +184,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -206,8 +211,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -230,8 +237,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -255,8 +264,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -280,8 +291,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -305,8 +318,10 @@ DevTowerHotel:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -347,21 +362,14 @@ DevTowerHotel:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 6.0
@@ -375,8 +383,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -399,8 +409,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -423,8 +435,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -447,8 +461,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -471,8 +487,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -496,8 +514,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -520,8 +540,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -545,8 +567,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -570,8 +594,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -595,8 +621,10 @@ DevTowerHotel:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -645,21 +673,14 @@ DevTowerHotel:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: -6.0
@@ -673,8 +694,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -697,8 +720,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -721,8 +746,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -745,8 +772,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -769,8 +798,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -794,8 +825,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -818,8 +851,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -843,8 +878,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -868,8 +905,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -893,8 +932,10 @@ DevTowerHotel:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -935,21 +976,14 @@ DevTowerHotel:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 0.0
@@ -963,8 +997,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -987,8 +1023,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1011,8 +1049,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1035,8 +1075,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1059,8 +1101,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1084,8 +1128,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1108,8 +1154,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1133,8 +1181,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1158,8 +1208,10 @@ DevTowerHotel:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1183,8 +1235,10 @@ DevTowerHotel:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1235,21 +1289,14 @@ DevTowerHotel:
           sizeZ: 9.0
         item:
           ==: org.bukkit.inventory.ItemStack
-          v: 4189
-          type: PAPER
-          meta:
-            ==: ItemMeta
-            meta-type: UNSPECIFIC
-            custom-model-data:
-              ==: CustomModelData
-              floats:
-              - 40000.0
-              flags: []
-              strings: []
-              colors: []
-            ItemFlags:
-            - HIDE_UNBREAKABLE
-            Unbreakable: true
+          DataVersion: 4325
+          id: minecraft:paper
+          count: 1
+          components:
+            minecraft:unbreakable: '{}'
+            minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+            minecraft:custom_model_data: '{floats:[40000.0f]}'
+          schema_version: 1
         editor:
           selectedIndex: 0
           animNodeSelectedOption: 22
@@ -1326,21 +1373,14 @@ DTH_spots:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: LEATHER_HORSE_ARMOR
-              meta:
-                ==: ItemMeta
-                meta-type: LEATHER_ARMOR
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 10000.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:leather_horse_armor
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[10000.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 0.0
@@ -1368,21 +1408,14 @@ DTH_spots:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: LEATHER_HORSE_ARMOR
-              meta:
-                ==: ItemMeta
-                meta-type: LEATHER_ARMOR
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 10000.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:leather_horse_armor
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[10000.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 0.0
@@ -1410,21 +1443,14 @@ DTH_spots:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: LEATHER_HORSE_ARMOR
-              meta:
-                ==: ItemMeta
-                meta-type: LEATHER_ARMOR
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 10000.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:leather_horse_armor
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[10000.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: -2.0
@@ -1452,21 +1478,14 @@ DTH_spots:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: LEATHER_HORSE_ARMOR
-              meta:
-                ==: ItemMeta
-                meta-type: LEATHER_ARMOR
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 10000.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:leather_horse_armor
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[10000.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 2.0000000000000004
@@ -1516,21 +1535,14 @@ DTH:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 6.0
@@ -1544,8 +1556,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1568,8 +1582,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1592,8 +1608,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1616,8 +1634,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1640,8 +1660,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1665,8 +1687,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1689,8 +1713,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1714,8 +1740,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1739,8 +1767,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1764,8 +1794,10 @@ DTH:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1794,21 +1826,14 @@ DTH:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 0.0
@@ -1822,8 +1847,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1846,8 +1873,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1870,8 +1899,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1894,8 +1925,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1918,8 +1951,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -1943,8 +1978,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -1967,8 +2004,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -1992,8 +2031,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2017,8 +2058,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2042,8 +2085,10 @@ DTH:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2072,21 +2117,14 @@ DTH:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: -6.0
@@ -2100,8 +2138,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -2124,8 +2164,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2148,8 +2190,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2172,8 +2216,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -2196,8 +2242,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2221,8 +2269,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2245,8 +2295,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -2270,8 +2322,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2295,8 +2349,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2320,8 +2376,10 @@ DTH:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2350,21 +2408,14 @@ DTH:
             type: ITEM
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: PAPER
-              meta:
-                ==: ItemMeta
-                meta-type: UNSPECIFIC
-                custom-model-data:
-                  ==: CustomModelData
-                  floats:
-                  - 40001.0
-                  flags: []
-                  strings: []
-                  colors: []
-                ItemFlags:
-                - HIDE_UNBREAKABLE
-                Unbreakable: true
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
             position:
               transform: DISPLAY_NONE
               posX: 0.0
@@ -2378,8 +2429,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -2402,8 +2455,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2426,8 +2481,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2450,8 +2507,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -2474,8 +2533,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2499,8 +2560,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2523,8 +2586,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: -0.98
@@ -2548,8 +2613,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2573,8 +2640,10 @@ DTH:
                 type: SEAT
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.98
@@ -2598,8 +2667,10 @@ DTH:
                 type: HITBOX
                 item:
                   ==: org.bukkit.inventory.ItemStack
-                  v: 4189
-                  type: OAK_PLANKS
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
                 position:
                   transform: HYBRID_ARMORSTAND_HEAD
                   posX: 0.0
@@ -2639,21 +2710,14 @@ DTH:
           sizeZ: 9.0
         item:
           ==: org.bukkit.inventory.ItemStack
-          v: 4189
-          type: PAPER
-          meta:
-            ==: ItemMeta
-            meta-type: UNSPECIFIC
-            custom-model-data:
-              ==: CustomModelData
-              floats:
-              - 40000.0
-              flags: []
-              strings: []
-              colors: []
-            ItemFlags:
-            - HIDE_UNBREAKABLE
-            Unbreakable: true
+          DataVersion: 4325
+          id: minecraft:paper
+          count: 1
+          components:
+            minecraft:unbreakable: '{}'
+            minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+            minecraft:custom_model_data: '{floats:[40000.0f]}'
+          schema_version: 1
         editor:
           selectedIndex: 0
           animNodeSelectedOption: 20
@@ -2717,8 +2781,10 @@ parkbench:
             type: HITBOX
             item:
               ==: org.bukkit.inventory.ItemStack
-              v: 4189
-              type: OAK_PLANKS
+              DataVersion: 4325
+              id: minecraft:oak_planks
+              count: 1
+              schema_version: 1
             position:
               transform: HYBRID_ARMORSTAND_HEAD
               posX: 0.0
@@ -2749,21 +2815,14 @@ parkbench:
           rotZ: 0.0
         item:
           ==: org.bukkit.inventory.ItemStack
-          v: 4189
-          type: PAPER
-          meta:
-            ==: ItemMeta
-            meta-type: UNSPECIFIC
-            custom-model-data:
-              ==: CustomModelData
-              floats:
-              - 20010.0
-              flags: []
-              strings: []
-              colors: []
-            ItemFlags:
-            - HIDE_UNBREAKABLE
-            Unbreakable: true
+          DataVersion: 4325
+          id: minecraft:paper
+          count: 1
+          components:
+            minecraft:unbreakable: '{}'
+            minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+            minecraft:custom_model_data: '{floats:[20010.0f]}'
+          schema_version: 1
         editor:
           selectedIndex: 0
           scrollOffset: 0
@@ -2777,3 +2836,2532 @@ parkbench:
       flipped: false
   savedName: parkbench
   claims: []
+Draymoor:
+  claims: []
+  name: DTH
+  carts:
+    0:
+      model:
+        type: ITEM
+        entityType: MINECART
+        attachments:
+          0:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: 9.0
+              posY: 0.0
+              posZ: 0.0
+              rotX: 0.0
+              rotY: 90.00000000000001
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            names:
+              - Bank 1
+            animations:
+              DTH_S1_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S1_Home:
+                nodes:
+                  - t=0.25
+              Test:
+                nodes:
+                  - t=1.5
+                  - t=1.5 yaw=-90.0
+                  - t=1.5 yaw=-180.0
+                  - t=1.5 yaw=-270.0
+                looped: false
+                speed: 2.06
+            editor:
+              animNodeSelectedOption: 20
+              expanded: false
+          1:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: 6.0
+              posY: 0.0
+              posZ: 6.0
+              rotX: 0.0
+              rotY: 135.0
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            names:
+              - Bank 2
+            animations:
+              DTH_S2_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S2_Home:
+                nodes:
+                  - t=0.25
+            editor:
+              animNodeSelectedOption: 9
+              expanded: false
+          2:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: 0.0
+              posY: 0.0
+              posZ: 9.0
+              rotX: 0.0
+              rotY: 180.0
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            editor:
+              expanded: false
+              animNodeSelectedOption: 10
+            names:
+              - Bank 3
+            animations:
+              DTH_S3_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S3_Home:
+                nodes:
+                  - t=0.0
+          3:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: -6.0
+              posY: 0.0
+              posZ: 6.0
+              rotX: 0.0
+              rotY: 225.0
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            editor:
+              expanded: false
+              animNodeSelectedOption: 9
+            names:
+              - Bank 4
+            animations:
+              DTH_S4_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S4_Home:
+                nodes:
+                  - t=0.25
+            entityType: MINECART
+          4:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: -9.0
+              posY: 0.0
+              posZ: 0.0
+              rotX: 0.0
+              rotY: 270.0
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            animations:
+              DTH_S1_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S1_Home:
+                nodes:
+                  - t=0.25
+              Test:
+                nodes:
+                  - t=1.5
+                  - t=1.5 yaw=-90.0
+                  - t=1.5 yaw=-180.0
+                  - t=1.5 yaw=-270.0
+                looped: false
+                speed: 2.06
+            editor:
+              animNodeSelectedOption: 20
+              expanded: false
+            names:
+              - Bank 5
+          5:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: -6.0
+              posY: 0.0
+              posZ: -6.0
+              rotX: 0.0
+              rotY: 320.0
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            animations:
+              DTH_S2_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S2_Home:
+                nodes:
+                  - t=0.25
+            editor:
+              animNodeSelectedOption: 9
+              expanded: false
+            names:
+              - Bank 6
+          6:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: 0.0
+              posY: 0.0
+              posZ: -9.0
+              rotX: 0.0
+              rotY: 0.0
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            editor:
+              expanded: false
+              animNodeSelectedOption: 10
+            animations:
+              DTH_S3_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S3_Home:
+                nodes:
+                  - t=0.0
+            names:
+              - Bank 7
+          7:
+            type: ITEM
+            item:
+              ==: org.bukkit.inventory.ItemStack
+              DataVersion: 4325
+              id: minecraft:paper
+              count: 1
+              components:
+                minecraft:unbreakable: '{}'
+                minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+                minecraft:custom_model_data: '{floats:[40001.0f]}'
+              schema_version: 1
+            position:
+              transform: DISPLAY_NONE
+              posX: 6.0
+              posY: 0.0
+              posZ: -6.0
+              rotX: 0.0
+              rotY: 45.00000000000001
+              rotZ: 0.0
+            attachments:
+              0:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.1
+              1:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.2
+              2:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: -0.1
+                  posZ: 0.74
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 1.3
+              3:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.1
+              4:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.2
+                animations: {}
+              5:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.03
+                  posZ: -0.26
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                names:
+                  - Stoel 2.3
+              6:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: -0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.1
+              7:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.2
+              8:
+                type: SEAT
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.98
+                  posY: 0.16
+                  posZ: -1.2
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: NO_NAMETAG
+                firstPersonViewLockMode: MOVE
+                lockRotation: true
+                displayItem:
+                  enabled: false
+                animations: {}
+                names:
+                  - Stoel 3.3
+              9:
+                type: HITBOX
+                item:
+                  ==: org.bukkit.inventory.ItemStack
+                  DataVersion: 4325
+                  id: minecraft:oak_planks
+                  count: 1
+                  schema_version: 1
+                position:
+                  transform: HYBRID_ARMORSTAND_HEAD
+                  posX: 0.0
+                  posY: -0.4
+                  posZ: 0.0
+                  rotX: 0.0
+                  rotY: 0.0
+                  rotZ: 0.0
+                  sizeX: 3.0000000000000004
+                  sizeY: 1.1
+                  sizeZ: 3.0
+                  anchor: default
+                entityType: MINECART
+                shulkerColor: DEFAULT
+                schematic: ''
+                firstPersonViewMode: DYNAMIC
+                displayMode: DEFAULT
+                firstPersonViewLockMode: 'OFF'
+                lockRotation: false
+                displayItem:
+                  enabled: false
+                text: ' '
+            editor:
+              expanded: false
+              animNodeSelectedOption: 9
+            animations:
+              DTH_S4_ShowStart:
+                nodes:
+                  - t=5.0
+                  - t=5.0 yaw=90.0
+                  - t=5.0 yaw=180.0
+              DTH_S4_Home:
+                nodes:
+                  - t=0.25
+            entityType: MINECART
+            names:
+              - Bank 8
+        position:
+          transform: DISPLAY_NONE
+          posX: 0.0
+          posY: 7.430000000000001
+          posZ: 0.0
+          rotX: 0.0
+          rotY: -90.0
+          rotZ: 0.0
+          sizeX: 9.0
+          sizeY: 1.0
+          sizeZ: 9.0
+        item:
+          ==: org.bukkit.inventory.ItemStack
+          DataVersion: 4325
+          id: minecraft:paper
+          count: 1
+          components:
+            minecraft:unbreakable: '{}'
+            minecraft:tooltip_display: '{hidden_components:["minecraft:unbreakable"]}'
+            minecraft:custom_model_data: '{floats:[40000.0f]}'
+          schema_version: 1
+        editor:
+          selectedIndex: 0
+          animNodeSelectedOption: 20
+          scrollOffset: 0
+        animations:
+          DTH_S0_First:
+            nodes:
+              - t=7.0 y=0.02 pitch=0.1
+              - t=7.0 y=0.02
+              - t=7.0 y=0.02 yaw=10.2
+              - t=7.0 y=0.02 yaw=40.0
+              - t=7.0 y=0.6 yaw=100.0
+              - t=7.0 y=1.2 yaw=180.0
+          DTH_S0_Second:
+            nodes:
+              - t=0.01 y=1.2 yaw=180.0
+              - t=4.4 y=1.2 yaw=180.0
+              - t=4.3999999999999995 y=1.2 yaw=270.0
+              - t=4.3999999999999995 y=1.2
+              - t=1.5 y=2.5 yaw=68.5
+              - t=0.25 y=2.5 yaw=103.0
+              - t=0.25 y=1.75 yaw=110.0
+              - t=0.25 y=-1.25 yaw=110.0
+              - t=0.33 y=-1.75 yaw=115.0
+              - t=0.75 y=-2.0 yaw=120.0
+              - t=2.0000000000000004 y=-2.25 yaw=133.0
+            looped: false
+          DTH_S0_Pre:
+            nodes:
+              - t=0.25 y=0.02
+          DTH_S0_TEST:
+            nodes:
+              - t=2.0
+              - t=0.25 y=2.5 yaw=150.0
+              - t=0.25 y=1.75 yaw=152.0
+              - t=0.25 y=-1.25 yaw=158.0
+              - t=0.33 y=-1.75 yaw=165.0
+              - t=0.75 y=-2.0 yaw=180.0
+              - t=2.0000000000000004 y=-2.25 yaw=215.0
+          DTH_S0_Rotatie:
+            looped: false
+            nodes:
+              - t=2.0000000000000004
+              - t=2.0000000000000004 y=0.9 pitch=20.0 yaw=90.0
+              - t=2.0 y=-0.8 yaw=180.0 roll=20.0
+              - t=2.0 yaw=270.0
+              - t=2.0000000000000004 pitch=-20.0 roll=20.0
+              - t=2.0000000000000004 y=0.9 pitch=-20.0 yaw=90.0
+              - t=2.0 y=-0.8 yaw=180.0 roll=-20.0
+              - t=2.0 yaw=270.0
+            speed: 0.8
+          DTH_S0_Home:
+            nodes:
+              - t=0.01
+      entityType: MINECART
+      flipped: true
+  savedName: Draymoor

@@ -21,15 +21,17 @@ const DisplayItemSchema = z.looseObject({
 });
 
 const ItemSchema = z.looseObject({
-	"==": z.string(),
-	v: z.number(),
-	type: z.string(),
-	meta: z.any().optional(),
+	"==": z.literal("org.bukkit.inventory.ItemStack"),
+	DataVersion: z.number(),
+	id: z.string(),
+	count: z.number(),
+	components: z.record(z.string(), z.string()),
+	schema_version: z.number(),
 });
 
 export type InternalAttachment = {
 	type: string;
-	item?: unknown; // You can refine this if you know ItemSchema
+	item?: z.infer<typeof ItemSchema>;
 	position: {
 		posX: number;
 		posY: number;
@@ -87,7 +89,7 @@ export const AttachmentSchema: z.ZodType<InternalAttachment> = z.lazy(() =>
 					nodes: z.array(z.string()),
 					looped: z.boolean().optional(),
 					speed: z.number().optional(),
-				})
+				}),
 			)
 			.optional(),
 		brightness: z
@@ -96,7 +98,7 @@ export const AttachmentSchema: z.ZodType<InternalAttachment> = z.lazy(() =>
 				sky: z.number(),
 			})
 			.optional(),
-	})
+	}),
 );
 export type Attachment = z.infer<typeof AttachmentSchema>;
 
@@ -125,7 +127,7 @@ export const ModelSchema = z.looseObject({
 					looped: z.boolean().optional(),
 					speed: z.number().optional(),
 				})
-				.passthrough()
+				.passthrough(),
 		)
 		.optional(),
 	physical: z
@@ -159,7 +161,10 @@ export const SavedTrainSchema = z.looseObject({
 });
 export type SavedTrain = z.infer<typeof SavedTrainSchema>;
 
-export const SavedTrainPropertiesSchema = z.record(z.string(), SavedTrainSchema);
+export const SavedTrainPropertiesSchema = z.record(
+	z.string(),
+	SavedTrainSchema,
+);
 export type SavedTrainProperties = z.infer<typeof SavedTrainPropertiesSchema>;
 
 export function validateSavedTrainProperties(data: unknown): {
@@ -174,6 +179,8 @@ export function validateSavedTrainProperties(data: unknown): {
 
 	return {
 		valid: false,
-		errors: result.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`),
+		errors: result.error.issues.map(
+			(issue) => `${issue.path.join(".")}: ${issue.message}`,
+		),
 	};
 }

@@ -18,13 +18,12 @@ import {
 	GizmoViewport,
 	Grid,
 	OrbitControls,
+	Preload,
 } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 
 import { Canvas } from "@react-three/fiber";
 import CartRender from "@/components/three/CartRender";
-import Cube from "@/components/three/Cube";
-import Dummy from "@/components/three/Dummy";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Suspense } from "react";
 import { DoubleSide as THREEDoubleSide } from "three";
@@ -102,7 +101,40 @@ function Preview() {
 				}}
 			>
 				<Suspense fallback={null}>
+					<EffectComposer
+						enableNormalPass
+						depthBuffer
+						stencilBuffer
+						enabled={postProcessingEnabled}
+					>
+						{preferences.SSAOEnabled ? <SSAO /> : <></>}
+
+						{preferences.DOFEnabled ? (
+							<DepthOfField
+								focusDistance={2}
+								focalLength={5}
+								bokehScale={2}
+							/>
+						) : (
+							<></>
+						)}
+
+						{(() => {
+							switch (preferences.antialiasing) {
+								case "FXAA":
+									return <FXAA />;
+								case "SMAA":
+									return <SMAA />;
+								// Add more cases here as needed
+								default:
+									return <></>;
+							}
+						})()}
+					</EffectComposer>
+
 					<FpsTracker />
+
+					<Preload all />
 
 					<ambientLight intensity={2} />
 					<directionalLight
@@ -130,49 +162,13 @@ function Preview() {
 						makeDefault
 						enableDamping={false}
 					/>
+
 					<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
 						<GizmoViewport
 							axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]}
 							labelColor="white"
 						/>
 					</GizmoHelper>
-
-					{/* Small trick to make loading things a bit quicker */}
-					<group position={[-1000, -1000, -1000]}>
-						<Cube />
-						<Dummy />
-					</group>
-
-					<EffectComposer
-						enableNormalPass
-						depthBuffer
-						stencilBuffer
-						enabled={postProcessingEnabled}
-					>
-						{preferences.SSAOEnabled ? <SSAO /> : <></>}
-
-						{(() => {
-							switch (preferences.antialiasing) {
-								case "FXAA":
-									return <FXAA />;
-								case "SMAA":
-									return <SMAA />;
-								// Add more cases here as needed
-								default:
-									return <></>;
-							}
-						})()}
-
-						{preferences.DOFEnabled ? (
-							<DepthOfField
-								focusDistance={2}
-								focalLength={5}
-								bokehScale={2}
-							/>
-						) : (
-							<></>
-						)}
-					</EffectComposer>
 				</Suspense>
 			</Canvas>
 			<FpsDisplay />
