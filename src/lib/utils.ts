@@ -8,8 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function degreeToRadian(degree: number): number {
-	return (degree * Math.PI) / 180;
+	return -degree * (Math.PI / 180);
 }
 export function radianToDegree(radian: number): number {
-	return (radian * 180) / Math.PI;
+	return -radian * (180 / Math.PI);
 }
