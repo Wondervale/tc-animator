@@ -524,6 +524,40 @@ function PreferencesPanel({
 										}
 									/>
 								</div>
+								<div className="flex flex-row gap-2">
+									<Label
+										htmlFor="control-damping-enabled"
+										className="mb-2 block"
+									>
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<Info className="mr-[0.5] inline h-3" />
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													Enabling control damping
+													makes camera movements
+													smoother by adding inertia.
+													This results in a more
+													natural feel when orbiting
+													or panning the view, but may
+													introduce a slight delay in
+													responsiveness.
+												</p>
+											</TooltipContent>
+										</Tooltip>
+										Orbit Controls Damping:
+									</Label>
+									<Switch
+										id="control-damping"
+										checked={preferences.controlDamping}
+										onCheckedChange={(checked) =>
+											preferences.setControlDamping(
+												checked,
+											)
+										}
+									/>
+								</div>
 							</div>
 						</div>
 					</DialogDescription>

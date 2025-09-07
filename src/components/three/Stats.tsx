@@ -1,11 +1,20 @@
 /** @format */
 
 import React, { useEffect, useRef, useState } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 
-import { useFrame } from "@react-three/fiber";
 import { usePreferences } from "@/stores/PreferencesStore";
 
+type RenderInfo = {
+	calls: number;
+	frame: number;
+	lines: number;
+	points: number;
+	triangles: number;
+};
+
 let fpsSubscribers: ((fps: number) => void)[] = [];
+let renderInfoSubscribers: ((info: RenderInfo) => void)[] = [];
 
 function subscribeToFps(cb: (fps: number) => void) {
 	fpsSubscribers.push(cb);
@@ -14,10 +23,19 @@ function subscribeToFps(cb: (fps: number) => void) {
 	};
 }
 
+function subscribeToRenderInfo(cb: (info: RenderInfo) => void) {
+	renderInfoSubscribers.push(cb);
+	return () => {
+		renderInfoSubscribers = renderInfoSubscribers.filter((s) => s !== cb);
+	};
+}
+
 // 1) FPS tracker runs inside Canvas but returns null (no DOM)
 export function FpsTracker() {
 	const frames = useRef(0);
 	const lastTime = useRef(performance.now());
+
+	const { gl } = useThree();
 
 	useFrame(() => {
 		frames.current++;
@@ -30,6 +48,9 @@ export function FpsTracker() {
 
 			// Notify subscribers outside Canvas
 			fpsSubscribers.forEach((cb) => cb(fps));
+
+			const info = gl.info;
+			renderInfoSubscribers.forEach((cb) => cb(info.render));
 		}
 	});
 
@@ -46,8 +67,20 @@ export function FpsDisplay({
 
 	const [fps, setFps] = useState(0);
 
+	const [renderInfo, setRenderInfo] = useState<RenderInfo>({
+		calls: 0,
+		frame: 0,
+		lines: 0,
+		points: 0,
+		triangles: 0,
+	});
+
 	useEffect(() => {
 		return subscribeToFps(setFps);
+	}, []);
+
+	useEffect(() => {
+		return subscribeToRenderInfo(setRenderInfo);
 	}, []);
 
 	const positionStyle: React.CSSProperties = {
@@ -66,11 +99,25 @@ export function FpsDisplay({
 
 			{preferences.debugText && (
 				<>
+					<hr className="border-border my-1 border-t" />
+
+					<p>Draw Calls: {renderInfo.calls}</p>
+					<p>Frame: {renderInfo.frame}</p>
+					<p>Triangles: {renderInfo.triangles}</p>
+					<p>Lines: {renderInfo.lines}</p>
+					<p>Points: {renderInfo.points}</p>
+
+					<hr className="border-border my-1 border-t" />
+
 					<p>Debug Text: {preferences.debugText ? "On" : "Off"}</p>
 					<p>Antialiasing: {preferences.antialiasing}</p>
 					<p>SSAO: {preferences.SSAOEnabled ? "On" : "Off"}</p>
 					<p>
 						Depth of Field: {preferences.DOFEnabled ? "On" : "Off"}
+					</p>
+					<p>
+						Control Damping:{" "}
+						{preferences.controlDamping ? "On" : "Off"}
 					</p>
 				</>
 			)}

@@ -5,6 +5,7 @@
  * @format
  */
 
+import { Canvas, useThree } from "@react-three/fiber";
 import {
 	DepthOfField,
 	EffectComposer,
@@ -20,76 +21,72 @@ import {
 	OrbitControls,
 	Preload,
 } from "@react-three/drei";
-import { useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 
-import { Canvas } from "@react-three/fiber";
 import CartRender from "@/components/three/CartRender";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { Suspense } from "react";
 import { DoubleSide as THREEDoubleSide } from "three";
+import { Vector3 } from "three";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 
-function Preview() {
-	const preferences = usePreferences();
-
-	const controlsRef = useRef<OrbitControlsImpl>(null);
+function RestoreOrbitControls({
+	controlsRef,
+}: {
+	controlsRef: React.RefObject<OrbitControlsImpl | null>;
+}) {
 	const projectStore = useProjectStore();
+	const { camera } = useThree();
 
-	// Restore controls state on mount
 	useEffect(() => {
-		setTimeout(() => {
-			const controls = controlsRef.current;
-			const meta = projectStore.metadata.orbitControls;
+		const controls = controlsRef.current;
+		const meta = projectStore.metadata.orbitControls;
+		if (!controls || !meta) return;
 
-			if (controls && meta) {
-				controls.object.position.set(...meta.position);
-				controls.target.set(...meta.target);
-				if (meta.zoom && controls.object.zoom !== undefined) {
-					controls.object.zoom = meta.zoom;
-					controls.object.updateProjectionMatrix();
-				}
-				controls.update();
-			}
-		}, 1000); // Delay to ensure controls are initialized
-	}, [projectStore.metadata.orbitControls, controlsRef]);
+		camera.position.copy(new Vector3(...meta.position));
+		controls.target.copy(new Vector3(...meta.target));
 
-	// Save controls state on change
+		if (meta.zoom && "zoom" in camera) {
+			// eslint-disable-next-line react-hooks/react-compiler
+			camera.zoom = meta.zoom;
+			camera.updateProjectionMatrix();
+		}
+
+		controls.update();
+	}, [projectStore.metadata.orbitControls, camera, controlsRef]);
+
+	// save state
 	useEffect(() => {
 		const controls = controlsRef.current;
 		if (!controls) return;
 
 		const handleChange = () => {
-			projectStore.setProjectName(projectStore.metadata.projectName); // trigger update
 			projectStore.setMetadata({
 				...projectStore.metadata,
 				orbitControls: {
-					position: [
-						controls.object.position.x,
-						controls.object.position.y,
-						controls.object.position.z,
-					],
-					target: [
-						controls.target.x,
-						controls.target.y,
-						controls.target.z,
-					],
-					zoom: controls.object.zoom,
+					position: camera.position.toArray(),
+					target: controls.target.toArray(),
+					zoom: camera.zoom,
 				},
 			});
 		};
+
 		controls.addEventListener("change", handleChange);
-
 		return () => controls.removeEventListener("change", handleChange);
-	}, [projectStore, controlsRef]);
+	}, [camera, projectStore, controlsRef]);
 
-	const postProcessingEnabled = useMemo(() => {
-		return (
-			preferences.antialiasing !== "none" ||
-			preferences.SSAOEnabled ||
-			preferences.DOFEnabled
-		);
-	}, [preferences]);
+	return null;
+}
+
+function Preview() {
+	const preferences = usePreferences();
+	const projectStore = useProjectStore();
+	const controlsRef = useRef<OrbitControlsImpl | null>(null);
+
+	const postProcessingEnabled =
+		preferences.antialiasing !== "none" ||
+		preferences.SSAOEnabled ||
+		preferences.DOFEnabled;
 
 	if (!projectStore.cart) {
 		return (
@@ -103,11 +100,6 @@ function Preview() {
 
 	return (
 		<>
-			<div className="hidden">
-				Post processing is{" "}
-				{postProcessingEnabled ? "enabled" : "disabled"}
-			</div>
-
 			<Canvas
 				className="three-bg"
 				camera={{ position: [3, 3, 3], fov: 45 }}
@@ -115,37 +107,27 @@ function Preview() {
 				dpr={[1, 2]}
 				gl={{
 					powerPreference: "high-performance",
-					antialias: preferences.antialiasing == "none",
+					antialias: preferences.antialiasing === "none",
 				}}
 			>
-				<EffectComposer enableNormalPass depthBuffer stencilBuffer>
-					{preferences.SSAOEnabled ? <SSAO /> : <></>}
-
-					{preferences.DOFEnabled ? (
-						<DepthOfField
-							focusDistance={2}
-							focalLength={5}
-							bokehScale={2}
-						/>
-					) : (
-						<></>
-					)}
-
-					{(() => {
-						switch (preferences.antialiasing) {
-							case "FXAA":
-								return <FXAA />;
-							case "SMAA":
-								return <SMAA />;
-							// Add more cases here as needed
-							default:
-								return <></>;
-						}
-					})()}
-				</EffectComposer>
+				{postProcessingEnabled && (
+					<EffectComposer enableNormalPass depthBuffer stencilBuffer>
+						<>
+							{preferences.SSAOEnabled && <SSAO />}
+							{preferences.DOFEnabled && (
+								<DepthOfField
+									focusDistance={2}
+									focalLength={5}
+									bokehScale={2}
+								/>
+							)}
+							{preferences.antialiasing === "FXAA" && <FXAA />}
+							{preferences.antialiasing === "SMAA" && <SMAA />}
+						</>
+					</EffectComposer>
+				)}
 
 				<FpsTracker />
-
 				<Preload all />
 
 				<ambientLight intensity={2} />
@@ -173,7 +155,7 @@ function Preview() {
 					<OrbitControls
 						ref={controlsRef}
 						makeDefault
-						enableDamping={false}
+						enableDamping={preferences.controlDamping}
 					/>
 
 					<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
@@ -182,8 +164,11 @@ function Preview() {
 							labelColor="white"
 						/>
 					</GizmoHelper>
+
+					<RestoreOrbitControls controlsRef={controlsRef} />
 				</Suspense>
 			</Canvas>
+
 			<FpsDisplay />
 		</>
 	);
