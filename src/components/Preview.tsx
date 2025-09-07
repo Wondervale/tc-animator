@@ -88,6 +88,11 @@ function Preview() {
 
 	return (
 		<>
+			<div className="hidden">
+				Post processing is{" "}
+				{postProcessingEnabled ? "enabled" : "disabled"}
+			</div>
+
 			<Canvas
 				className="three-bg"
 				camera={{ position: [3, 3, 3], fov: 45 }}
@@ -96,53 +101,46 @@ function Preview() {
 				gl={{
 					powerPreference: "high-performance",
 					antialias: preferences.antialiasing == "none",
-					stencil: !postProcessingEnabled,
-					depth: !postProcessingEnabled,
 				}}
 			>
+				<EffectComposer enableNormalPass depthBuffer stencilBuffer>
+					{preferences.SSAOEnabled ? <SSAO /> : <></>}
+
+					{preferences.DOFEnabled ? (
+						<DepthOfField
+							focusDistance={2}
+							focalLength={5}
+							bokehScale={2}
+						/>
+					) : (
+						<></>
+					)}
+
+					{(() => {
+						switch (preferences.antialiasing) {
+							case "FXAA":
+								return <FXAA />;
+							case "SMAA":
+								return <SMAA />;
+							// Add more cases here as needed
+							default:
+								return <></>;
+						}
+					})()}
+				</EffectComposer>
+
+				<FpsTracker />
+
+				<Preload all />
+
+				<ambientLight intensity={2} />
+				<directionalLight
+					position={[5, 5, 5]}
+					intensity={3}
+					castShadow
+				/>
+
 				<Suspense fallback={null}>
-					<EffectComposer
-						enableNormalPass
-						depthBuffer
-						stencilBuffer
-						enabled={postProcessingEnabled}
-					>
-						{preferences.SSAOEnabled ? <SSAO /> : <></>}
-
-						{preferences.DOFEnabled ? (
-							<DepthOfField
-								focusDistance={2}
-								focalLength={5}
-								bokehScale={2}
-							/>
-						) : (
-							<></>
-						)}
-
-						{(() => {
-							switch (preferences.antialiasing) {
-								case "FXAA":
-									return <FXAA />;
-								case "SMAA":
-									return <SMAA />;
-								// Add more cases here as needed
-								default:
-									return <></>;
-							}
-						})()}
-					</EffectComposer>
-
-					<FpsTracker />
-
-					<Preload all />
-
-					<ambientLight intensity={2} />
-					<directionalLight
-						position={[5, 5, 5]}
-						intensity={3}
-						castShadow
-					/>
-
 					<CartRender />
 
 					<Grid
