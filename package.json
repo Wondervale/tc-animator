@@ -11,6 +11,7 @@
 		"credits": "pnpx @opengovsg/credits-generator"
 	},
 	"dependencies": {
+		"@avensaas/nbt-parser": "^0.1.1",
 		"@hookform/resolvers": "^5.2.1",
 		"@monaco-editor/react": "^4.7.0",
 		"@opengovsg/credits-generator": "^1.0.7",

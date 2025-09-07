@@ -6,6 +6,7 @@
  */
 
 import {
+	SavedTrainPropertiesSchema,
 	validateSavedTrainProperties,
 	type SavedTrain,
 	type SavedTrainProperties,
@@ -40,14 +41,17 @@ export const useTrainsStore = create<TrainStore>((set) => ({
 			const valid = validateSavedTrainProperties(data);
 
 			if (valid.valid) {
-				set({ trains: data as SavedTrainProperties });
+				set({
+					trains: SavedTrainPropertiesSchema.parse(data),
+					parseErrors: undefined,
+				});
 			} else {
 				console.error("Invalid YAML data:", valid.errors);
 				toast.error(
 					"We couldn't load your trains. Please check that you uploaded the SavedTrainProperties YAML file from TrainCarts. See the browser console for more details.",
 					{
 						duration: 10000,
-					}
+					},
 				);
 
 				set({ trains: {}, parseErrors: valid.errors });
@@ -58,10 +62,13 @@ export const useTrainsStore = create<TrainStore>((set) => ({
 				"We couldn't read your file. Please make sure it's a valid YAML and try again. See the browser console for more details.",
 				{
 					duration: 10000,
-				}
+				},
 			);
 
-			set({ trains: {}, parseErrors: ["Failed to parse YAML.", String(error)] });
+			set({
+				trains: {},
+				parseErrors: ["Failed to parse YAML.", String(error)],
+			});
 			return;
 		}
 	},

@@ -1,5 +1,6 @@
 /** @format */
 
+import NBT from "@avensaas/nbt-parser";
 import { z } from "zod";
 
 const PositionSchema = z.looseObject({
@@ -25,7 +26,23 @@ const ItemSchema = z.looseObject({
 	DataVersion: z.number(),
 	id: z.string(),
 	count: z.number(),
-	components: z.record(z.string(), z.string()),
+	components: z
+		.record(z.string(), z.string())
+		.transform((components) => {
+			// Try to parse each component value as JSON, fallback to string if parsing fails
+			const parsed: Record<string, unknown> = {};
+
+			for (const [key, value] of Object.entries(components)) {
+				try {
+					parsed[key] = NBT.parseSNBT(value).toJSON();
+				} catch {
+					parsed[key] = value;
+				}
+			}
+
+			return parsed;
+		})
+		.optional(),
 	schema_version: z.number(),
 });
 
