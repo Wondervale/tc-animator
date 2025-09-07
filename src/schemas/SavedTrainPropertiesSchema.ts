@@ -21,30 +21,37 @@ const DisplayItemSchema = z.looseObject({
 	enabled: z.boolean(),
 });
 
-const ItemSchema = z.looseObject({
-	"==": z.literal("org.bukkit.inventory.ItemStack"),
-	DataVersion: z.number(),
-	id: z.string(),
-	count: z.number(),
-	components: z
-		.record(z.string(), z.string())
-		.transform((components) => {
-			// Try to parse each component value as JSON, fallback to string if parsing fails
-			const parsed: Record<string, unknown> = {};
-
-			for (const [key, value] of Object.entries(components)) {
-				try {
-					parsed[key] = NBT.parseSNBT(value).toJSON();
-				} catch {
-					parsed[key] = value;
+const ItemSchema = z.union([
+	z.looseObject({
+		"==": z.literal("org.bukkit.inventory.ItemStack"),
+		DataVersion: z.number(),
+		id: z.string(),
+		count: z.number(),
+		components: z
+			.record(z.string(), z.string())
+			.transform((components) => {
+				const parsed: Record<string, unknown> = {};
+				for (const [key, value] of Object.entries(components)) {
+					try {
+						parsed[key] = NBT.parseSNBT(value).toJSON();
+					} catch {
+						parsed[key] = value;
+					}
 				}
-			}
-
-			return parsed;
-		})
-		.optional(),
-	schema_version: z.number(),
-});
+				return parsed;
+			})
+			.optional(),
+		schema_version: z.number(),
+	}),
+	z.looseObject({
+		"==": z.literal("org.bukkit.inventory.ItemStack"),
+		DataVersion: z.number(),
+		id: z.string(),
+		count: z.number(),
+		components: z.record(z.string(), z.unknown()).optional(),
+		schema_version: z.number(),
+	}),
+]);
 
 export type InternalAttachment = {
 	type: string;

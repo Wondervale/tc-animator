@@ -8,7 +8,8 @@
 import { fileOpen, fileSave } from "browser-fs-access";
 import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 
-import type { Cart } from "@/schemas/SavedTrainPropertiesSchema";
+import { CartSchema, type Cart } from "@/schemas/SavedTrainPropertiesSchema";
+import { MetadataSchema, type Metadata } from "@/schemas/ProjectSchema";
 import { create } from "zustand";
 import superjson from "superjson";
 import { toast } from "sonner";
@@ -18,16 +19,7 @@ export const fileHeader = strToU8("🦊🚂🎬");
 interface ProjectStore {
 	saved: boolean;
 
-	metadata: {
-		projectName: string;
-		createdAt: Date | null;
-
-		orbitControls?: {
-			position: [number, number, number];
-			target: [number, number, number];
-			zoom?: number;
-		};
-	};
+	metadata: Metadata;
 
 	cart: Cart | null;
 
@@ -105,21 +97,29 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			// Create the zip file with fflate
 			const zipDataRaw = zipSync(
 				{
-					"metadata.json": strToU8(superjson.stringify(localMetadata)),
-					"cart.json": strToU8(superjson.stringify(projectStore.cart)),
+					"metadata.json": strToU8(
+						superjson.stringify(localMetadata),
+					),
+					"cart.json": strToU8(
+						superjson.stringify(projectStore.cart),
+					),
 				},
-				{ level: 9 }
+				{ level: 9 },
 			);
 
 			// Prepend the file header
-			const header = new Uint8Array(fileHeader.length + zipDataRaw.length);
+			const header = new Uint8Array(
+				fileHeader.length + zipDataRaw.length,
+			);
 			header.set(fileHeader);
 			header.set(zipDataRaw, fileHeader.length);
 
 			const fixedBuffer = new Uint8Array(header.length);
 			fixedBuffer.set(header);
 
-			const blob = new Blob([fixedBuffer], { type: "application/binary" });
+			const blob = new Blob([fixedBuffer], {
+				type: "application/binary",
+			});
 
 			const fileHandle = projectStore.fileHandle;
 
@@ -137,7 +137,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 							loading: "Saving project...",
 							success: "Project saved successfully!",
 							error: "Failed to save the project.",
-						}
+						},
 					)
 					.unwrap();
 
@@ -152,7 +152,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 						set({
 							metadata: {
 								...localMetadata,
-								projectName: localFileHandle.name.replace(/\.tcaproj$/, ""),
+								projectName: localFileHandle.name.replace(
+									/\.tcaproj$/,
+									"",
+								),
 							},
 						});
 					}
@@ -176,7 +179,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 							loading: "Saving project...",
 							success: "Project saved successfully!",
 							error: "Failed to save the project.",
-						}
+						},
 					)
 					.unwrap();
 
@@ -209,8 +212,14 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 
 			const header = new Uint8Array(fileHeader.length);
 			header.set(fileHeader);
-			const bufferHeader = new Uint8Array(buffer.slice(0, fileHeader.length));
-			if (!bufferHeader.every((value: number, index: number) => value === header[index])) {
+			const bufferHeader = new Uint8Array(
+				buffer.slice(0, fileHeader.length),
+			);
+			if (
+				!bufferHeader.every(
+					(value: number, index: number) => value === header[index],
+				)
+			) {
 				throw new Error("Invalid TCA-Project file format.");
 			}
 
@@ -220,18 +229,68 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			for (const [filename, fileData] of Object.entries(unzipped)) {
 				switch (filename) {
 					case "metadata.json": {
+						const data = superjson.parse(strFromU8(fileData));
+
+						const parsed = MetadataSchema.safeParse(data);
+						if (!parsed.success) {
+							console.error(
+								"Invalid metadata in project:",
+								parsed.error,
+							);
+							toast.error(
+								"We couldn't load your project. The metadata is invalid. See the browser console for more details.",
+								{ duration: 10000 },
+							);
+
+							// Reset self
+							set({
+								metadata: { projectName: "", createdAt: null },
+								cart: null,
+								fileHandle: undefined,
+							});
+
+							continue;
+						}
+
 						set({
-							metadata: superjson.parse(strFromU8(fileData)),
+							metadata: parsed.data,
 						});
 						break;
 					}
 					case "cart.json": {
-						const cart = superjson.parse(strFromU8(fileData)) as Cart;
-						set({ cart });
+						const data = superjson.parse(
+							strFromU8(fileData),
+						) as Cart;
+
+						const parsed = CartSchema.safeParse(data);
+
+						if (!parsed.success) {
+							console.error(
+								"Invalid cart data in project:",
+								parsed.error,
+							);
+							toast.error(
+								"We couldn't load your project. The cart data is invalid. See the browser console for more details.",
+								{ duration: 10000 },
+							);
+
+							// Reset self
+							set({
+								metadata: { projectName: "", createdAt: null },
+								cart: null,
+								fileHandle: undefined,
+							});
+
+							continue;
+						}
+
+						set({ cart: parsed.data });
 						break;
 					}
 					default:
-						console.warn(`Unknown file in TCA-Project: ${filename}`);
+						console.warn(
+							`Unknown file in TCA-Project: ${filename}`,
+						);
 						break;
 				}
 			}
@@ -239,6 +298,11 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			set({ saved: true, fileHandle: fileHandle.handle });
 		},
 
-		reset: () => set({ metadata: { projectName: "", createdAt: null }, cart: null, fileHandle: undefined }),
+		reset: () =>
+			set({
+				metadata: { projectName: "", createdAt: null },
+				cart: null,
+				fileHandle: undefined,
+			}),
 	};
 });

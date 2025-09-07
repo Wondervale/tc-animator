@@ -38,23 +38,27 @@ function Preview() {
 
 	// Restore controls state on mount
 	useEffect(() => {
-		const controls = controlsRef.current;
-		const meta = projectStore.metadata.orbitControls;
-		if (controls && meta) {
-			controls.object.position.set(...meta.position);
-			controls.target.set(...meta.target);
-			if (meta.zoom && controls.object.zoom !== undefined) {
-				controls.object.zoom = meta.zoom;
-				controls.object.updateProjectionMatrix();
+		setTimeout(() => {
+			const controls = controlsRef.current;
+			const meta = projectStore.metadata.orbitControls;
+
+			if (controls && meta) {
+				controls.object.position.set(...meta.position);
+				controls.target.set(...meta.target);
+				if (meta.zoom && controls.object.zoom !== undefined) {
+					controls.object.zoom = meta.zoom;
+					controls.object.updateProjectionMatrix();
+				}
+				controls.update();
 			}
-			controls.update();
-		}
-	}, [projectStore.metadata.orbitControls]);
+		}, 1000); // Delay to ensure controls are initialized
+	}, [projectStore.metadata.orbitControls, controlsRef]);
 
 	// Save controls state on change
 	useEffect(() => {
 		const controls = controlsRef.current;
 		if (!controls) return;
+
 		const handleChange = () => {
 			projectStore.setProjectName(projectStore.metadata.projectName); // trigger update
 			projectStore.setMetadata({
@@ -75,8 +79,9 @@ function Preview() {
 			});
 		};
 		controls.addEventListener("change", handleChange);
+
 		return () => controls.removeEventListener("change", handleChange);
-	}, [projectStore]);
+	}, [projectStore, controlsRef]);
 
 	const postProcessingEnabled = useMemo(() => {
 		return (
@@ -85,6 +90,16 @@ function Preview() {
 			preferences.DOFEnabled
 		);
 	}, [preferences]);
+
+	if (!projectStore.cart) {
+		return (
+			<div className="flex h-full w-full items-center justify-center bg-black">
+				<p className="text-muted-foreground">
+					No cart selected. Please create or open a project.
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<>
