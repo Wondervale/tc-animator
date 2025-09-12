@@ -115,6 +115,12 @@ function Preview() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (!selected) return;
+
+		if (!projectStore.cart) setSelected(null); // Deselect if no cart is loaded
+	}, [projectStore.cart, selected]);
+
 	if (!projectStore.cart) {
 		return (
 			<div className="flex h-full w-full items-center justify-center bg-black">
