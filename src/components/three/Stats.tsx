@@ -93,7 +93,7 @@ export function FpsDisplay({
 
 	return (
 		<div
-			className="text-muted-foreground pointer-events-none fixed z-10 text-right font-mono text-sm"
+			className="text-muted-foreground pointer-events-none absolute z-10 text-right font-mono text-sm"
 			style={{ ...positionStyle }}
 		>
 			<p>{fps} FPS</p>

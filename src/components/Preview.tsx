@@ -22,12 +22,20 @@ import {
 	Preload,
 	TransformControls,
 } from "@react-three/drei";
+import { Move3D, Rotate3D } from "lucide-react";
 import { Object3D, DoubleSide as THREEDoubleSide } from "three";
 import { Suspense, useEffect, useRef, useState } from "react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import CartRender from "@/components/three/CartRender";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { Toggle } from "@/components/ui/toggle";
 import { Vector3 } from "three";
+import { degreeToRadian } from "@/lib/utils";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 
@@ -39,6 +47,7 @@ function RestoreOrbitControls({
 	const projectStore = useProjectStore();
 	const { camera } = useThree();
 
+	// restore state
 	useEffect(() => {
 		const controls = controlsRef.current;
 		const meta = projectStore.metadata.orbitControls;
@@ -86,6 +95,26 @@ function Preview() {
 
 	const [selected, setSelected] = useState<Object3D | null>(null);
 
+	const [translateMode, setTranslateMode] = useState<"translate" | "rotate">(
+		"translate",
+	);
+
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.target && (event.target as HTMLElement).isContentEditable)
+				return;
+			if (event.key === "v" || event.key === "V") {
+				setTranslateMode("translate");
+			} else if (event.key === "r" || event.key === "R") {
+				setTranslateMode("rotate");
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, []);
+
 	if (!projectStore.cart) {
 		return (
 			<div className="flex h-full w-full items-center justify-center bg-black">
@@ -118,7 +147,7 @@ function Preview() {
 	].filter(Boolean) as React.ReactElement[]; // cast to satisfy TS
 
 	return (
-		<>
+		<div className="relative h-full w-full">
 			<Canvas
 				className="three-bg"
 				camera={{ position: [3, 3, 3], fov: 45 }}
@@ -162,8 +191,8 @@ function Preview() {
 					{selected && (
 						<TransformControls
 							object={selected}
-							mode="translate"
-							rotationSnap={Math.PI / 2}
+							mode={translateMode}
+							rotationSnap={degreeToRadian(11.25)}
 							translationSnap={0.25}
 							onMouseDown={() =>
 								(controlsRef.current!.enabled = false)
@@ -192,7 +221,39 @@ function Preview() {
 			</Canvas>
 
 			<FpsDisplay />
-		</>
+
+			<div className="absolute top-[8px] left-[8px] flex flex-row gap-[8px]">
+				<Tooltip>
+					<TooltipTrigger>
+						<Toggle
+							pressed={translateMode === "translate"}
+							onClick={() => setTranslateMode("translate")}
+						>
+							<Move3D />
+						</Toggle>
+					</TooltipTrigger>
+					<TooltipContent>
+						Translate Mode
+						<kbd className="text-muted-foreground ml-1">V</kbd>
+					</TooltipContent>
+				</Tooltip>
+
+				<Tooltip>
+					<TooltipTrigger>
+						<Toggle
+							pressed={translateMode === "rotate"}
+							onClick={() => setTranslateMode("rotate")}
+						>
+							<Rotate3D />
+						</Toggle>
+					</TooltipTrigger>
+					<TooltipContent>
+						Rotate Mode
+						<kbd className="text-muted-foreground ml-1">R</kbd>
+					</TooltipContent>
+				</Tooltip>
+			</div>
+		</div>
 	);
 }
 
