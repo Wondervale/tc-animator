@@ -95,7 +95,7 @@ function Preview() {
 
 	const [selected, setSelected] = useState<Object3D | null>(null);
 
-	const [translateMode, setTranslateMode] = useState<"translate" | "rotate">(
+	const [transformMode, setTransformMode] = useState<"translate" | "rotate">(
 		"translate",
 	);
 
@@ -104,9 +104,9 @@ function Preview() {
 			if (event.target && (event.target as HTMLElement).isContentEditable)
 				return;
 			if (event.key === "v" || event.key === "V") {
-				setTranslateMode("translate");
+				setTransformMode("translate");
 			} else if (event.key === "r" || event.key === "R") {
-				setTranslateMode("rotate");
+				setTransformMode("rotate");
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
@@ -191,7 +191,7 @@ function Preview() {
 					{selected && (
 						<TransformControls
 							object={selected}
-							mode={translateMode}
+							mode={transformMode}
 							rotationSnap={degreeToRadian(11.25)}
 							translationSnap={0.25}
 							onMouseDown={() =>
@@ -226,8 +226,8 @@ function Preview() {
 				<Tooltip>
 					<TooltipTrigger>
 						<Toggle
-							pressed={translateMode === "translate"}
-							onClick={() => setTranslateMode("translate")}
+							pressed={transformMode === "translate"}
+							onClick={() => setTransformMode("translate")}
 						>
 							<Move3D />
 						</Toggle>
@@ -241,8 +241,8 @@ function Preview() {
 				<Tooltip>
 					<TooltipTrigger>
 						<Toggle
-							pressed={translateMode === "rotate"}
-							onClick={() => setTranslateMode("rotate")}
+							pressed={transformMode === "rotate"}
+							onClick={() => setTransformMode("rotate")}
 						>
 							<Rotate3D />
 						</Toggle>
