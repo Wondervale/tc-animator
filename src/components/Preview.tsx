@@ -163,6 +163,13 @@ function Preview() {
 					powerPreference: "high-performance",
 					antialias: false,
 				}}
+				onPointerMissed={(e) => {
+					// Ignore right clicks or drags
+					if (e.type === "click") {
+						projectStore.setSelectedObjectPath(undefined);
+						setSelected(null);
+					}
+				}}
 			>
 				<EffectComposer enableNormalPass depthBuffer stencilBuffer>
 					{passes}

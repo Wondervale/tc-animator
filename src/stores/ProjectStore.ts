@@ -56,6 +56,11 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			if (!nextState.metadata?.orbitControls) {
 				nextState.saved = false;
 			}
+
+			// Don't set save to false if only the selected object path is being updated
+			if (nextState.selectedObjectPath) {
+				nextState.saved = get().saved;
+			}
 		}
 
 		// always do partial update -> omit replace
