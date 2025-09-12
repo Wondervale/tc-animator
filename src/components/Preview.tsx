@@ -96,6 +96,27 @@ function Preview() {
 		);
 	}
 
+	const passes = [
+		preferences.SSAOEnabled && <SSAO key="ssao" />,
+		preferences.DOFEnabled && (
+			<DepthOfField
+				key="dof"
+				focusDistance={2}
+				focalLength={5}
+				bokehScale={2}
+			/>
+		),
+		<SMAA key="smaa" />,
+		selected && (
+			<Outline
+				key="outline"
+				selection={[selected]}
+				edgeStrength={4}
+				blur
+			/>
+		),
+	].filter(Boolean) as React.ReactElement[]; // cast to satisfy TS
+
 	return (
 		<>
 			<Canvas
@@ -109,29 +130,7 @@ function Preview() {
 				}}
 			>
 				<EffectComposer enableNormalPass depthBuffer stencilBuffer>
-					<>
-						{preferences.SSAOEnabled && <SSAO />}
-						{preferences.DOFEnabled && (
-							<DepthOfField
-								focusDistance={2}
-								focalLength={5}
-								bokehScale={2}
-							/>
-						)}
-
-						<SMAA />
-
-						{/* 🆕 Outline around selected */}
-						{selected && (
-							<Outline
-								selection={[selected]} // highlight only the selected object
-								visibleEdgeColor={0x00ff00}
-								hiddenEdgeColor={0x00ff00}
-								edgeStrength={4}
-								blur
-							/>
-						)}
-					</>
+					{passes}
 				</EffectComposer>
 
 				<FpsTracker />

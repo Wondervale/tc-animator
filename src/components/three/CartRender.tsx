@@ -119,7 +119,17 @@ function AttachmentItem({
 											outlineColor="black"
 											position={[0, 3.5, 0]}
 										>
-											{`Pos:${pos
+											{`${
+												attachment.names
+													? Array.isArray(
+															attachment.names,
+														) &&
+														attachment.names
+															.length > 0
+														? attachment.names[0]
+														: "Seat"
+													: "Seat"
+											}\nPos:${pos
 												.toArray()
 												.map(
 													(v) => `\n${v.toFixed(2)}`,
@@ -150,7 +160,14 @@ function AttachmentItem({
 						outlineWidth={0.05}
 						outlineColor="black"
 					>
-						{`pos:${pos.toArray().map((v) => v.toFixed(2))}\nrot:${rot
+						{`${
+							attachment.names
+								? Array.isArray(attachment.names) &&
+									attachment.names.length > 0
+									? attachment.names[0]
+									: ""
+								: ""
+						}\nPos:${pos.toArray().map((v) => v.toFixed(2))}\nrot:${rot
 							.toArray()
 							.filter((v): v is number => typeof v === "number")
 							.map((v) =>
