@@ -19,6 +19,9 @@ interface PreferencesStore {
 	DOFEnabled: boolean;
 	controlDamping: boolean;
 
+	angleSnap: number;
+	distanceSnap: number;
+
 	setTheme: (theme: "light" | "dark") => void;
 	setSaveInterval: (interval: number) => void;
 	setDebugText: (enabled: boolean) => void;
@@ -26,6 +29,9 @@ interface PreferencesStore {
 	setSSAOEnabled: (enabled: boolean) => void;
 	setDOFEnabled: (enabled: boolean) => void;
 	setControlDamping: (enabled: boolean) => void;
+
+	setAngleSnap: (angle: number) => void;
+	setDistanceSnap: (distance: number) => void;
 
 	getComplementaryGridColor: () => string;
 }
@@ -41,6 +47,9 @@ export const usePreferences = create<PreferencesStore>()(
 			DOFEnabled: true,
 			controlDamping: false,
 
+			angleSnap: 11.25,
+			distanceSnap: 0.25,
+
 			setTheme: (theme) => set({ theme }),
 			setSaveInterval: (interval) => set({ saveInterval: interval }),
 			setDebugText: (enabled) => set({ debugText: enabled }),
@@ -48,6 +57,9 @@ export const usePreferences = create<PreferencesStore>()(
 			setSSAOEnabled: (enabled) => set({ SSAOEnabled: enabled }),
 			setDOFEnabled: (enabled) => set({ DOFEnabled: enabled }),
 			setControlDamping: (enabled) => set({ controlDamping: enabled }),
+
+			setAngleSnap: (angle) => set({ angleSnap: angle }),
+			setDistanceSnap: (distance) => set({ distanceSnap: distance }),
 
 			getComplementaryGridColor: () => {
 				const color = Color(get().gridColor);

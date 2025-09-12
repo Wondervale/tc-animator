@@ -5,6 +5,7 @@
  * @format
  */
 
+import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
 	DepthOfField,
@@ -22,7 +23,6 @@ import {
 	Preload,
 	TransformControls,
 } from "@react-three/drei";
-import { Move3D, Rotate3D } from "lucide-react";
 import { Object3D, DoubleSide as THREEDoubleSide } from "three";
 import { Suspense, useEffect, useRef, useState } from "react";
 import {
@@ -31,6 +31,8 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import AngleSlider from "@/components/ui/AngleSlider";
+import { Button } from "@/components/ui/button";
 import CartRender from "@/components/three/CartRender";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Toggle } from "@/components/ui/toggle";
@@ -98,6 +100,9 @@ function Preview() {
 	const [transformMode, setTransformMode] = useState<"translate" | "rotate">(
 		"translate",
 	);
+	const [transformSpace, setTransformSpace] = useState<"world" | "local">(
+		"world",
+	);
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -107,13 +112,17 @@ function Preview() {
 				setTransformMode("translate");
 			} else if (event.key === "r" || event.key === "R") {
 				setTransformMode("rotate");
+			} else if (event.key === "x" || event.key === "X") {
+				setTransformSpace(
+					transformSpace === "world" ? "local" : "world",
+				);
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
-	}, []);
+	}, [transformSpace]);
 
 	useEffect(() => {
 		if (!selected) return;
@@ -205,14 +214,15 @@ function Preview() {
 						<TransformControls
 							object={selected}
 							mode={transformMode}
-							rotationSnap={degreeToRadian(11.25)}
-							translationSnap={0.25}
+							rotationSnap={degreeToRadian(preferences.angleSnap)}
+							translationSnap={preferences.distanceSnap}
 							onMouseDown={() =>
 								(controlsRef.current!.enabled = false)
 							}
 							onMouseUp={() =>
 								(controlsRef.current!.enabled = true)
 							}
+							space={transformSpace}
 						/>
 					)}
 
@@ -236,6 +246,29 @@ function Preview() {
 			<FpsDisplay />
 
 			<div className="absolute top-[8px] left-[8px] flex flex-row gap-[8px]">
+				<Tooltip>
+					<Button
+						variant="secondary"
+						size="icon"
+						asChild
+						onClick={() => {
+							setTransformSpace(
+								transformSpace === "world" ? "local" : "world",
+							);
+						}}
+					>
+						<TooltipTrigger>
+							{transformSpace === "world" ? <Globe /> : <Box />}
+						</TooltipTrigger>
+					</Button>
+					<TooltipContent>
+						{transformSpace === "world"
+							? "World Space"
+							: "Local Space"}
+						<kbd className="text-muted-foreground ml-1">X</kbd>
+					</TooltipContent>
+				</Tooltip>
+
 				<Tooltip>
 					<Toggle
 						pressed={transformMode === "translate"}
@@ -267,6 +300,13 @@ function Preview() {
 						<kbd className="text-muted-foreground ml-1">R</kbd>
 					</TooltipContent>
 				</Tooltip>
+
+				{transformMode === "rotate" && (
+					<AngleSlider
+						value={preferences.angleSnap}
+						onChange={preferences.setAngleSnap}
+					/>
+				)}
 			</div>
 		</div>
 	);
