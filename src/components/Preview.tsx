@@ -9,7 +9,6 @@ import { Canvas, useThree } from "@react-three/fiber";
 import {
 	DepthOfField,
 	EffectComposer,
-	FXAA,
 	SMAA,
 	SSAO,
 } from "@react-three/postprocessing";
@@ -83,11 +82,6 @@ function Preview() {
 	const projectStore = useProjectStore();
 	const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
-	const postProcessingEnabled =
-		preferences.antialiasing !== "none" ||
-		preferences.SSAOEnabled ||
-		preferences.DOFEnabled;
-
 	if (!projectStore.cart) {
 		return (
 			<div className="flex h-full w-full items-center justify-center bg-black">
@@ -107,25 +101,23 @@ function Preview() {
 				dpr={[1, 2]}
 				gl={{
 					powerPreference: "high-performance",
-					antialias: preferences.antialiasing === "none",
+					antialias: false,
 				}}
 			>
-				{postProcessingEnabled && (
-					<EffectComposer enableNormalPass depthBuffer stencilBuffer>
-						<>
-							{preferences.SSAOEnabled && <SSAO />}
-							{preferences.DOFEnabled && (
-								<DepthOfField
-									focusDistance={2}
-									focalLength={5}
-									bokehScale={2}
-								/>
-							)}
-							{preferences.antialiasing === "FXAA" && <FXAA />}
-							{preferences.antialiasing === "SMAA" && <SMAA />}
-						</>
-					</EffectComposer>
-				)}
+				<EffectComposer enableNormalPass depthBuffer stencilBuffer>
+					<>
+						{preferences.SSAOEnabled && <SSAO />}
+						{preferences.DOFEnabled && (
+							<DepthOfField
+								focusDistance={2}
+								focalLength={5}
+								bokehScale={2}
+							/>
+						)}
+
+						<SMAA />
+					</>
+				</EffectComposer>
 
 				<FpsTracker />
 				<Preload all />

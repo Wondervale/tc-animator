@@ -41,6 +41,7 @@ export function FpsTracker() {
 		frames.current++;
 		const now = performance.now();
 		const delta = now - lastTime.current;
+
 		if (delta > 500) {
 			const fps = Math.round((frames.current * 1000) / delta);
 			frames.current = 0;
@@ -110,7 +111,6 @@ export function FpsDisplay({
 					<hr className="border-border my-1 border-t" />
 
 					<p>Debug Text: {preferences.debugText ? "On" : "Off"}</p>
-					<p>Antialiasing: {preferences.antialiasing}</p>
 					<p>SSAO: {preferences.SSAOEnabled ? "On" : "Off"}</p>
 					<p>
 						Depth of Field: {preferences.DOFEnabled ? "On" : "Off"}

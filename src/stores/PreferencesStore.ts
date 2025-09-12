@@ -17,7 +17,6 @@ interface PreferencesStore {
 	gridColor: string;
 	SSAOEnabled: boolean;
 	DOFEnabled: boolean;
-	antialiasing: "none" | "FXAA" | "SMAA";
 	controlDamping: boolean;
 
 	setTheme: (theme: "light" | "dark") => void;
@@ -26,7 +25,6 @@ interface PreferencesStore {
 	setGridColor: (color: string) => void;
 	setSSAOEnabled: (enabled: boolean) => void;
 	setDOFEnabled: (enabled: boolean) => void;
-	setAntialiasing: (mode: "none" | "FXAA" | "SMAA") => void;
 	setControlDamping: (enabled: boolean) => void;
 
 	getComplementaryGridColor: () => string;
@@ -41,7 +39,6 @@ export const usePreferences = create<PreferencesStore>()(
 			gridColor: "#92a3bb",
 			SSAOEnabled: true,
 			DOFEnabled: true,
-			antialiasing: "SMAA",
 			controlDamping: false,
 
 			setTheme: (theme) => set({ theme }),
@@ -50,7 +47,6 @@ export const usePreferences = create<PreferencesStore>()(
 			setGridColor: (color) => set({ gridColor: color }),
 			setSSAOEnabled: (enabled) => set({ SSAOEnabled: enabled }),
 			setDOFEnabled: (enabled) => set({ DOFEnabled: enabled }),
-			setAntialiasing: (mode) => set({ antialiasing: mode }),
 			setControlDamping: (enabled) => set({ controlDamping: enabled }),
 
 			getComplementaryGridColor: () => {
