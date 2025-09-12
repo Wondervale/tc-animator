@@ -9,6 +9,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import {
 	DepthOfField,
 	EffectComposer,
+	Outline,
 	SMAA,
 	SSAO,
 } from "@react-three/postprocessing";
@@ -19,12 +20,13 @@ import {
 	Grid,
 	OrbitControls,
 	Preload,
+	TransformControls,
 } from "@react-three/drei";
-import { Suspense, useEffect, useRef } from "react";
+import { Object3D, DoubleSide as THREEDoubleSide } from "three";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import CartRender from "@/components/three/CartRender";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { DoubleSide as THREEDoubleSide } from "three";
 import { Vector3 } from "three";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
@@ -82,6 +84,8 @@ function Preview() {
 	const projectStore = useProjectStore();
 	const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
+	const [selected, setSelected] = useState<Object3D | null>(null);
+
 	if (!projectStore.cart) {
 		return (
 			<div className="flex h-full w-full items-center justify-center bg-black">
@@ -116,6 +120,17 @@ function Preview() {
 						)}
 
 						<SMAA />
+
+						{/* 🆕 Outline around selected */}
+						{selected && (
+							<Outline
+								selection={[selected]} // highlight only the selected object
+								visibleEdgeColor={0x00ff00}
+								hiddenEdgeColor={0x00ff00}
+								edgeStrength={4}
+								blur
+							/>
+						)}
 					</>
 				</EffectComposer>
 
@@ -130,7 +145,7 @@ function Preview() {
 				/>
 
 				<Suspense fallback={null}>
-					<CartRender />
+					<CartRender onSelect={setSelected} />
 
 					<Grid
 						position={[0.5, -0.501, 0.5]}
@@ -143,6 +158,22 @@ function Preview() {
 						infiniteGrid
 						side={THREEDoubleSide}
 					/>
+
+					{/* 🆕 Gizmos attach only if something is selected */}
+					{selected && (
+						<TransformControls
+							object={selected}
+							mode="translate"
+							rotationSnap={Math.PI / 2}
+							translationSnap={0.25}
+							onMouseDown={() =>
+								(controlsRef.current!.enabled = false)
+							}
+							onMouseUp={() =>
+								(controlsRef.current!.enabled = true)
+							}
+						/>
+					)}
 
 					<OrbitControls
 						ref={controlsRef}

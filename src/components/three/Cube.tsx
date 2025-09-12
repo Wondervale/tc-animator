@@ -5,10 +5,10 @@
  * @format
  */
 
-import { Box, useTexture } from "@react-three/drei";
-import { NearestFilter, Vector3 } from "three";
+import { useTexture } from "@react-three/drei";
 
-import { useMemo } from "react";
+import { NearestFilter, Mesh } from "three";
+import { forwardRef, useMemo, useState, type JSX } from "react";
 
 // Keep a global history and color generator (move to separate file if needed)
 const colorHistory: string[] = [];
@@ -38,13 +38,7 @@ function getUniquePastelColor(): string {
 	return color;
 }
 
-function Cube({
-	args = new Vector3(1, 1, 1),
-	position = new Vector3(0, 0, 0),
-}: {
-	args?: Vector3;
-	position?: Vector3;
-}) {
+const Cube = forwardRef<Mesh, JSX.IntrinsicElements["mesh"]>((props, ref) => {
 	// This is a simple cube component that can be used in the scene.
 	const originalTexture = useTexture(
 		`${import.meta.env.BASE_URL}textures/missing.png`,
@@ -60,11 +54,29 @@ function Cube({
 	// Assign a pastel color once when component mounts
 	const pastelColor = useMemo(() => getUniquePastelColor(), []);
 
+	const [hovered, setHovered] = useState(false);
+
 	return (
-		<Box args={args.toArray()} position={position} castShadow receiveShadow>
-			<meshStandardMaterial map={texture} color={pastelColor} />
-		</Box>
+		<mesh
+			ref={ref}
+			{...props}
+			castShadow
+			receiveShadow
+			onPointerOver={(e) => {
+				e.stopPropagation();
+				setHovered(true);
+			}}
+			onPointerOut={() => setHovered(false)}
+		>
+			<boxGeometry args={[1, 1, 1]} />
+			<meshStandardMaterial
+				map={texture}
+				color={pastelColor}
+				emissive={hovered ? pastelColor : "#000"}
+				emissiveIntensity={hovered ? 0.5 : 0}
+			/>
+		</mesh>
 	);
-}
+});
 
 export default Cube;
