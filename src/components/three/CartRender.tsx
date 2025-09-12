@@ -18,10 +18,12 @@ import { usePreferences } from "@/stores/PreferencesStore";
 import { Euler, Quaternion, Vector3, type Object3D, type Group } from "three";
 
 function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
-	const { cart } = useProjectStore();
+	const { cart, setSelectedObjectPath } = useProjectStore();
 	const groupRef = useRef<Group>(null);
 
 	if (!cart?.model) return null;
+
+	const jsonPath = "$.model";
 
 	const { position } = cart.model;
 
@@ -48,14 +50,21 @@ function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 			rotation={rot}
 			onClick={(e) => {
 				e.stopPropagation();
-				if (groupRef.current) onSelect(groupRef.current);
+				if (groupRef.current) {
+					onSelect(groupRef.current);
+					setSelectedObjectPath(jsonPath);
+				}
 			}}
 		>
 			{/* Root mesh */}
 			<group scale={scale}>
 				<Cube />
 			</group>
-			<AttachmentRender attachments={cart.model} onSelect={onSelect} />
+			<AttachmentRender
+				attachments={cart.model}
+				onSelect={onSelect}
+				jsonPath="$.model"
+			/>
 		</group>
 	);
 }
@@ -63,11 +72,14 @@ function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 function AttachmentItem({
 	attachment,
 	onSelect,
+	jsonPath,
 }: {
 	attachment: Attachment | Model;
 	onSelect: (obj: Object3D) => void;
+	jsonPath: string;
 }) {
 	const preferences = usePreferences();
+	const { setSelectedObjectPath } = useProjectStore();
 
 	const groupRef = useRef<Group>(null);
 
@@ -99,6 +111,7 @@ function AttachmentItem({
 				) {
 					e.stopPropagation();
 					onSelect(groupRef.current);
+					setSelectedObjectPath(jsonPath);
 				}
 			}}
 		>
@@ -181,6 +194,7 @@ function AttachmentItem({
 				<AttachmentRender
 					attachments={attachment}
 					onSelect={onSelect}
+					jsonPath={`${jsonPath}`}
 				/>
 			)}
 		</group>
@@ -190,9 +204,11 @@ function AttachmentItem({
 function AttachmentRender({
 	attachments,
 	onSelect,
+	jsonPath,
 }: {
 	attachments: Attachment | Model;
 	onSelect: (obj: Object3D) => void;
+	jsonPath: string;
 }) {
 	return Object.entries(attachments.attachments || {}).map(
 		([key, attachment]) => (
@@ -200,6 +216,7 @@ function AttachmentRender({
 				key={key}
 				attachment={attachment}
 				onSelect={onSelect}
+				jsonPath={`${jsonPath}.attachments.${key}`}
 			/>
 		),
 	);

@@ -27,11 +27,15 @@ interface ProjectStore {
 
 	fileHandle?: FileSystemFileHandle;
 
+	selectedObjectPath?: string; // JSON path to the selected object in the cart
+
 	setMetadata: (metadata: ProjectStore["metadata"]) => void;
 
 	setProjectName: (name: string) => void;
 	setCart: (cart: Cart | null) => void;
 	clearCart: () => void;
+
+	setSelectedObjectPath: (path: string | undefined) => void;
 
 	saveProject: (newFile?: boolean) => Promise<void>;
 	loadProjectFromFile: () => Promise<void>;
@@ -73,6 +77,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 		},
 
 		cart: null,
+
+		selectedObjectPath: undefined,
+
+		setSelectedObjectPath: (path) => set({ selectedObjectPath: path }),
 
 		setMetadata: (metadata) => set({ metadata }),
 
