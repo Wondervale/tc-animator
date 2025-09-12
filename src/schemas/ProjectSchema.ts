@@ -6,8 +6,13 @@
 import { z } from "zod";
 
 export const MetadataSchema = z.object({
+	schemaVersion: z.number().min(0).default(0),
+
 	projectName: z.string(),
-	createdAt: z.date().nullable(),
+
+	createdAt: z.date().optional().nullable(),
+	lastModifiedAt: z.date().optional().nullable(),
+
 	orbitControls: z
 		.object({
 			position: z.tuple([z.number(), z.number(), z.number()]),

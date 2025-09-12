@@ -16,6 +16,8 @@ import { toast } from "sonner";
 
 export const fileHeader = strToU8("🦊🚂🎬");
 
+export const SCHEMA_VERSION = 0;
+
 interface ProjectStore {
 	saved: boolean;
 
@@ -60,8 +62,13 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 		saved: false,
 
 		metadata: {
+			schemaVersion: SCHEMA_VERSION,
+
 			projectName: "",
+
 			createdAt: null,
+			lastModifiedAt: null,
+
 			orbitControls: undefined,
 		},
 
@@ -152,6 +159,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 						set({
 							metadata: {
 								...localMetadata,
+								lastModifiedAt: new Date(),
 								projectName: localFileHandle.name.replace(
 									/\.tcaproj$/,
 									"",
@@ -187,7 +195,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 					set({
 						saved: true,
 						fileHandle,
-						metadata: { ...localMetadata },
+						metadata: {
+							...localMetadata,
+							lastModifiedAt: new Date(),
+						},
 					});
 				}
 			}
@@ -244,7 +255,12 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 
 							// Reset self
 							set({
-								metadata: { projectName: "", createdAt: null },
+								metadata: {
+									schemaVersion: SCHEMA_VERSION,
+									projectName: "",
+									createdAt: null,
+									lastModifiedAt: null,
+								},
 								cart: null,
 								fileHandle: undefined,
 							});
@@ -276,7 +292,12 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 
 							// Reset self
 							set({
-								metadata: { projectName: "", createdAt: null },
+								metadata: {
+									schemaVersion: SCHEMA_VERSION,
+									projectName: "",
+									createdAt: null,
+									lastModifiedAt: null,
+								},
 								cart: null,
 								fileHandle: undefined,
 							});
@@ -300,7 +321,12 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 
 		reset: () =>
 			set({
-				metadata: { projectName: "", createdAt: null },
+				metadata: {
+					schemaVersion: SCHEMA_VERSION,
+					projectName: "",
+					createdAt: null,
+					lastModifiedAt: null,
+				},
 				cart: null,
 				fileHandle: undefined,
 			}),
