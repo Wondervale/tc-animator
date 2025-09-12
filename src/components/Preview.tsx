@@ -224,14 +224,15 @@ function Preview() {
 
 			<div className="absolute top-[8px] left-[8px] flex flex-row gap-[8px]">
 				<Tooltip>
-					<TooltipTrigger>
-						<Toggle
-							pressed={transformMode === "translate"}
-							onClick={() => setTransformMode("translate")}
-						>
+					<Toggle
+						pressed={transformMode === "translate"}
+						onClick={() => setTransformMode("translate")}
+						asChild
+					>
+						<TooltipTrigger>
 							<Move3D />
-						</Toggle>
-					</TooltipTrigger>
+						</TooltipTrigger>
+					</Toggle>
 					<TooltipContent>
 						Translate Mode
 						<kbd className="text-muted-foreground ml-1">V</kbd>
@@ -239,14 +240,15 @@ function Preview() {
 				</Tooltip>
 
 				<Tooltip>
-					<TooltipTrigger>
-						<Toggle
-							pressed={transformMode === "rotate"}
-							onClick={() => setTransformMode("rotate")}
-						>
+					<Toggle
+						pressed={transformMode === "rotate"}
+						onClick={() => setTransformMode("rotate")}
+						asChild
+					>
+						<TooltipTrigger>
 							<Rotate3D />
-						</Toggle>
-					</TooltipTrigger>
+						</TooltipTrigger>
+					</Toggle>
 					<TooltipContent>
 						Rotate Mode
 						<kbd className="text-muted-foreground ml-1">R</kbd>

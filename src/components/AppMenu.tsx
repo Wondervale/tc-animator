@@ -112,13 +112,7 @@ function AppMenu() {
 	}, [projectStore]);
 
 	return (
-		<Menubar
-			style={{
-				padding: "-1em",
-				margin: "-1em",
-			}}
-			className="rounded-none"
-		>
+		<Menubar className="rounded-none">
 			<div className="bg-card flex items-center gap-2 px-2">
 				{projectStore.metadata.projectName || "Untitled Project"}
 

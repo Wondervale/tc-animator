@@ -5,13 +5,12 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Suspense, useEffect } from "react";
 
 import AppMenu from "@/components/AppMenu";
-import Editor from "@monaco-editor/react";
 import Preview from "@/components/Preview";
-import { Skeleton } from "@/components/ui/skeleton";
+import PropertiesPanels from "@/components/PropertiesPanels";
 import Wave from "@/components/Wave";
+import { useEffect } from "react";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 
@@ -72,46 +71,11 @@ function App() {
 						<ResizablePanel
 							minSize={5}
 							defaultSize={20}
-							className="bg-card flex flex-col gap-4 p-4"
+							className="bg-card flex flex-col gap-4"
 						>
 							<AppMenu />
-							<Suspense
-								fallback={
-									<Skeleton className="h-full w-full" />
-								}
-							>
-								<Editor
-									language="json"
-									theme="vs-dark"
-									value={JSON.stringify(
-										projectStore.cart,
-										null,
-										2,
-									)}
-									options={{
-										minimap: { enabled: true },
-										scrollbar: {
-											alwaysConsumeMouseWheel: false,
-										},
-										wordWrap: "on",
-										automaticLayout: true,
-									}}
-									onChange={(value) => {
-										if (value) {
-											try {
-												const parsed =
-													JSON.parse(value);
-												projectStore.setCart(parsed);
-											} catch (e) {
-												console.error(
-													"Failed to parse JSON:",
-													e,
-												);
-											}
-										}
-									}}
-								/>
-							</Suspense>
+
+							<PropertiesPanels />
 						</ResizablePanel>
 						<ResizableHandle />
 						<ResizablePanel minSize={5}>
