@@ -6,9 +6,15 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { Input } from "@/components/ui/input";
 import { JSONPath } from "jsonpath-plus";
+import blockbenchImage from "/public/blockbench-settings.png";
 import { useMemo } from "react";
 import { useProjectStore } from "@/stores/ProjectStore";
 
@@ -61,13 +67,29 @@ function ModelControl() {
 	return (
 		<>
 			{/* Explainer */}
-			<p className="text-muted-foreground mb-4 text-sm">
+			<p className="text-muted-foreground mb-4">
 				You can replace the default cubes with your own 3D models to
 				make the cart look like it is ingame.
 				<br />
 				<br />
 				Models must be in <b>GLTF</b> or <b>GLB</b> format. These can be
-				exported from Blockbench or most 3D software.
+				exported from
+				<Tooltip>
+					<TooltipTrigger className="mx-1 cursor-help font-bold underline underline-offset-2">
+						Blockbench
+					</TooltipTrigger>
+					<TooltipContent>
+						<p className="mb-2">
+							Use these settings when exporting from Blockbench:
+						</p>
+
+						<img
+							src={blockbenchImage}
+							alt="Blockbench export settings"
+						/>
+					</TooltipContent>
+				</Tooltip>
+				or most 3D software.
 				<br />
 				<br />
 				Below, you'll see each <b>Custom Model ID</b> for your
