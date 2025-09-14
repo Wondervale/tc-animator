@@ -35,16 +35,16 @@ export default defineConfig({
 							return "three";
 						}
 
-						if (id.includes("monaco-editor")) {
-							return "monaco-editor";
-						}
-
-						if (id.includes("react")) {
-							return "react";
+						if (id.includes("monaco")) {
+							return "monaco";
 						}
 
 						if (id.includes("lucide")) {
 							return "lucide";
+						}
+
+						if (id.includes("react")) {
+							return "react";
 						}
 					}
 				},

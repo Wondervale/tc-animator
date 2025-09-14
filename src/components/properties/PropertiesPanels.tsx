@@ -6,6 +6,7 @@
 import { Suspense, lazy } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import ModelControl from "@/components/properties/ModelControl";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjectStore } from "@/stores/ProjectStore";
 
@@ -16,7 +17,7 @@ function PropertiesPanels() {
 
 	return (
 		<Tabs defaultValue="project-debug" className="-mt-4 h-full w-full">
-			<TabsList className="w-full overflow-auto rounded-none">
+			<TabsList className="w-full flex-wrap rounded-none">
 				<TabsTrigger value="object-controls">
 					Object Controls
 				</TabsTrigger>
@@ -30,7 +31,7 @@ function PropertiesPanels() {
 			</TabsContent>
 
 			<TabsContent value="custom-models" className="px-4">
-				W.I.P.
+				<ModelControl />
 			</TabsContent>
 
 			<TabsContent value="cart-debug">

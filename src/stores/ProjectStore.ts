@@ -8,7 +8,11 @@
 import { fileOpen, fileSave } from "browser-fs-access";
 import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 
-import { CartSchema, type Cart } from "@/schemas/SavedTrainPropertiesSchema";
+import {
+	CartSchema,
+	type Attachment,
+	type Cart,
+} from "@/schemas/SavedTrainPropertiesSchema";
 import { MetadataSchema, type Metadata } from "@/schemas/ProjectSchema";
 import { create } from "zustand";
 import superjson from "superjson";
@@ -24,6 +28,7 @@ interface ProjectStore {
 	metadata: Metadata;
 
 	cart: Cart | null;
+	modelIds: number[];
 
 	fileHandle?: FileSystemFileHandle;
 
@@ -41,6 +46,50 @@ interface ProjectStore {
 	loadProjectFromFile: () => Promise<void>;
 
 	reset: () => void;
+}
+
+function collectModelIds(cart: Cart | null): number[] {
+	if (!cart) return [];
+	const collected = new Set<number>();
+
+	function extractFromComponents(components?: Record<string, unknown>) {
+		if (
+			components &&
+			typeof components === "object" &&
+			"minecraft:custom_model_data" in components
+		) {
+			const custom = components["minecraft:custom_model_data"] as {
+				floats?: number[];
+			};
+			if (custom?.floats) {
+				for (const val of custom.floats) {
+					collected.add(val);
+				}
+			}
+		}
+	}
+
+	function traverseAttachments(attachments: Record<string, Attachment>) {
+		for (const key of Object.keys(attachments)) {
+			const attachment = attachments[key];
+
+			extractFromComponents(attachment.item?.components);
+
+			if (attachment.attachments) {
+				traverseAttachments(attachment.attachments);
+			}
+		}
+	}
+
+	if (cart.model) {
+		extractFromComponents(cart.model.item?.components);
+
+		if (cart.model.attachments) {
+			traverseAttachments(cart.model.attachments);
+		}
+	}
+
+	return Array.from(collected).sort((a, b) => a - b);
 }
 
 export const useProjectStore = create<ProjectStore>((setOrg, get) => {
@@ -82,6 +131,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 		},
 
 		cart: null,
+		modelIds: [],
 
 		selectedObjectPath: undefined,
 
@@ -96,7 +146,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 					projectName: name,
 				},
 			})),
-		setCart: (cart) => set({ cart }),
+		setCart: (cart) => set({ cart, modelIds: collectModelIds(cart) }),
 		clearCart: () => set({ cart: null }),
 
 		saveProject: async (newFile) => {
@@ -318,7 +368,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 							continue;
 						}
 
-						set({ cart: parsed.data });
+						set({
+							cart: parsed.data,
+							modelIds: collectModelIds(parsed.data),
+						});
 						break;
 					}
 					default:
