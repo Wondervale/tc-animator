@@ -20,11 +20,16 @@ function PropertiesPanels() {
 				<TabsTrigger value="object-controls">
 					Object Controls
 				</TabsTrigger>
+				<TabsTrigger value="custom-models">Custom Models</TabsTrigger>
 				<TabsTrigger value="cart-debug">Cart Debug</TabsTrigger>
 				<TabsTrigger value="project-debug">Project Debug</TabsTrigger>
 			</TabsList>
 
 			<TabsContent value="object-controls" className="px-4">
+				W.I.P.
+			</TabsContent>
+
+			<TabsContent value="custom-models" className="px-4">
 				W.I.P.
 			</TabsContent>
 

@@ -8,7 +8,7 @@ import {
 
 import AppMenu from "@/components/AppMenu";
 import Preview from "@/components/Preview";
-import PropertiesPanels from "@/components/PropertiesPanels";
+import PropertiesPanels from "@/components/properties/PropertiesPanels";
 import Wave from "@/components/Wave";
 import { useEffect } from "react";
 import { usePreferences } from "@/stores/PreferencesStore";
