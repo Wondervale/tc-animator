@@ -19,6 +19,7 @@ import superjson from "superjson";
 import { create } from "zustand";
 
 import { convertGltfToGlb } from "@/lib/gltf";
+import { toPureArrayBuffer } from "@/lib/utils";
 import equal from "fast-deep-equal";
 
 export const fileHeader = strToU8("🦊🚂🎬");
@@ -215,11 +216,9 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 				// 3. If it's a .gltf, convert to .glb
 				if (extension === ".gltf") {
 					const glbData = await convertGltfToGlb(data);
-					zipFiles[`models/model_${modelId}.glb`] = glbData;
+					zipFiles[`models/${modelId}.glb`] = glbData;
 				} else {
-					zipFiles[`models/model_${modelId}.glb`] = new Uint8Array(
-						data,
-					);
+					zipFiles[`models/${modelId}.glb`] = new Uint8Array(data);
 				}
 			}
 
@@ -366,84 +365,91 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			const unzipped = await unzipSync(zipData);
 
 			for (const [filename, fileData] of Object.entries(unzipped)) {
-				switch (filename) {
-					case "metadata.json": {
-						const data = superjson.parse(strFromU8(fileData));
+				if (filename === "metadata.json") {
+					const data = superjson.parse(strFromU8(fileData));
 
-						const parsed = MetadataSchema.safeParse(data);
-						if (!parsed.success) {
-							console.error(
-								"Invalid metadata in project:",
-								parsed.error,
-							);
-							toast.error(
-								"We couldn't load your project. The metadata is invalid. See the browser console for more details.",
-								{ duration: 10000 },
-							);
-
-							// Reset self
-							set({
-								metadata: {
-									schemaVersion: SCHEMA_VERSION,
-									projectName: "",
-									createdAt: null,
-									lastModifiedAt: null,
-								},
-								cart: null,
-								fileHandle: undefined,
-							});
-
-							continue;
-						}
-
-						set({
-							metadata: parsed.data,
-						});
-						break;
-					}
-					case "cart.json": {
-						const data = superjson.parse(
-							strFromU8(fileData),
-						) as Cart;
-
-						const parsed = CartSchema.safeParse(data);
-
-						if (!parsed.success) {
-							console.error(
-								"Invalid cart data in project:",
-								parsed.error,
-							);
-							toast.error(
-								"We couldn't load your project. The cart data is invalid. See the browser console for more details.",
-								{ duration: 10000 },
-							);
-
-							// Reset self
-							set({
-								metadata: {
-									schemaVersion: SCHEMA_VERSION,
-									projectName: "",
-									createdAt: null,
-									lastModifiedAt: null,
-								},
-								cart: null,
-								fileHandle: undefined,
-							});
-
-							continue;
-						}
-
-						set({
-							cart: parsed.data,
-							modelIds: collectModelIds(parsed.data),
-						});
-						break;
-					}
-					default:
-						console.warn(
-							`Unknown file in TCA-Project: ${filename}`,
+					const parsed = MetadataSchema.safeParse(data);
+					if (!parsed.success) {
+						console.error(
+							"Invalid metadata in project:",
+							parsed.error,
 						);
-						break;
+						toast.error(
+							"We couldn't load your project. The metadata is invalid. See the browser console for more details.",
+							{ duration: 10000 },
+						);
+
+						// Reset self
+						set({
+							metadata: {
+								schemaVersion: SCHEMA_VERSION,
+								projectName: "",
+								createdAt: null,
+								lastModifiedAt: null,
+							},
+							cart: null,
+							fileHandle: undefined,
+						});
+
+						continue;
+					}
+
+					set({
+						metadata: parsed.data,
+					});
+				} else if (filename === "cart.json") {
+					const data = superjson.parse(strFromU8(fileData)) as Cart;
+
+					const parsed = CartSchema.safeParse(data);
+
+					if (!parsed.success) {
+						console.error(
+							"Invalid cart data in project:",
+							parsed.error,
+						);
+						toast.error(
+							"We couldn't load your project. The cart data is invalid. See the browser console for more details.",
+							{ duration: 10000 },
+						);
+
+						// Reset self
+						set({
+							metadata: {
+								schemaVersion: SCHEMA_VERSION,
+								projectName: "",
+								createdAt: null,
+								lastModifiedAt: null,
+							},
+							cart: null,
+							fileHandle: undefined,
+						});
+
+						continue;
+					}
+
+					set({
+						cart: parsed.data,
+						modelIds: collectModelIds(parsed.data),
+					});
+				} else if (
+					filename.startsWith("models/") &&
+					filename.endsWith(".glb")
+				) {
+					const modelId = parseInt(
+						filename.replace("models/", "").replace(".glb", ""),
+					);
+					if (!isNaN(modelId)) {
+						set((state) => {
+							const newMap = new Map(state.modelFiles);
+							newMap.set(
+								modelId,
+								toPureArrayBuffer(fileData.buffer),
+							);
+							return { modelFiles: newMap };
+						});
+					}
+				} else {
+					console.warn(`Unknown file in TCA-Project: ${filename}`);
 				}
 			}
 

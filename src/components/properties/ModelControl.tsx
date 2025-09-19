@@ -19,6 +19,7 @@ import { useMemo } from "react";
 import blockbenchImage from "/public/blockbench-settings.png";
 
 import { convertGltfToGlb } from "@/lib/gltf";
+import { toPureArrayBuffer } from "@/lib/utils";
 import { fileOpen } from "browser-fs-access";
 
 function ModelControl() {
@@ -85,24 +86,8 @@ function ModelControl() {
 			if (file.name.toLowerCase().endsWith(".gltf")) {
 				try {
 					const glbUint8Array = await convertGltfToGlb(arrayBuffer);
-					const buffer =
-						glbUint8Array instanceof ArrayBuffer
-							? glbUint8Array
-							: glbUint8Array.buffer.slice(
-									glbUint8Array.byteOffset,
-									glbUint8Array.byteOffset +
-										glbUint8Array.byteLength,
-								);
-					// Ensure buffer is ArrayBuffer (not SharedArrayBuffer)
-					finalData =
-						buffer instanceof ArrayBuffer
-							? buffer
-							: new ArrayBuffer(buffer.byteLength);
-					if (!(buffer instanceof ArrayBuffer)) {
-						// Copy data if needed
-						const view = new Uint8Array(finalData);
-						view.set(new Uint8Array(buffer));
-					}
+					const buffer = toPureArrayBuffer(glbUint8Array.buffer);
+					finalData = buffer;
 				} catch (error) {
 					console.error("Failed to convert GLTF to GLB:", error);
 					alert(
