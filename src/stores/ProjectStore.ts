@@ -18,6 +18,8 @@ import { create } from "zustand";
 import superjson from "superjson";
 import { toast } from "sonner";
 
+import equal from "fast-deep-equal";
+
 export const fileHeader = strToU8("🦊🚂🎬");
 
 export const SCHEMA_VERSION = 0;
@@ -96,20 +98,29 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 	const set: typeof setOrg = (partial) => {
 		const update = typeof partial === "function" ? partial(get()) : partial;
 
-		// enforce saved = false unless explicitly true
+		// Only set saved = false if metadata changes (excluding orbitControls), cart, or modelIds change
+		const prevState = get();
 		const nextState: Partial<ProjectStore> = { ...update };
+
+		let shouldSetSavedFalse = false;
+
+		// Check if metadata is being updated (excluding orbitControls)
+		if ("metadata" in nextState && nextState.metadata) {
+			const prevMeta = { ...prevState.metadata };
+			const nextMeta = { ...nextState.metadata };
+			delete prevMeta.orbitControls;
+			delete nextMeta.orbitControls;
+
+			if (!equal(prevMeta, nextMeta)) {
+				shouldSetSavedFalse = true;
+			}
+		}
+
+		// If explicitly setting saved: true, honor it
 		if ("saved" in nextState && nextState.saved === true) {
 			nextState.saved = true;
-		} else {
-			// Don't set saved to false if the orbit controls are being updated
-			if (!nextState.metadata?.orbitControls) {
-				nextState.saved = false;
-			}
-
-			// Don't set save to false if only the selected object path is being updated
-			if (nextState.selectedObjectPath) {
-				nextState.saved = get().saved;
-			}
+		} else if (shouldSetSavedFalse) {
+			nextState.saved = false;
 		}
 
 		// always do partial update -> omit replace
