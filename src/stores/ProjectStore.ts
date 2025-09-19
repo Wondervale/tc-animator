@@ -197,12 +197,20 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 				// Save using browser-fs-access
 				const localFileHandle = await toast
 					.promise(
-						fileSave(blob, {
-							fileName,
-							extensions: [".tcaproj"],
-							mimeTypes: ["application/binary"],
-							id: "tca-project",
-						}),
+						Promise.race([
+							fileSave(blob, {
+								fileName,
+								extensions: [".tcaproj"],
+								mimeTypes: ["application/binary"],
+								id: "tca-project",
+							}),
+							new Promise<never>((_, reject) =>
+								setTimeout(
+									() => reject(new Error("Save timed out.")),
+									15000,
+								),
+							),
+						]),
 						{
 							loading: "Saving project...",
 							success: "Project saved successfully!",
@@ -235,17 +243,25 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 				// Save to the existing file handle
 				const success = await toast
 					.promise(
-						fileHandle
-							.createWritable()
-							.then(async (writer) => {
-								await writer.write(fixedBuffer);
-								await writer.close();
+						Promise.race([
+							fileHandle
+								.createWritable()
+								.then(async (writer) => {
+									await writer.write(fixedBuffer);
+									await writer.close();
 
-								return true;
-							})
-							.catch(() => {
-								return false;
-							}),
+									return true;
+								})
+								.catch(() => {
+									return false;
+								}),
+							new Promise<never>((_, reject) =>
+								setTimeout(
+									() => reject(new Error("Save timed out.")),
+									15000,
+								),
+							),
+						]),
 						{
 							loading: "Saving project...",
 							success: "Project saved successfully!",
