@@ -7,7 +7,7 @@ import { degreeToRadian } from "@/lib/utils";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 
-import { Text, type TextProps } from "@react-three/drei";
+import { Box, Text, type TextProps } from "@react-three/drei";
 import { Euler, Quaternion, Vector3, type Object3D } from "three";
 
 export function CameraFacingText(
@@ -45,8 +45,37 @@ export function CameraFacingText(
 	});
 
 	return (
-		<Text ref={ref} {...props}>
-			{props.children}
-		</Text>
+		<>
+			<Box
+				args={[0.3, 0.3, 0.3]}
+				position={(() => {
+					let x = 0,
+						y = 0,
+						z = -0.1;
+					const pos = props.position;
+					if (Array.isArray(pos) && pos.length === 3) {
+						x = pos[0] ?? 0;
+						y = pos[1] ?? 0;
+						z = (pos[2] ?? 0) - 0.1;
+					} else if (
+						pos &&
+						typeof pos === "object" &&
+						"x" in pos &&
+						"y" in pos &&
+						"z" in pos
+					) {
+						x = (pos as Vector3).x ?? 0;
+						y = (pos as Vector3).y ?? 0;
+						z = ((pos as Vector3).z ?? 0) - 0.1;
+					} else if (typeof pos === "number") {
+						x = pos;
+					}
+					return new Vector3(x, y, z);
+				})()}
+			/>
+			<Text ref={ref} {...props} renderOrder={9999}>
+				{props.children}
+			</Text>
+		</>
 	);
 }

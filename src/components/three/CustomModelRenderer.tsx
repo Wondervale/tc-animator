@@ -9,6 +9,7 @@ import { useProjectStore } from "@/stores/ProjectStore";
 import { useGLTF } from "@react-three/drei";
 import { JSONPath } from "jsonpath-plus";
 import { useEffect, useMemo, useState } from "react";
+import { Box3, Group, Mesh, Vector3 } from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
 
 const modelBlobUrlCache = new Map<
@@ -139,13 +140,45 @@ function ModelInstance({
 function ModelRenderer({
 	modelId,
 	blobUrl,
+	scale = 1,
+	position = new Vector3(0, 0, 0),
 }: {
 	modelId: number;
 	blobUrl: string;
+	scale?: number;
+	position?: Vector3;
 }) {
 	const { scene } = useGLTF(blobUrl);
-	// // Clone once per scene
-	const customModel = useMemo(() => (scene ? clone(scene) : null), [scene]);
+	const customModel = useMemo(() => {
+		if (!scene) return null;
+
+		const cloned = clone(scene);
+		cloned.updateWorldMatrix(true, true);
+
+		// Compute bounding box of the entire model
+		const box = new Box3().setFromObject(cloned);
+		const center = new Vector3();
+		box.getCenter(center);
+
+		const size = new Vector3();
+		box.getSize(size);
+
+		// Bottom center: X and Z from center, Y at min
+		const bottomCenter = new Vector3(center.x, box.min.y, center.z);
+
+		const pivot = new Group();
+
+		// Shift all meshes so bottom center aligns with origin
+		cloned.traverse((child) => {
+			if ((child as Mesh).isMesh) {
+				(child as Mesh).position.sub(bottomCenter);
+			}
+		});
+
+		pivot.add(cloned);
+
+		return pivot;
+	}, [scene]);
 
 	if (!customModel) return <Cube key={modelId} />;
 
@@ -153,9 +186,11 @@ function ModelRenderer({
 		<primitive
 			key={modelId}
 			object={customModel}
-			rotation={[0, degreeToRadian(180), 0]}
+			scale={scale}
+			position={position}
 			castShadow
 			receiveShadow
+			rotation={[0, degreeToRadian(180), 0]}
 		/>
 	);
 }
