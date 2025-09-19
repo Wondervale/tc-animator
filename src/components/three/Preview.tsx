@@ -5,16 +5,12 @@
  * @format
  */
 
-import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
-import { Canvas, useThree } from "@react-three/fiber";
-import {
-	DepthOfField,
-	EffectComposer,
-	Outline,
-	SMAA,
-	SSAO,
-} from "@react-three/postprocessing";
 import { FpsDisplay, FpsTracker } from "@/components/three/Stats";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
 	GizmoHelper,
 	GizmoViewport,
@@ -23,23 +19,26 @@ import {
 	Preload,
 	TransformControls,
 } from "@react-three/drei";
-import { Object3D, DoubleSide as THREEDoubleSide } from "three";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+	DepthOfField,
+	EffectComposer,
+	Outline,
+	SMAA,
+	SSAO,
+} from "@react-three/postprocessing";
+import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
+import CartRender from "@/components/three/CartRender";
 import AngleSlider from "@/components/ui/AngleSlider";
 import { Button } from "@/components/ui/button";
-import CartRender from "@/components/three/CartRender";
-import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Toggle } from "@/components/ui/toggle";
-import { Vector3 } from "three";
 import { degreeToRadian } from "@/lib/utils";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
+import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 function RestoreOrbitControls({
 	controlsRef,
@@ -116,13 +115,35 @@ function Preview() {
 				setTransformSpace(
 					transformSpace === "world" ? "local" : "world",
 				);
+			} else if (event.key === "f" || event.key === "F") {
+				// Focus on selected object
+				if (selected) {
+					const box = new Box3().setFromObject(selected);
+					const size = box.getSize(new Vector3()).length();
+					const center = box.getCenter(new Vector3());
+					const distance = size * 1.5;
+
+					const camera = controlsRef.current?.object;
+					if (camera) {
+						const direction = new Vector3()
+							.subVectors(camera.position, center)
+							.normalize()
+							.multiplyScalar(distance);
+						camera.position.copy(direction.add(center));
+						controlsRef.current?.target.copy(center);
+						controlsRef.current?.update();
+					}
+				}
+			} else if (event.key === "Escape") {
+				projectStore.setSelectedObjectPath(undefined);
+				setSelected(null);
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [transformSpace]);
+	}, [transformSpace, projectStore, selected]);
 
 	useEffect(() => {
 		if (!selected) return;
