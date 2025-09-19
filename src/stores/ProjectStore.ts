@@ -8,16 +8,17 @@
 import { fileOpen, fileSave } from "browser-fs-access";
 import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 
+import { MetadataSchema, type Metadata } from "@/schemas/ProjectSchema";
 import {
 	CartSchema,
 	type Attachment,
 	type Cart,
 } from "@/schemas/SavedTrainPropertiesSchema";
-import { MetadataSchema, type Metadata } from "@/schemas/ProjectSchema";
-import { create } from "zustand";
-import superjson from "superjson";
 import { toast } from "sonner";
+import superjson from "superjson";
+import { create } from "zustand";
 
+import { convertGltfToGlb } from "@/lib/gltf";
 import equal from "fast-deep-equal";
 
 export const fileHeader = strToU8("🦊🚂🎬");
@@ -25,17 +26,21 @@ export const fileHeader = strToU8("🦊🚂🎬");
 export const SCHEMA_VERSION = 0;
 
 interface ProjectStore {
+	// Core state
 	saved: boolean;
 
 	metadata: Metadata;
 
 	cart: Cart | null;
+
 	modelIds: number[];
+	modelFiles: Map<number, ArrayBuffer>;
 
 	fileHandle?: FileSystemFileHandle;
 
 	selectedObjectPath?: string; // JSON path to the selected object in the cart
 
+	// Setters and actions
 	setMetadata: (metadata: ProjectStore["metadata"]) => void;
 
 	setProjectName: (name: string) => void;
@@ -44,10 +49,14 @@ interface ProjectStore {
 
 	setSelectedObjectPath: (path: string | undefined) => void;
 
+	// Persistence
 	saveProject: (newFile?: boolean) => Promise<void>;
 	loadProjectFromFile: () => Promise<void>;
-
 	reset: () => void;
+
+	// Model file logic
+	setModelFile: (modelId: number, data: ArrayBuffer | undefined) => void;
+	removeModelFile: (modelId: number) => void;
 }
 
 function collectModelIds(cart: Cart | null): number[] {
@@ -142,7 +151,9 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 		},
 
 		cart: null,
+
 		modelIds: [],
+		modelFiles: new Map<number, ArrayBuffer>(),
 
 		selectedObjectPath: undefined,
 
@@ -175,18 +186,42 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 				createdAt: projectStore.metadata.createdAt || new Date(),
 			};
 
+			const zipFiles: Record<string, Uint8Array> = {
+				"metadata.json": strToU8(superjson.stringify(localMetadata)),
+				"cart.json": strToU8(superjson.stringify(projectStore.cart)),
+			};
+
+			// add .gltf and .glb models to a "models/" folder
+			for (const modelId of projectStore.modelIds) {
+				// 1. Check if the file is a .glb or .gltf
+				const data = projectStore.modelFiles.get(modelId);
+				if (!data) continue;
+
+				// 2. Determine file type by checking the first few bytes
+				const header = new Uint8Array(data.slice(0, 4));
+				let extension = ".gltf"; // default
+				if (
+					header[0] === 0x67 && // 'g'
+					header[1] === 0x6c && // 'l'
+					header[2] === 0x54 && // 'T'
+					header[3] === 0x46 // 'F'
+				) {
+					extension = ".glb";
+				}
+
+				// 3. If it's a .gltf, convert to .glb
+				if (extension === ".gltf") {
+					const glbData = await convertGltfToGlb(data);
+					zipFiles[`models/model_${modelId}.glb`] = glbData;
+				} else {
+					zipFiles[`models/model_${modelId}.glb`] = new Uint8Array(
+						data,
+					);
+				}
+			}
+
 			// Create the zip file with fflate
-			const zipDataRaw = zipSync(
-				{
-					"metadata.json": strToU8(
-						superjson.stringify(localMetadata),
-					),
-					"cart.json": strToU8(
-						superjson.stringify(projectStore.cart),
-					),
-				},
-				{ level: 9 },
-			);
+			const zipDataRaw = zipSync(zipFiles, { level: 9, mem: 8 });
 
 			// Prepend the file header
 			const header = new Uint8Array(
@@ -423,5 +458,24 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 				cart: null,
 				fileHandle: undefined,
 			}),
+
+		setModelFile: (modelId, data) => {
+			set((state) => {
+				const newMap = new Map(state.modelFiles);
+				if (data) {
+					newMap.set(modelId, data);
+				} else {
+					newMap.delete(modelId);
+				}
+				return { modelFiles: newMap, saved: false };
+			});
+		},
+		removeModelFile: (modelId) => {
+			set((state) => {
+				const newMap = new Map(state.modelFiles);
+				newMap.delete(modelId);
+				return { modelFiles: newMap, saved: false };
+			});
+		},
 	};
 });

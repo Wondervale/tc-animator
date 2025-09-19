@@ -12,14 +12,18 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { JSONPath } from "jsonpath-plus";
 import { useMemo } from "react";
 import blockbenchImage from "/public/blockbench-settings.png";
 
+import { convertGltfToGlb } from "@/lib/gltf";
+import { fileOpen } from "browser-fs-access";
+
 function ModelControl() {
-	const { modelIds, selectedObjectPath, cart } = useProjectStore();
+	const { modelIds, selectedObjectPath, cart, modelFiles, setModelFile } =
+		useProjectStore();
 
 	const selectedAttachmentModels = useMemo(() => {
 		if (!selectedObjectPath || !cart) return [];
@@ -63,6 +67,59 @@ function ModelControl() {
 
 		return Array.from(models);
 	}, [selectedObjectPath, cart]);
+
+	const loadModelFile = async (modelId: number) => {
+		try {
+			const file = await fileOpen({
+				mimeTypes: ["model/gltf+json", "model/gltf-binary"],
+				extensions: [".gltf", ".glb"],
+				multiple: false,
+				description: "3D Model (GLTF/GLB)",
+				id: "tca-models",
+			});
+
+			const arrayBuffer = await file.arrayBuffer();
+			let finalData = arrayBuffer;
+
+			// If GLTF, convert to GLB
+			if (file.name.toLowerCase().endsWith(".gltf")) {
+				try {
+					const glbUint8Array = await convertGltfToGlb(arrayBuffer);
+					const buffer =
+						glbUint8Array instanceof ArrayBuffer
+							? glbUint8Array
+							: glbUint8Array.buffer.slice(
+									glbUint8Array.byteOffset,
+									glbUint8Array.byteOffset +
+										glbUint8Array.byteLength,
+								);
+					// Ensure buffer is ArrayBuffer (not SharedArrayBuffer)
+					finalData =
+						buffer instanceof ArrayBuffer
+							? buffer
+							: new ArrayBuffer(buffer.byteLength);
+					if (!(buffer instanceof ArrayBuffer)) {
+						// Copy data if needed
+						const view = new Uint8Array(finalData);
+						view.set(new Uint8Array(buffer));
+					}
+				} catch (error) {
+					console.error("Failed to convert GLTF to GLB:", error);
+					alert(
+						"Failed to convert GLTF to GLB. See console for details.",
+					);
+					setModelFile(modelId, finalData as ArrayBuffer);
+				}
+			}
+
+			setModelFile(modelId, finalData);
+		} catch (error) {
+			if ((error as { name?: string }).name !== "AbortError") {
+				console.error("Error loading model file:", error);
+				alert("Error loading model file. See console for details.");
+			}
+		}
+	};
 
 	return (
 		<>
@@ -127,11 +184,15 @@ function ModelControl() {
 									{id}
 								</TableCell>
 								<TableCell>
-									<Input
-										type="file"
-										accept=".gltf,.glb"
-										className="m-0 w-full"
-									/>
+									<Button
+										variant="secondary"
+										size="sm"
+										onClick={() => loadModelFile(id)}
+									>
+										{modelFiles.get(id)
+											? "Change Model"
+											: "Upload Model"}
+									</Button>
 								</TableCell>
 							</TableRow>
 						))}
