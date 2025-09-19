@@ -1,9 +1,9 @@
 /** @format */
 
-import { defineConfig } from "vite";
-import path from "path";
-import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,6 +22,8 @@ export default defineConfig({
 		},
 	},
 	build: {
+		target: "esnext",
+
 		rollupOptions: {
 			treeshake: true,
 			output: {
@@ -41,6 +43,30 @@ export default defineConfig({
 
 						if (id.includes("lucide")) {
 							return "lucide";
+						}
+
+						if (id.includes("tailwind")) {
+							return "tailwind";
+						}
+
+						if (id.includes("lodash")) {
+							return "lodash";
+						}
+
+						if (id.includes("radix")) {
+							return "radix";
+						}
+
+						if (id.includes("zustand")) {
+							return "zustand";
+						}
+
+						if (id.includes("jsep")) {
+							return "jsep";
+						}
+
+						if (id.includes("nbt")) {
+							return "nbt";
 						}
 
 						if (id.includes("react")) {
