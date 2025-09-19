@@ -4,7 +4,7 @@
  */
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useMemo } from "react";
 
 import ModelControl from "@/components/properties/ModelControl";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,17 @@ const Editor = lazy(() => import("@monaco-editor/react"));
 
 function PropertiesPanels() {
 	const projectStore = useProjectStore();
+
+	const reducedProjectData = useMemo(() => {
+		const rest = {
+			...projectStore,
+			cart: undefined,
+			modelFiles: undefined,
+			fileHandle: undefined,
+		};
+
+		return rest;
+	}, [projectStore]);
 
 	return (
 		<Tabs defaultValue="object-controls" className="-mt-4 h-full w-full">
@@ -75,18 +86,15 @@ function PropertiesPanels() {
 					<Editor
 						language="json"
 						theme="vs-dark"
-						value={JSON.stringify(
-							{ ...projectStore, cart: undefined },
-							null,
-							2,
-						)}
+						value={JSON.stringify(reducedProjectData, null, 2)}
 						options={{
-							minimap: { enabled: true },
+							minimap: { enabled: false }, // Disable minimap for perf
 							scrollbar: {
 								alwaysConsumeMouseWheel: false,
 							},
-							wordWrap: "on",
+							wordWrap: "off", // Disable word wrap for perf
 							automaticLayout: true,
+							readOnly: true, // Make editor read-only for debug
 						}}
 					/>
 				</Suspense>

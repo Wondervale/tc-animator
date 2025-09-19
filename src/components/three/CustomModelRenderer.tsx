@@ -145,6 +145,7 @@ function ModelRenderer({
 }: {
 	modelId: number;
 	blobUrl: string;
+	hoverable?: boolean;
 	scale?: number;
 	position?: Vector3;
 }) {
@@ -183,15 +184,16 @@ function ModelRenderer({
 	if (!customModel) return <Cube key={modelId} />;
 
 	return (
-		<primitive
-			key={modelId}
-			object={customModel}
-			scale={scale}
-			position={position}
-			castShadow
-			receiveShadow
-			rotation={[0, degreeToRadian(180), 0]}
-		/>
+		<>
+			<primitive
+				object={customModel}
+				scale={scale}
+				position={position}
+				rotation={[0, degreeToRadian(180), 0]}
+				castShadow
+				receiveShadow
+			/>
+		</>
 	);
 }
 
