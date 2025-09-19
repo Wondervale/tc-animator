@@ -62,7 +62,7 @@ function App() {
 				autoSaveId="tca-project"
 				autoSave="true"
 			>
-				<ResizablePanel>
+				<ResizablePanel minSize={5} defaultSize={80}>
 					<ResizablePanelGroup
 						direction="horizontal"
 						autoSaveId="tca-preview"
@@ -70,7 +70,7 @@ function App() {
 					>
 						<ResizablePanel
 							minSize={5}
-							defaultSize={20}
+							defaultSize={25}
 							className="bg-card flex flex-col gap-4"
 						>
 							<AppMenu />
@@ -78,7 +78,7 @@ function App() {
 							<PropertiesPanels />
 						</ResizablePanel>
 						<ResizableHandle />
-						<ResizablePanel minSize={5}>
+						<ResizablePanel minSize={5} defaultSize={75}>
 							<Preview />
 						</ResizablePanel>
 					</ResizablePanelGroup>
@@ -86,7 +86,7 @@ function App() {
 				<ResizableHandle />
 				<ResizablePanel
 					minSize={5}
-					defaultSize={40}
+					defaultSize={20}
 					className="bg-card p-4"
 				>
 					Timeline
