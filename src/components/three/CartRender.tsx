@@ -8,14 +8,15 @@
 import type { Attachment, Model } from "@/schemas/SavedTrainPropertiesSchema";
 
 import Cube from "@/components/three/Cube";
+import CustomModelRenderer from "@/components/three/CustomModelRenderer";
 import Dummy from "@/components/three/Dummy";
-import { Text, type TextProps } from "@react-three/drei";
 import { degreeToRadian } from "@/lib/utils";
-import { useProjectStore } from "@/stores/ProjectStore";
-import { useThree, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
 import { usePreferences } from "@/stores/PreferencesStore";
-import { Euler, Quaternion, Vector3, type Object3D, type Group } from "three";
+import { useProjectStore } from "@/stores/ProjectStore";
+import { Text, type TextProps } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useRef } from "react";
+import { Euler, Quaternion, Vector3, type Group, type Object3D } from "three";
 
 function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 	const { cart, setSelectedObjectPath } = useProjectStore();
@@ -58,7 +59,7 @@ function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 		>
 			{/* Root mesh */}
 			<group scale={scale}>
-				<Cube />
+				<CustomModelRenderer jsonPath="$.model" />
 			</group>
 			<AttachmentRender
 				attachments={cart.model}
