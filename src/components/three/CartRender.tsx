@@ -7,16 +7,15 @@
 
 import type { Attachment, Model } from "@/schemas/SavedTrainPropertiesSchema";
 
-import Cube from "@/components/three/Cube";
 import CustomModelRenderer from "@/components/three/CustomModelRenderer";
 import Dummy from "@/components/three/Dummy";
 import { degreeToRadian } from "@/lib/utils";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { Text, type TextProps } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+
+import { CameraFacingText } from "@/components/three/CameraFacingText";
 import { useRef } from "react";
-import { Euler, Quaternion, Vector3, type Group, type Object3D } from "three";
+import { Euler, Vector3, type Group, type Object3D } from "three";
 
 function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 	const { cart, setSelectedObjectPath } = useProjectStore();
@@ -156,7 +155,7 @@ function AttachmentItem({
 						case "HITBOX":
 							return null; // Hitboxes are not rendered visually
 						default:
-							return <Cube />;
+							return <CustomModelRenderer jsonPath={jsonPath} />;
 					}
 				})()}
 			</group>
@@ -220,45 +219,6 @@ function AttachmentRender({
 				jsonPath={`${jsonPath}.attachments.${key}`}
 			/>
 		),
-	);
-}
-
-function CameraFacingText(props: TextProps & { children: React.ReactNode }) {
-	const ref = useRef<Object3D>(null);
-	const { camera } = useThree();
-
-	useFrame(() => {
-		if (!ref.current) return;
-
-		const textPos = ref.current.getWorldPosition(new Vector3());
-		const camPos = camera.position.clone();
-		camPos.y = textPos.y;
-
-		const dir = camPos.sub(textPos).normalize();
-		let angle = Math.atan2(dir.x, dir.z);
-
-		if (ref.current.parent) {
-			const parentQuat = new Quaternion();
-			ref.current.parent.getWorldQuaternion(parentQuat);
-
-			const parentEuler = new Euler().setFromQuaternion(
-				parentQuat,
-				"YXZ",
-			);
-			const parentRotationY = parentEuler.y;
-
-			angle = angle - parentRotationY + Math.PI;
-		} else {
-			angle += Math.PI;
-		}
-
-		ref.current.rotation.set(0, angle + degreeToRadian(180), 0);
-	});
-
-	return (
-		<Text ref={ref} {...props}>
-			{props.children}
-		</Text>
 	);
 }
 

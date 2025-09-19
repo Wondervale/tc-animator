@@ -31,6 +31,7 @@ import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
+import { CameraFacingText } from "@/components/three/CameraFacingText";
 import CartRender from "@/components/three/CartRender";
 import AngleSlider from "@/components/ui/AngleSlider";
 import { Button } from "@/components/ui/button";
@@ -215,53 +216,64 @@ function Preview() {
 					castShadow
 				/>
 
-				<Suspense fallback={null}>
+				<Suspense
+					fallback={
+						<CameraFacingText
+							fontSize={5}
+							color="white"
+							anchorX="center"
+							anchorY="middle"
+							outlineWidth={0.2}
+							outlineColor="black"
+						>
+							Loading...
+						</CameraFacingText>
+					}
+				>
 					<CartRender onSelect={setSelected} />
-
-					<Grid
-						position={[0.5, -0.501, 0.5]}
-						cellSize={1 / 16}
-						sectionSize={1}
-						cellThickness={0.5}
-						sectionThickness={1.5}
-						cellColor={preferences.gridColor}
-						sectionColor={preferences.getComplementaryGridColor()}
-						infiniteGrid
-						side={THREEDoubleSide}
-					/>
-
-					{/* 🆕 Gizmos attach only if something is selected */}
-					{selected && (
-						<TransformControls
-							object={selected}
-							mode={transformMode}
-							rotationSnap={degreeToRadian(preferences.angleSnap)}
-							translationSnap={preferences.distanceSnap}
-							onMouseDown={() =>
-								(controlsRef.current!.enabled = false)
-							}
-							onMouseUp={() =>
-								(controlsRef.current!.enabled = true)
-							}
-							space={transformSpace}
-						/>
-					)}
-
-					<OrbitControls
-						ref={controlsRef}
-						makeDefault
-						enableDamping={preferences.controlDamping}
-					/>
-
-					<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-						<GizmoViewport
-							axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]}
-							labelColor="white"
-						/>
-					</GizmoHelper>
-
-					<RestoreOrbitControls controlsRef={controlsRef} />
 				</Suspense>
+
+				<Grid
+					position={[0.5, -0.501, 0.5]}
+					cellSize={1 / 16}
+					sectionSize={1}
+					cellThickness={0.5}
+					sectionThickness={1.5}
+					cellColor={preferences.gridColor}
+					sectionColor={preferences.getComplementaryGridColor()}
+					infiniteGrid
+					side={THREEDoubleSide}
+				/>
+
+				{/* 🆕 Gizmos attach only if something is selected */}
+				{selected && (
+					<TransformControls
+						object={selected}
+						mode={transformMode}
+						rotationSnap={degreeToRadian(preferences.angleSnap)}
+						translationSnap={preferences.distanceSnap}
+						onMouseDown={() =>
+							(controlsRef.current!.enabled = false)
+						}
+						onMouseUp={() => (controlsRef.current!.enabled = true)}
+						space={transformSpace}
+					/>
+				)}
+
+				<OrbitControls
+					ref={controlsRef}
+					makeDefault
+					enableDamping={preferences.controlDamping}
+				/>
+
+				<GizmoHelper alignment="bottom-right" margin={[80, 80]}>
+					<GizmoViewport
+						axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]}
+						labelColor="white"
+					/>
+				</GizmoHelper>
+
+				<RestoreOrbitControls controlsRef={controlsRef} />
 			</Canvas>
 
 			<FpsDisplay />

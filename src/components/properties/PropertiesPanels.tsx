@@ -17,7 +17,7 @@ function PropertiesPanels() {
 	const projectStore = useProjectStore();
 
 	return (
-		<Tabs defaultValue="project-debug" className="-mt-4 h-full w-full">
+		<Tabs defaultValue="object-controls" className="-mt-4 h-full w-full">
 			<TabsList className="w-full rounded-none">
 				<TabsTrigger value="object-controls">
 					Object Controls

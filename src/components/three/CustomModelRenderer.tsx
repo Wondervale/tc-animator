@@ -4,11 +4,40 @@
  */
 
 import Cube from "@/components/three/Cube";
+import { degreeToRadian } from "@/lib/utils";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { useGLTF } from "@react-three/drei";
 import { JSONPath } from "jsonpath-plus";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+
+const modelBlobUrlCache = new Map<
+	number,
+	{ buffer: ArrayBuffer; url: string }
+>();
+
+function getOrCreateBlobUrl(modelId: number, buffer: ArrayBuffer): string {
+	const cached = modelBlobUrlCache.get(modelId);
+	if (cached && cached.buffer === buffer) {
+		return cached.url;
+	}
+	// Clean up old URL if buffer changed
+	if (cached) {
+		URL.revokeObjectURL(cached.url);
+	}
+	const blob = new Blob([buffer]);
+	const url = URL.createObjectURL(blob);
+	modelBlobUrlCache.set(modelId, { buffer, url });
+	return url;
+}
+
+function cleanupBlobUrl(modelId: number) {
+	const cached = modelBlobUrlCache.get(modelId);
+	if (cached) {
+		URL.revokeObjectURL(cached.url);
+		modelBlobUrlCache.delete(modelId);
+	}
+}
 
 function CustomModelRenderer({ jsonPath }: { jsonPath: string }) {
 	const { cart, modelFiles } = useProjectStore();
@@ -86,33 +115,25 @@ function ModelInstance({
 	modelId: number;
 	arrayBuffer?: ArrayBuffer;
 }) {
-	// Cache the blob URL per modelId
-	const blobUrlRef = useRef<string | undefined>(undefined);
+	const [blobUrl, setBlobUrl] = useState<string | undefined>(undefined);
 
 	useEffect(() => {
-		if (!arrayBuffer) return;
-
-		// Clean up old URL
-		if (blobUrlRef.current) {
-			URL.revokeObjectURL(blobUrlRef.current);
+		if (!arrayBuffer) {
+			setBlobUrl(undefined);
+			cleanupBlobUrl(modelId);
+			return;
 		}
-
-		// Create a stable URL for this buffer
-		const blob = new Blob([arrayBuffer]);
-		const url = URL.createObjectURL(blob);
-		blobUrlRef.current = url;
+		const url = getOrCreateBlobUrl(modelId, arrayBuffer);
+		setBlobUrl(url);
 
 		return () => {
-			if (blobUrlRef.current) {
-				URL.revokeObjectURL(blobUrlRef.current);
-				blobUrlRef.current = undefined;
-			}
+			// Only cleanup if this is the last reference
+			cleanupBlobUrl(modelId);
 		};
-	}, [arrayBuffer]);
+	}, [modelId, arrayBuffer]);
 
-	if (!blobUrlRef.current) return <Cube key={modelId} />;
-
-	return <ModelRenderer modelId={modelId} blobUrl={blobUrlRef.current} />;
+	if (!blobUrl) return <Cube key={modelId} />;
+	return <ModelRenderer modelId={modelId} blobUrl={blobUrl} />;
 }
 
 function ModelRenderer({
@@ -132,8 +153,7 @@ function ModelRenderer({
 		<primitive
 			key={modelId}
 			object={customModel}
-			scale={1}
-			position={[0, 0, 0]}
+			rotation={[0, degreeToRadian(180), 0]}
 			castShadow
 			receiveShadow
 		/>
