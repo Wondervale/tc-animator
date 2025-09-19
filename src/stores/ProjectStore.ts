@@ -57,6 +57,9 @@ interface ProjectStore {
 	// Model file logic
 	setModelFile: (modelId: number, data: ArrayBuffer | undefined) => void;
 	removeModelFile: (modelId: number) => void;
+
+	// Debug
+	logState: () => void;
 }
 
 function collectModelIds(cart: Cart | null): number[] {
@@ -476,6 +479,12 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 				newMap.delete(modelId);
 				return { modelFiles: newMap, saved: false };
 			});
+		},
+
+		// Debug
+		logState: () => {
+			const state = get();
+			console.log("ProjectStore state:", state);
 		},
 	};
 });

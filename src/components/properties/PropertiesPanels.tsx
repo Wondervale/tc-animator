@@ -3,10 +3,11 @@
  *   All rights reserved.
  */
 
-import { Suspense, lazy } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Suspense, lazy } from "react";
 
 import ModelControl from "@/components/properties/ModelControl";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjectStore } from "@/stores/ProjectStore";
 
@@ -17,7 +18,7 @@ function PropertiesPanels() {
 
 	return (
 		<Tabs defaultValue="project-debug" className="-mt-4 h-full w-full">
-			<TabsList className="w-full flex-wrap rounded-none">
+			<TabsList className="w-full rounded-none">
 				<TabsTrigger value="object-controls">
 					Object Controls
 				</TabsTrigger>
@@ -64,6 +65,13 @@ function PropertiesPanels() {
 
 			<TabsContent value="project-debug">
 				<Suspense fallback={<Skeleton className="h-full w-full" />}>
+					<Button
+						className="mb-2 block w-full"
+						onClick={() => projectStore.logState()}
+					>
+						Log State to Console
+					</Button>
+
 					<Editor
 						language="json"
 						theme="vs-dark"
