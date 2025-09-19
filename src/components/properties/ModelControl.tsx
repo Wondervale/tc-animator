@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/tooltip";
 
 import { Input } from "@/components/ui/input";
-import { JSONPath } from "jsonpath-plus";
-import blockbenchImage from "/public/blockbench-settings.png";
-import { useMemo } from "react";
 import { useProjectStore } from "@/stores/ProjectStore";
+import { JSONPath } from "jsonpath-plus";
+import { useMemo } from "react";
+import blockbenchImage from "/public/blockbench-settings.png";
 
 function ModelControl() {
 	const { modelIds, selectedObjectPath, cart } = useProjectStore();
@@ -69,7 +69,7 @@ function ModelControl() {
 			{/* Explainer */}
 			<p className="text-muted-foreground mb-4">
 				You can replace the default cubes with your own 3D models to
-				make the cart look like it is ingame.
+				make the cart look like it would in-game with a resourcepack.
 				<br />
 				<br />
 				Models must be in <b>GLTF</b> or <b>GLB</b> format. These can be
