@@ -47,6 +47,8 @@ export function CameraFacingText(
 	return (
 		<>
 			<Box
+				castShadow
+				receiveShadow
 				args={[0.3, 0.3, 0.3]}
 				position={(() => {
 					let x = 0,

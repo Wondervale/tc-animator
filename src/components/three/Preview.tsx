@@ -23,7 +23,6 @@ import { Canvas, useThree } from "@react-three/fiber";
 import {
 	DepthOfField,
 	EffectComposer,
-	Outline,
 	SMAA,
 	SSAO,
 } from "@react-three/postprocessing";
@@ -33,6 +32,7 @@ import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
 import { CameraFacingText } from "@/components/three/CameraFacingText";
 import CartRender from "@/components/three/CartRender";
+import MeshOutline from "@/components/three/MeshOutline";
 import AngleSlider from "@/components/ui/AngleSlider";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
@@ -96,6 +96,7 @@ function Preview() {
 	const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
 	const [selected, setSelected] = useState<Object3D | null>(null);
+	const [hovered, setHovered] = useState<Object3D | null>(null);
 
 	const [transformMode, setTransformMode] = useState<"translate" | "rotate">(
 		"translate",
@@ -163,6 +164,8 @@ function Preview() {
 	}
 
 	const passes = [
+		<SMAA key="smaa" />,
+
 		preferences.SSAOEnabled && <SSAO key="ssao" />,
 		preferences.DOFEnabled && (
 			<DepthOfField
@@ -172,27 +175,23 @@ function Preview() {
 				bokehScale={2}
 			/>
 		),
-		<SMAA key="smaa" />,
-		selected && (
-			<Outline
-				key="outline"
-				selection={[selected]}
-				edgeStrength={4}
-				blur
-			/>
-		),
 	].filter(Boolean) as React.ReactElement[]; // cast to satisfy TS
 
 	return (
 		<div className="relative h-full w-full">
 			<Canvas
-				className="three-bg"
+				className={`three-bg ${hovered ? "cursor-pointer" : "cursor-default"}`}
 				camera={{ position: [3, 3, 3], fov: 45 }}
 				shadows
 				dpr={[1, 2]}
 				gl={{
+					toneMapping: 0,
 					powerPreference: "high-performance",
-					antialias: false,
+					alpha: false,
+					antialias: true,
+					stencil: false,
+					autoClear: false,
+					depth: true,
 				}}
 				onPointerMissed={(e) => {
 					// Ignore right clicks or drags
@@ -202,7 +201,12 @@ function Preview() {
 					}
 				}}
 			>
-				<EffectComposer enableNormalPass depthBuffer stencilBuffer>
+				<EffectComposer
+					enabled
+					enableNormalPass
+					depthBuffer
+					stencilBuffer
+				>
 					{passes}
 				</EffectComposer>
 
@@ -230,7 +234,7 @@ function Preview() {
 						</CameraFacingText>
 					}
 				>
-					<CartRender onSelect={setSelected} />
+					<CartRender onSelect={setSelected} onHover={setHovered} />
 				</Suspense>
 
 				<Grid
@@ -274,6 +278,21 @@ function Preview() {
 				</GizmoHelper>
 
 				<RestoreOrbitControls controlsRef={controlsRef} />
+
+				{hovered && (
+					<MeshOutline
+						selection={hovered}
+						color={0xffa500}
+						scaleFactor={1.1}
+					/>
+				)}
+				{selected && (
+					<MeshOutline
+						selection={selected}
+						color={0x00ffff}
+						scaleFactor={1.1}
+					/>
+				)}
 			</Canvas>
 
 			<FpsDisplay />

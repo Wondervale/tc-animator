@@ -17,7 +17,13 @@ import { CameraFacingText } from "@/components/three/CameraFacingText";
 import { useRef } from "react";
 import { Euler, Vector3, type Group, type Object3D } from "three";
 
-function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
+function CartRender({
+	onSelect,
+	onHover,
+}: {
+	onSelect: (obj: Object3D) => void;
+	onHover: (obj: Object3D | null) => void;
+}) {
 	const { cart, setSelectedObjectPath } = useProjectStore();
 	const groupRef = useRef<Group>(null);
 
@@ -48,6 +54,16 @@ function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 			ref={groupRef}
 			position={pos}
 			rotation={rot}
+			onPointerOver={(e) => {
+				e.stopPropagation();
+				if (groupRef.current) {
+					onHover(groupRef.current);
+				}
+			}}
+			onPointerOut={(e) => {
+				e.stopPropagation();
+				onHover(null);
+			}}
 			onClick={(e) => {
 				e.stopPropagation();
 				if (groupRef.current) {
@@ -63,6 +79,7 @@ function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 			<AttachmentRender
 				attachments={cart.model}
 				onSelect={onSelect}
+				onHover={onHover}
 				jsonPath="$.model"
 			/>
 		</group>
@@ -72,10 +89,12 @@ function CartRender({ onSelect }: { onSelect: (obj: Object3D) => void }) {
 function AttachmentItem({
 	attachment,
 	onSelect,
+	onHover,
 	jsonPath,
 }: {
 	attachment: Attachment | Model;
 	onSelect: (obj: Object3D) => void;
+	onHover: (obj: Object3D | null) => void;
 	jsonPath: string;
 }) {
 	const preferences = usePreferences();
@@ -104,6 +123,19 @@ function AttachmentItem({
 			ref={groupRef}
 			position={pos}
 			rotation={rot}
+			onPointerOver={(e) => {
+				if (
+					groupRef.current &&
+					!["SEAT", "HITBOX"].includes(attachment.type)
+				) {
+					e.stopPropagation();
+					onHover(groupRef.current);
+				}
+			}}
+			onPointerOut={(e) => {
+				e.stopPropagation();
+				onHover(null);
+			}}
 			onClick={(e) => {
 				if (
 					groupRef.current &&
@@ -194,6 +226,7 @@ function AttachmentItem({
 				<AttachmentRender
 					attachments={attachment}
 					onSelect={onSelect}
+					onHover={onHover}
 					jsonPath={`${jsonPath}`}
 				/>
 			)}
@@ -204,10 +237,12 @@ function AttachmentItem({
 function AttachmentRender({
 	attachments,
 	onSelect,
+	onHover,
 	jsonPath,
 }: {
 	attachments: Attachment | Model;
 	onSelect: (obj: Object3D) => void;
+	onHover: (obj: Object3D | null) => void;
 	jsonPath: string;
 }) {
 	return Object.entries(attachments.attachments || {}).map(
@@ -216,6 +251,7 @@ function AttachmentRender({
 				key={key}
 				attachment={attachment}
 				onSelect={onSelect}
+				onHover={onHover}
 				jsonPath={`${jsonPath}.attachments.${key}`}
 			/>
 		),
