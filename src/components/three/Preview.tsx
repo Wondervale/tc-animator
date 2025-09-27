@@ -15,6 +15,7 @@ import {
 	GizmoHelper,
 	GizmoViewport,
 	Grid,
+	Html,
 	OrbitControls,
 	Preload,
 	TransformControls,
@@ -30,7 +31,6 @@ import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
-import { CameraFacingText } from "@/components/three/CameraFacingText";
 import CartRender from "@/components/three/CartRender";
 import MeshOutline from "@/components/three/MeshOutline";
 import AngleSlider from "@/components/ui/AngleSlider";
@@ -220,20 +220,7 @@ function Preview() {
 					castShadow
 				/>
 
-				<Suspense
-					fallback={
-						<CameraFacingText
-							fontSize={5}
-							color="white"
-							anchorX="center"
-							anchorY="middle"
-							outlineWidth={0.2}
-							outlineColor="black"
-						>
-							Loading...
-						</CameraFacingText>
-					}
-				>
+				<Suspense fallback={<Html center>Loading...</Html>}>
 					<CartRender onSelect={setSelected} onHover={setHovered} />
 				</Suspense>
 
