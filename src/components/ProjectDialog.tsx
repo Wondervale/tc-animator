@@ -13,7 +13,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ChevronLeft, ExternalLink, FolderOpen, Import } from "lucide-react";
 import {
 	Select,
 	SelectContent,
@@ -23,15 +22,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { ChevronLeft, ExternalLink, FolderOpen, Import } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { fileOpen } from "browser-fs-access";
-import { toast } from "sonner";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { useState } from "react";
 import { useTrainsStore } from "@/stores/TrainsStore";
+import { fileOpen } from "browser-fs-access";
+import { useState } from "react";
+import { toast } from "sonner";
 
 function NewProjectDialog() {
 	const projectStore = useProjectStore();
@@ -39,7 +39,9 @@ function NewProjectDialog() {
 
 	const [currentTrain, setCurrentTrain] = useState(trainsStore.currentTrain);
 	const [currentCart, setCurrentCart] = useState(projectStore.cart);
-	const [projectName, setProjectName] = useState(projectStore.metadata.projectName);
+	const [projectName, setProjectName] = useState(
+		projectStore.metadata.projectName,
+	);
 
 	return (
 		<AlertDialog open={true}>
@@ -59,8 +61,10 @@ function NewProjectDialog() {
 							<hr className="my-4" />
 
 							<p className="text-sm text-muted-foreground mb-2">
-								TC Animator lets you animate one cart from a single train per project. To work on a
-								different train or cart, create a new project for each one.
+								TC Animator lets you animate one cart from a
+								single train per project. To work on a different
+								train or cart, create a new project for each
+								one.
 							</p>
 
 							<Label htmlFor="train">Train</Label>
@@ -71,7 +75,8 @@ function NewProjectDialog() {
 										setCurrentTrain(train);
 										setCurrentCart(null);
 									}
-								}}>
+								}}
+							>
 								<SelectTrigger className="w-full" id="train">
 									<SelectValue placeholder="Select a train" />
 								</SelectTrigger>
@@ -81,7 +86,10 @@ function NewProjectDialog() {
 										{Object.values(trainsStore.trains)
 											.filter((train) => train.carts)
 											.map((train) => (
-												<SelectItem key={train.savedName} value={train.savedName}>
+												<SelectItem
+													key={train.savedName}
+													value={train.savedName}
+												>
 													{train.savedName}
 												</SelectItem>
 											))}
@@ -95,9 +103,12 @@ function NewProjectDialog() {
 							<Select
 								value={
 									currentTrain?.carts
-										? Object.entries(currentTrain.carts).find(
-												([, cart]) => cart === currentCart
-										  )?.[0] ?? ""
+										? (Object.entries(
+												currentTrain.carts,
+											).find(
+												([, cart]) =>
+													cart === currentCart,
+											)?.[0] ?? "")
 										: ""
 								}
 								disabled={!currentTrain?.carts}
@@ -106,14 +117,17 @@ function NewProjectDialog() {
 									if (cart) {
 										setCurrentCart(cart);
 									}
-								}}>
+								}}
+							>
 								<SelectTrigger className="w-full" id="cart">
 									<SelectValue placeholder="Select a cart" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Carts</SelectLabel>
-										{Object.entries(currentTrain?.carts || {}).map(([key]) => (
+										{Object.entries(
+											currentTrain?.carts || {},
+										).map(([key]) => (
 											<SelectItem key={key} value={key}>
 												{key}
 											</SelectItem>
@@ -130,7 +144,8 @@ function NewProjectDialog() {
 						onClick={() => {
 							projectStore.reset();
 							trainsStore.reset();
-						}}>
+						}}
+					>
 						<ChevronLeft />
 						Back
 					</Button>
@@ -145,7 +160,8 @@ function NewProjectDialog() {
 								await projectStore.saveProject();
 							}
 						}}
-						disabled={!(projectName && currentTrain && currentCart)}>
+						disabled={!(projectName && currentTrain && currentCart)}
+					>
 						Create Project
 					</Button>
 				</AlertDialogFooter>
@@ -158,7 +174,11 @@ function ProjectDialog() {
 	const projectStore = useProjectStore();
 	const trainsStore = useTrainsStore();
 
+	const [loading, setLoading] = useState(false);
+
 	const loadTrainsFromFile = async () => {
+		setLoading(true);
+
 		const fileHandle = await fileOpen({
 			description: "Select a YAML file",
 			mimeTypes: ["application/x-yaml", "text/yaml"],
@@ -174,17 +194,34 @@ function ProjectDialog() {
 			trainsStore.setTrainsFromYml(text);
 			trainsStore.setCurrentTrain(Object.values(trainsStore.trains)[0]);
 		}
+
+		setLoading(false);
 	};
 
 	const loadProjectFromFile = async () => {
-		toast.promise(projectStore.loadProjectFromFile(), {
-			loading: "Loading project...",
-			success: "Project loaded successfully!",
-			error: "Failed to load project.",
-		});
+		setLoading(true);
+
+		await toast
+			.promise(projectStore.loadProjectFromFile(), {
+				loading: "Loading project...",
+				success: "Project loaded successfully!",
+				error: "Failed to load project.",
+			})
+			.unwrap();
+
+		setLoading(false);
 	};
 
-	if (Object.entries(trainsStore.trains).length > 0 && !projectStore.metadata.createdAt) {
+	if (loading) {
+		return (
+			<div className="fixed inset-0 z-50 bg-black/50 backdrop-blur"></div>
+		);
+	}
+
+	if (
+		Object.entries(trainsStore.trains).length > 0 &&
+		!projectStore.metadata.createdAt
+	) {
 		return <NewProjectDialog />;
 	}
 
@@ -197,22 +234,24 @@ function ProjectDialog() {
 					<AlertDialogDescription asChild>
 						<div className="flex flex-col items-center gap-4">
 							<h3 className="text-lg">
-								Please import a SavedTrainProperties YAML file or open an existing project to get
-								started.
+								Please import a SavedTrainProperties YAML file
+								or open an existing project to get started.
 							</h3>
 
 							<div className="grid grid-cols-2 gap-4">
 								<Button
 									variant="secondary"
 									className="aspect-square w-full h-auto flex flex-col"
-									onClick={loadTrainsFromFile}>
+									onClick={loadTrainsFromFile}
+								>
 									<Import className="block size-24 mx-auto" />
 									Import SavedTrainProperties
 								</Button>
 								<Button
 									variant="secondary"
 									className="aspect-square w-full h-auto flex flex-col"
-									onClick={loadProjectFromFile}>
+									onClick={loadProjectFromFile}
+								>
 									<FolderOpen className="block size-24 mx-auto" />
 									Open TCA-Project
 								</Button>
@@ -225,7 +264,8 @@ function ProjectDialog() {
 						href="https://foxxite.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-1">
+						className="flex items-center gap-1"
+					>
 						Made with ❤️ by Foxxite | Articca
 						<ExternalLink className="inline-block size-4" />
 					</a>
