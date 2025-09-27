@@ -1,68 +1,84 @@
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+
+type MeshOutlineProps = {
+	selection: THREE.Object3D | null;
+	color?: number;
+	scaleFactor?: number;
+};
 
 export default function MeshOutline({
 	selection,
 	color = 0xffa500,
 	scaleFactor = 1.05,
-}: {
-	selection: THREE.Object3D | null;
-	color?: number;
-	scaleFactor?: number;
-}) {
+}: MeshOutlineProps) {
 	const { scene } = useThree();
-	const meshRef = useRef<THREE.LineSegments>(null);
-	const box = useRef(new THREE.Box3());
-	const size = useRef(new THREE.Vector3());
-	const center = useRef(new THREE.Vector3());
+	const meshRef = useRef<THREE.LineSegments | null>(null);
 
-	// Geometry for a unit cube wireframe
-	const geometry = useRef(
-		new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)),
-	);
-	const material = useRef(new THREE.LineBasicMaterial({ color }));
+	// Memoize the bounding box size for each object
+	const boundingSize = useMemo(() => {
+		if (!selection) return new THREE.Vector3(1, 1, 1);
+
+		// Clone the object to ignore rotation/scale
+		const clone = selection.clone(true);
+		clone.rotation.set(0, 0, 0);
+		clone.updateWorldMatrix(true, true);
+
+		const box = new THREE.Box3().setFromObject(clone);
+		const size = box
+			.getSize(new THREE.Vector3())
+			.multiplyScalar(scaleFactor);
+		return size;
+	}, [selection, scaleFactor]);
 
 	useEffect(() => {
 		if (!selection) return;
 
 		if (!meshRef.current) {
-			const lines = new THREE.LineSegments(
-				geometry.current,
-				material.current,
+			const geometry = new THREE.EdgesGeometry(
+				new THREE.BoxGeometry(
+					boundingSize.x,
+					boundingSize.y,
+					boundingSize.z,
+				),
 			);
-			meshRef.current = lines;
+			const material = new THREE.LineBasicMaterial({ color });
+			meshRef.current = new THREE.LineSegments(geometry, material);
 			scene.add(meshRef.current);
 		}
 
 		return () => {
 			if (meshRef.current) {
 				scene.remove(meshRef.current);
+				meshRef.current.geometry.dispose();
 				meshRef.current = null;
 			}
 		};
-	}, [selection, scene]);
+	}, [selection, scene, color, boundingSize]);
 
 	useFrame(() => {
 		if (!meshRef.current || !selection) return;
 
-		// Compute bounding box in world space
-		box.current.setFromObject(selection);
-		box.current.getSize(size.current);
-		box.current.getCenter(center.current);
+		// Compute center in world space
+		const center = new THREE.Box3()
+			.setFromObject(selection)
+			.getCenter(new THREE.Vector3());
 
-		// Slightly enlarge box
-		size.current.multiplyScalar(scaleFactor);
+		// Update geometry to match memoized size
+		meshRef.current.geometry.dispose();
+		meshRef.current.geometry = new THREE.EdgesGeometry(
+			new THREE.BoxGeometry(
+				boundingSize.x,
+				boundingSize.y,
+				boundingSize.z,
+			),
+		);
 
-		// Apply position, rotation, and scale
-		meshRef.current.position.copy(center.current);
+		// Set position and rotation to match selection in world space
+		meshRef.current.position.copy(center);
 		meshRef.current.quaternion.copy(
 			selection.getWorldQuaternion(new THREE.Quaternion()),
-		);
-		meshRef.current.scale.set(
-			size.current.x,
-			size.current.y,
-			size.current.z,
 		);
 	});
 
