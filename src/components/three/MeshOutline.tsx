@@ -29,6 +29,9 @@ export default function MeshOutline({
 		const size = box
 			.getSize(new THREE.Vector3())
 			.multiplyScalar(scaleFactor);
+
+		clone.remove();
+
 		return size;
 	}, [selection, scaleFactor]);
 
