@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { JSONPath } from "jsonpath-plus";
 import { useMemo } from "react";
-import blockbenchImage from "/public/blockbench-settings.png";
+import blockbenchImage from "/src/assets/blockbench-settings.png";
 
 import { convertGltfToGlb } from "@/lib/gltf";
 import { toPureArrayBuffer } from "@/lib/utils";

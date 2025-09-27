@@ -7,8 +7,10 @@
 
 import { useTexture } from "@react-three/drei";
 
-import { NearestFilter, Mesh } from "three";
 import { forwardRef, useMemo, useState, type JSX } from "react";
+import { Mesh, NearestFilter } from "three";
+
+import missingTexture from "/src/assets/textures/missing.png";
 
 // Keep a global history and color generator (move to separate file if needed)
 const colorHistory: string[] = [];
@@ -40,9 +42,7 @@ function getUniquePastelColor(): string {
 
 const Cube = forwardRef<Mesh, JSX.IntrinsicElements["mesh"]>((props, ref) => {
 	// This is a simple cube component that can be used in the scene.
-	const originalTexture = useTexture(
-		`${import.meta.env.BASE_URL}textures/missing.png`,
-	);
+	const originalTexture = useTexture(missingTexture);
 
 	const texture = useMemo(() => {
 		const clone = originalTexture.clone();

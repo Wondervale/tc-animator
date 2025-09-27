@@ -12,7 +12,7 @@ import { useMemo } from "react";
 import { Vector3 } from "three";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
 
-const DUMMY_PATH = `${import.meta.env.BASE_URL}models/dummy.glb`;
+import DUMMY_PATH from "/src/assets/models/dummy.glb?url";
 
 useGLTF.preload(DUMMY_PATH);
 
@@ -23,7 +23,7 @@ function Dummy({
 	scale?: number;
 	position?: Vector3;
 }) {
-	const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/dummy.glb`);
+	const { scene } = useGLTF(DUMMY_PATH);
 	const dummyModel = useMemo(() => {
 		if (!scene) return null;
 
