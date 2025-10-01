@@ -1,8 +1,8 @@
 import DraggableKeyframe from "@/components/timeline/DraggableKeyframe";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
-// import { cn } from "@/lib/utils";
 
 export type Keyframe = {
 	id: string;
@@ -48,6 +48,31 @@ const tracksData: Track[] = [
 const Timeline: React.FC = () => {
 	// --- Jump Playhead on Ruler or Waveform Click ---
 	const LABEL_WIDTH = 100; // matches minmax(100px, 1fr) in gridTemplateColumns
+
+	const [tracks, setTracks] = useState<Track[]>(tracksData);
+	const [currentTime, setCurrentTime] = useState(0);
+	const [zoom, setZoom] = useState(100);
+	const [duration, setDuration] = useState(5);
+	const [isDraggingPlayhead, setIsDraggingPlayhead] = useState(false);
+
+	const waveformRef = useRef<HTMLDivElement>(null);
+	const wavesurferRef = useRef<WaveSurfer | null>(null);
+
+	// --- Smarter Zoom ---
+	// zoom: px per second. At min zoom, 0.1s = 10% of timeline width. At max zoom, full track fits.
+	const MIN_ZOOM = 20; // px per second
+	const MAX_ZOOM = 400; // px per second
+
+	// When zooming in, show more detail, when zooming out, show less detail
+	const setSmartZoom = (factor: number) => {
+		setZoom((z) => {
+			let newZoom = z * factor;
+			newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+			return newZoom;
+		});
+	};
+
+	// --- Timeline Jump ---
 	const handleTimelineJump = (clientX: number) => {
 		if (!timelineRef.current) return;
 		const rect = timelineRef.current.getBoundingClientRect();
@@ -61,18 +86,10 @@ const Timeline: React.FC = () => {
 		}
 	};
 
-	const [tracks, setTracks] = useState<Track[]>(tracksData);
-	const [currentTime, setCurrentTime] = useState(0);
-	const [zoom, setZoom] = useState(100);
-	const [duration, setDuration] = useState(5);
-	const [isDraggingPlayhead, setIsDraggingPlayhead] = useState(false);
-
-	const waveformRef = useRef<HTMLDivElement>(null);
-	const wavesurferRef = useRef<WaveSurfer | null>(null);
-
 	// --- Load Audio Waveform ---
 	useEffect(() => {
 		const audioTrack = tracks.find((t) => t.type === "audio");
+
 		if (audioTrack?.audioUrl && waveformRef.current) {
 			const waveColor =
 				getComputedStyle(document.documentElement)
@@ -103,16 +120,15 @@ const Timeline: React.FC = () => {
 			});
 
 			wavesurferRef.current.on("audioprocess", () => {
-				if (!isDraggingPlayhead) {
-					setCurrentTime(wavesurferRef.current!.getCurrentTime());
-				}
+				setCurrentTime(wavesurferRef.current!.getCurrentTime());
 			});
 		}
+
 		return () => {
 			wavesurferRef.current?.destroy();
 			wavesurferRef.current = null;
 		};
-	}, [tracks, isDraggingPlayhead]);
+	}, [tracks]);
 
 	// --- Keyframe Update ---
 	const updateKeyframe = (
@@ -164,9 +180,11 @@ const Timeline: React.FC = () => {
 		},
 		[isDraggingPlayhead, zoom, duration],
 	);
+
 	const handlePlayheadMouseUp = () => {
 		setIsDraggingPlayhead(false);
 	};
+
 	useEffect(() => {
 		if (isDraggingPlayhead) {
 			window.addEventListener("mousemove", handlePlayheadMouseMove);
@@ -183,26 +201,37 @@ const Timeline: React.FC = () => {
 
 	// --- Ruler ---
 	const renderRuler = () => {
-		// More detail at higher zoom, less at lower zoom
-		let step: number;
-		if (zoom >= 200) step = 0.1;
-		else if (zoom >= 100) step = 0.25;
-		else if (zoom >= 50) step = 0.5;
-		else step = 1;
+		// --- Evenly spaced ruler ---
+		const labelMinSpacingPx = 40; // minimum px between labels
+		const timelinePx = duration * zoom;
+
+		// Calculate how many labels fit
+		const numLabels = Math.floor(timelinePx / labelMinSpacingPx);
+
+		// Step in seconds between labels
+		let step = duration / numLabels;
+
+		// Round step to nearest 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, etc for nice intervals
+		const niceSteps = [0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 20, 50, 100];
+		step = niceSteps.find((s) => s >= step) || step;
+
+		// Recalculate numLabels with nice step
 		const marks = [];
 		for (let t = 0; t <= duration; t += step) {
+			const leftPx = t * zoom;
 			marks.push(
 				<div
 					key={t}
 					className="absolute top-0 h-5 border-l border-border text-xs text-muted-foreground"
-					style={{ left: `${t * zoom}px`, width: 1 }}
+					style={{ left: `${leftPx}px`, width: 1 }}
 				>
 					<span className="absolute left-1 top-0">
-						{t.toFixed(2)}s
+						{t.toFixed(step < 1 ? 2 : 1)}s
 					</span>
 				</div>,
 			);
 		}
+
 		// Add click handler to jump playhead
 		return (
 			<div
@@ -224,10 +253,15 @@ const Timeline: React.FC = () => {
 				<Button onClick={pause} variant="destructive">
 					Pause
 				</Button>
-				<Button onClick={() => setZoom((z) => z * 1.2)}>Zoom In</Button>
-				<Button onClick={() => setZoom((z) => Math.max(20, z / 1.2))}>
-					Zoom Out
-				</Button>
+				<Button onClick={() => setSmartZoom(1.2)}>Zoom In</Button>
+				<Button onClick={() => setSmartZoom(1 / 1.2)}>Zoom Out</Button>
+
+				<div className="flex items-center justify-center flex-1">
+					<p className="text-sm text-muted-foreground">
+						Current Time: {format(currentTime * 1000, "mm:ss.SS")} /{" "}
+						{format(duration * 1000, "mm:ss.SS")}
+					</p>
+				</div>
 			</div>
 
 			{/* Timeline Grid Layout */}
