@@ -1,7 +1,7 @@
 import DraggableKeyframe from "@/components/timeline/DraggableKeyframe";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
 export type Keyframe = {
@@ -57,6 +57,7 @@ const Timeline: React.FC = () => {
 
 	const waveformRef = useRef<HTMLDivElement>(null);
 	const wavesurferRef = useRef<WaveSurfer | null>(null);
+	const timelineScrollRef = useRef<HTMLDivElement>(null);
 
 	// --- Smarter Zoom ---
 	// zoom: px per second. At min zoom, 0.1s = 10% of timeline width. At max zoom, full track fits.
@@ -64,13 +65,13 @@ const Timeline: React.FC = () => {
 	const MAX_ZOOM = 400; // px per second
 
 	// When zooming in, show more detail, when zooming out, show less detail
-	const setSmartZoom = (factor: number) => {
+	const setSmartZoom = useCallback((factor: number) => {
 		setZoom((z) => {
 			let newZoom = z * factor;
 			newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
 			return newZoom;
 		});
-	};
+	}, []);
 
 	// --- Timeline Jump ---
 	const handleTimelineJump = (clientX: number) => {
@@ -244,6 +245,38 @@ const Timeline: React.FC = () => {
 		);
 	};
 
+	// --- Wheel Handler (native, passive: false) ---
+	useEffect(() => {
+		const el = timelineScrollRef.current;
+		if (!el) return;
+		const handleWheel = (e: WheelEvent) => {
+			// Alt + Wheel: Zoom in/out
+			if (e.altKey) {
+				e.preventDefault();
+				const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+				setSmartZoom(factor);
+				return;
+			}
+
+			// Ctrl/Cmd + Wheel: Vertical scroll
+			if (e.ctrlKey || e.metaKey) {
+				e.preventDefault();
+				el.scrollTop += e.deltaY;
+				// Prevent browser zoom
+				e.stopPropagation();
+				return;
+			}
+
+			// Default: Horizontal scroll
+			e.preventDefault();
+			el.scrollLeft += e.deltaY;
+		};
+		el.addEventListener("wheel", handleWheel, { passive: false });
+		return () => {
+			el.removeEventListener("wheel", handleWheel);
+		};
+	}, [duration, zoom, currentTime, setSmartZoom]);
+
 	return (
 		<div className="flex flex-col w-full h-full space-y-2 bg-card">
 			{/* Controls */}
@@ -269,6 +302,7 @@ const Timeline: React.FC = () => {
 			<div
 				className="w-full flex-1 overflow-x-auto"
 				style={{ position: "relative" }}
+				ref={timelineScrollRef}
 			>
 				<div
 					ref={timelineRef}
