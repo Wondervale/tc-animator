@@ -376,7 +376,10 @@ const Timeline: React.FC = () => {
 							}
 							className="mr-1 accent-primary"
 						/>
-						Zoom to mouse
+						<span>
+							[EXPERIMENTAL] Zoom to mouse <kbd>Alt</kbd>+
+							<kbd>Wheel</kbd>
+						</span>
 					</label>
 				</div>
 				<div className="flex-1 flex items-center justify-center">
