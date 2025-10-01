@@ -170,7 +170,8 @@ const Timeline: React.FC = () => {
 		(e: MouseEvent) => {
 			if (!isDraggingPlayhead || !timelineRef.current) return;
 			const rect = timelineRef.current.getBoundingClientRect();
-			const x = e.clientX - rect.left;
+			let x = e.clientX - rect.left - LABEL_WIDTH;
+			x = Math.max(0, x); // prevent negative
 			let t = x / zoom;
 			t = Math.max(0, Math.min(duration, t));
 			setCurrentTime(t);
@@ -362,7 +363,7 @@ const Timeline: React.FC = () => {
 
 				{/* Playhead (absolute, only over tracks) */}
 				<div
-					className="absolute w-[2px] bg-primary cursor-ew-resize z-10"
+					className="absolute w-[2px] bg-primary cursor-ew-resize z-10 hover:bg-primary/80"
 					style={{
 						left: `${currentTime * zoom}px`,
 						top: `24px`, // below ruler
