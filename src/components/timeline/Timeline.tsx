@@ -169,7 +169,12 @@ const Timeline: React.FC = () => {
 
 	// --- Ruler ---
 	const renderRuler = () => {
-		const step = Math.max(0.5, Math.ceil(5 / zoom));
+		// More detail at higher zoom, less at lower zoom
+		let step: number;
+		if (zoom >= 200) step = 0.1;
+		else if (zoom >= 100) step = 0.25;
+		else if (zoom >= 50) step = 0.5;
+		else step = 1;
 		const marks = [];
 		for (let t = 0; t <= duration; t += step) {
 			marks.push(
@@ -179,7 +184,7 @@ const Timeline: React.FC = () => {
 					style={{ left: `${t * zoom}px`, width: 1 }}
 				>
 					<span className="absolute left-1 top-0">
-						{t.toFixed(1)}s
+						{t.toFixed(2)}s
 					</span>
 				</div>,
 			);
@@ -258,13 +263,21 @@ const Timeline: React.FC = () => {
 									gridColumn: "2 / 3",
 									gridRow: `${idx + 2}`,
 									position: "relative",
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
 								}}
 							>
 								{track.type === "audio" ? (
 									<div
 										ref={waveformRef}
-										className="absolute left-0 top-0 w-full h-full"
-										style={{ pointerEvents: "none" }}
+										className="absolute left-0 w-full"
+										style={{
+											top: "50%",
+											transform: "translateY(-50%)",
+											height: "55px",
+											pointerEvents: "none",
+										}}
 									/>
 								) : (
 									track.keyframes?.map((kf) => (
@@ -295,8 +308,9 @@ const Timeline: React.FC = () => {
 					className="absolute w-[2px] bg-primary cursor-ew-resize z-10"
 					style={{
 						left: `${currentTime * zoom}px`,
-						top: "24px", // below ruler
+						top: `24px`, // below ruler
 						height: `${tracks.length * 64}px`, // only over tracks
+						gridColumn: "2 / 3",
 					}}
 					onMouseDown={handlePlayheadMouseDown}
 				/>
