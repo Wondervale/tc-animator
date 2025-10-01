@@ -84,11 +84,7 @@ function App() {
 					</ResizablePanelGroup>
 				</ResizablePanel>
 				<ResizableHandle />
-				<ResizablePanel
-					minSize={5}
-					defaultSize={20}
-					className="bg-card p-4"
-				>
+				<ResizablePanel minSize={5} defaultSize={20}>
 					<Timeline />
 				</ResizablePanel>
 			</ResizablePanelGroup>

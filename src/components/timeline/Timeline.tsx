@@ -46,6 +46,21 @@ const tracksData: Track[] = [
 ];
 
 const Timeline: React.FC = () => {
+	// --- Jump Playhead on Ruler or Waveform Click ---
+	const LABEL_WIDTH = 100; // matches minmax(100px, 1fr) in gridTemplateColumns
+	const handleTimelineJump = (clientX: number) => {
+		if (!timelineRef.current) return;
+		const rect = timelineRef.current.getBoundingClientRect();
+		let x = clientX - rect.left - LABEL_WIDTH;
+		x = Math.max(0, x); // prevent negative
+		let t = x / zoom;
+		t = Math.max(0, Math.min(duration, t));
+		setCurrentTime(t);
+		if (wavesurferRef.current) {
+			wavesurferRef.current.seekTo(t / duration);
+		}
+	};
+
 	const [tracks, setTracks] = useState<Track[]>(tracksData);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [zoom, setZoom] = useState(100);
@@ -54,7 +69,6 @@ const Timeline: React.FC = () => {
 
 	const waveformRef = useRef<HTMLDivElement>(null);
 	const wavesurferRef = useRef<WaveSurfer | null>(null);
-	// const intervalRef = useRef<number | null>(null);
 
 	// --- Load Audio Waveform ---
 	useEffect(() => {
@@ -75,7 +89,7 @@ const Timeline: React.FC = () => {
 				progressColor,
 				height: 55,
 				barWidth: 2,
-				cursorColor: "#f00",
+				cursorColor: "transparent",
 			});
 
 			wavesurferRef.current.load(audioTrack.audioUrl);
@@ -189,11 +203,19 @@ const Timeline: React.FC = () => {
 				</div>,
 			);
 		}
-		return <div className="relative h-5 w-full">{marks}</div>;
+		// Add click handler to jump playhead
+		return (
+			<div
+				className="relative h-5 w-full cursor-pointer"
+				onClick={(e) => handleTimelineJump(e.clientX)}
+			>
+				{marks}
+			</div>
+		);
 	};
 
 	return (
-		<div className="flex flex-col w-full h-full space-y-2 bg-card -m-4">
+		<div className="flex flex-col w-full h-full space-y-2 bg-card">
 			{/* Controls */}
 			<div className="flex space-x-2 m-2">
 				<Button onClick={play} variant="default">
@@ -256,8 +278,8 @@ const Timeline: React.FC = () => {
 							<div
 								className={
 									track.type === "audio"
-										? "relative h-16 border-b border-border flex items-center justify-center w-full"
-										: "relative h-16 border-b border-border flex items-center justify-center"
+										? "relative h-16 border-b border-border flex items-center justify-center w-full cursor-pointer"
+										: "relative h-16 border-b border-border flex items-center justify-center cursor-pointer"
 								}
 								style={{
 									gridColumn: "2 / 3",
@@ -267,6 +289,7 @@ const Timeline: React.FC = () => {
 									alignItems: "center",
 									justifyContent: "center",
 								}}
+								onClick={(e) => handleTimelineJump(e.clientX)}
 							>
 								{track.type === "audio" ? (
 									<div
