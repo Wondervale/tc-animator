@@ -1,6 +1,7 @@
 import DraggableKeyframe from "@/components/timeline/DraggableKeyframe";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+import { PauseIcon, PlayIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react";
 import React, {
 	type MouseEvent as ReactMouseEvent,
 	useCallback,
@@ -66,6 +67,8 @@ const Timeline: React.FC = () => {
 	const [duration, setDuration] = useState(5);
 	const [isDraggingPlayhead, setIsDraggingPlayhead] = useState(false);
 	const [isPlaying, setIsPlaying] = useState(false);
+	// Preference: zoom to mouse
+	const [zoomToMouseEnabled, setZoomToMouseEnabled] = useState(true);
 
 	const waveformRef = useRef<HTMLDivElement>(null);
 	const wavesurferRef = useRef<WaveSurfer | null>(null);
@@ -73,27 +76,66 @@ const Timeline: React.FC = () => {
 	const timelineRef = useRef<HTMLDivElement>(null);
 
 	// --- Smart Zoom ---
-	const setSmartZoom = useCallback((factor: number, anchorPx?: number) => {
-		setZoom((prev) => {
-			const oldZoom = prev;
-			const newZoom = Math.max(
-				MIN_ZOOM,
-				Math.min(MAX_ZOOM, prev * factor),
-			);
+	const setSmartZoom = useCallback(
+		(factor: number, anchorPx?: number) => {
+			setZoom((prev) => {
+				const oldZoom = prev;
+				const newZoom = Math.max(
+					MIN_ZOOM,
+					Math.min(MAX_ZOOM, prev * factor),
+				);
 
-			if (!timelineScrollRef.current || !anchorPx) return newZoom;
-
-			// Adjust scroll so that point under cursor stays fixed
-			const scrollEl = timelineScrollRef.current;
-			const rect = scrollEl.getBoundingClientRect();
-			const mouseX = anchorPx - rect.left - LABEL_WIDTH;
-			const timeAtMouse = (scrollEl.scrollLeft + mouseX) / oldZoom;
-			const newScrollLeft = timeAtMouse * newZoom - mouseX;
-			scrollEl.scrollLeft = newScrollLeft;
-
-			return newZoom;
-		});
-	}, []);
+				if (!timelineScrollRef.current) return newZoom;
+				const scrollEl = timelineScrollRef.current;
+				if (zoomToMouseEnabled && anchorPx !== undefined) {
+					// Adjust scroll so that point under cursor stays fixed
+					const rect = scrollEl.getBoundingClientRect();
+					const mouseX = anchorPx - rect.left - LABEL_WIDTH;
+					// Clamp mouseX to timeline bounds
+					const timelineWidth = duration * oldZoom;
+					const clampedMouseX = Math.max(
+						0,
+						Math.min(mouseX, timelineWidth),
+					);
+					const timeAtMouse =
+						(scrollEl.scrollLeft + clampedMouseX) / oldZoom;
+					let newScrollLeft = timeAtMouse * newZoom - clampedMouseX;
+					// Clamp scrollLeft to valid range
+					const maxScroll = Math.max(
+						0,
+						duration * newZoom - scrollEl.clientWidth,
+					);
+					newScrollLeft = Math.max(
+						0,
+						Math.min(newScrollLeft, maxScroll),
+					);
+					scrollEl.scrollLeft = newScrollLeft;
+				} else {
+					// Just zoom, keep scroll centered
+					const centerTime =
+						(scrollEl.scrollLeft +
+							scrollEl.clientWidth / 2 -
+							LABEL_WIDTH) /
+						oldZoom;
+					let newScrollLeft =
+						centerTime * newZoom -
+						scrollEl.clientWidth / 2 +
+						LABEL_WIDTH;
+					const maxScroll = Math.max(
+						0,
+						duration * newZoom - scrollEl.clientWidth,
+					);
+					newScrollLeft = Math.max(
+						0,
+						Math.min(newScrollLeft, maxScroll),
+					);
+					scrollEl.scrollLeft = newScrollLeft;
+				}
+				return newZoom;
+			});
+		},
+		[duration, zoomToMouseEnabled],
+	);
 
 	// --- Jump Playhead ---
 	const jumpTo = (clientX: number) => {
@@ -304,15 +346,39 @@ const Timeline: React.FC = () => {
 		<div className="flex flex-col w-full h-full space-y-2 bg-card">
 			{/* Controls */}
 			<div className="flex space-x-2 m-2">
-				<Button onClick={play}>Play</Button>
-				<Button onClick={pause} variant="destructive">
-					Pause
+				<Button onClick={isPlaying ? pause : play}>
+					{isPlaying ? (
+						<>
+							<PauseIcon />
+							Pause
+						</>
+					) : (
+						<>
+							<PlayIcon />
+							Play
+						</>
+					)}
+				</Button>
+				<Button onClick={() => setSmartZoom(1.2)}>
+					<ZoomInIcon /> Zoom In
+				</Button>
+				<Button onClick={() => setSmartZoom(1 / 1.2)}>
+					<ZoomOutIcon /> Zoom Out
 				</Button>
 
-				<Button disabled>{isPlaying ? "Playing" : "Paused"}</Button>
-
-				<Button onClick={() => setSmartZoom(1.2)}>Zoom In</Button>
-				<Button onClick={() => setSmartZoom(1 / 1.2)}>Zoom Out</Button>
+				<div className="flex items-center space-x-2">
+					<label className="flex items-center text-xs select-none cursor-pointer">
+						<input
+							type="checkbox"
+							checked={zoomToMouseEnabled}
+							onChange={(e) =>
+								setZoomToMouseEnabled(e.target.checked)
+							}
+							className="mr-1 accent-primary"
+						/>
+						Zoom to mouse
+					</label>
+				</div>
 				<div className="flex-1 flex items-center justify-center">
 					<p className="text-sm text-muted-foreground">
 						{format(currentTime * 1000, "mm:ss.SS")} /{" "}
