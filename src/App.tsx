@@ -7,12 +7,12 @@ import {
 } from "@/components/ui/resizable";
 
 import AppMenu from "@/components/AppMenu";
-import Preview from "@/components/three/Preview";
 import PropertiesPanels from "@/components/properties/PropertiesPanels";
-import Wave from "@/components/Wave";
-import { useEffect } from "react";
+import Preview from "@/components/three/Preview";
+import Timeline from "@/components/timeline/Timeline";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
+import { useEffect } from "react";
 
 function App() {
 	const preferences = usePreferences();
@@ -89,8 +89,7 @@ function App() {
 					defaultSize={20}
 					className="bg-card p-4"
 				>
-					Timeline
-					<Wave />
+					<Timeline />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>
