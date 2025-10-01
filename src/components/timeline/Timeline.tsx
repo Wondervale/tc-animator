@@ -265,113 +265,126 @@ const Timeline: React.FC = () => {
 				</div>
 			</div>
 
-			{/* Timeline Grid Layout */}
+			{/* Timeline Grid Layout with horizontal scroll and sticky labels */}
 			<div
-				ref={timelineRef}
-				className="grid w-full flex-1"
-				style={{
-					gridTemplateColumns: `minmax(100px, 1fr) ${duration * zoom}px`,
-					gridTemplateRows: `24px repeat(${tracks.length}, 64px)`, // 24px for ruler, 64px per track
-					position: "relative",
-				}}
+				className="w-full flex-1 overflow-x-auto"
+				style={{ position: "relative" }}
 			>
-				{/* Ruler Row */}
 				<div
-					className="h-6"
-					style={{ gridColumn: "1 / 2", gridRow: "1" }}
-				/>
-				<div
-					className="relative border-b border-border bg-card-foreground/10"
+					ref={timelineRef}
+					className="grid w-full"
 					style={{
-						gridColumn: "2 / 3",
-						gridRow: "1",
-						width: "100%",
-						height: "24px",
+						gridTemplateColumns: `minmax(100px, 1fr) ${duration * zoom}px`,
+						gridTemplateRows: `24px repeat(${tracks.length}, 64px)`,
+						position: "relative",
+						minWidth: `${100 + duration * zoom}px`,
 					}}
 				>
-					{renderRuler()}
-				</div>
+					{/* Ruler Row */}
+					<div
+						className="h-6 sticky left-0 bg-card z-20"
+						style={{ gridColumn: "1 / 2", gridRow: "1" }}
+					/>
+					<div
+						className="relative border-b border-border bg-card-foreground/10"
+						style={{
+							gridColumn: "2 / 3",
+							gridRow: "1",
+							width: "100%",
+							height: "24px",
+						}}
+					>
+						{renderRuler()}
+					</div>
 
-				{/* Track Labels and Tracks */}
-				{[...tracks]
-					.sort((a, b) =>
-						a.type === "audio" ? -1 : b.type === "audio" ? 1 : 0,
-					)
-					.map((track, idx) => (
-						<React.Fragment key={track.id}>
-							{/* Track Label */}
-							<div
-								className="flex items-center h-16 px-2 border-b border-border text-xs text-muted-foreground"
-								style={{
-									gridColumn: "1 / 2",
-									gridRow: `${idx + 2}`,
-								}}
-							>
-								{track.name}
-							</div>
-							{/* Track Timeline */}
-							<div
-								className={
-									track.type === "audio"
-										? "relative h-16 border-b border-border flex items-center justify-center w-full cursor-pointer"
-										: "relative h-16 border-b border-border flex items-center justify-center cursor-pointer"
-								}
-								style={{
-									gridColumn: "2 / 3",
-									gridRow: `${idx + 2}`,
-									position: "relative",
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-								onClick={(e) => handleTimelineJump(e.clientX)}
-							>
-								{track.type === "audio" ? (
-									<div
-										ref={waveformRef}
-										className="absolute left-0 w-full"
-										style={{
-											top: "50%",
-											transform: "translateY(-50%)",
-											height: "55px",
-											pointerEvents: "none",
-										}}
-									/>
-								) : (
-									track.keyframes?.map((kf) => (
+					{/* Track Labels and Tracks */}
+					{[...tracks]
+						.sort((a, b) =>
+							a.type === "audio"
+								? -1
+								: b.type === "audio"
+									? 1
+									: 0,
+						)
+						.map((track, idx) => (
+							<React.Fragment key={track.id}>
+								{/* Track Label (sticky) */}
+								<div
+									className="flex items-center h-16 px-2 border-b border-border text-xs text-muted-foreground sticky left-0 bg-card z-20"
+									style={{
+										gridColumn: "1 / 2",
+										gridRow: `${idx + 2}`,
+									}}
+								>
+									{track.name}
+								</div>
+								{/* Track Timeline */}
+								<div
+									className={
+										track.type === "audio"
+											? "relative h-16 border-b border-border flex items-center justify-center w-full cursor-pointer"
+											: "relative h-16 border-b border-border flex items-center justify-center cursor-pointer"
+									}
+									style={{
+										gridColumn: "2 / 3",
+										gridRow: `${idx + 2}`,
+										position: "relative",
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+									}}
+									onClick={(e) =>
+										handleTimelineJump(e.clientX)
+									}
+								>
+									{track.type === "audio" ? (
 										<div
-											key={kf.id}
+											ref={waveformRef}
+											className="absolute left-0 w-full"
 											style={{
-												position: "absolute",
-												left: `${kf.time * zoom}px`,
 												top: "50%",
 												transform: "translateY(-50%)",
+												height: "55px",
+												pointerEvents: "none",
 											}}
-										>
-											<DraggableKeyframe
-												keyframe={kf}
-												trackId={track.id}
-												zoom={zoom}
-												onUpdate={updateKeyframe}
-											/>
-										</div>
-									))
-								)}
-							</div>
-						</React.Fragment>
-					))}
+										/>
+									) : (
+										track.keyframes?.map((kf) => (
+											<div
+												key={kf.id}
+												style={{
+													position: "absolute",
+													left: `${kf.time * zoom}px`,
+													top: "50%",
+													transform:
+														"translateY(-50%)",
+												}}
+											>
+												<DraggableKeyframe
+													keyframe={kf}
+													trackId={track.id}
+													zoom={zoom}
+													onUpdate={updateKeyframe}
+												/>
+											</div>
+										))
+									)}
+								</div>
+							</React.Fragment>
+						))}
 
-				{/* Playhead (absolute, only over tracks) */}
-				<div
-					className="absolute w-[2px] bg-primary cursor-ew-resize z-10 hover:bg-primary/80"
-					style={{
-						left: `${currentTime * zoom}px`,
-						top: `24px`, // below ruler
-						height: `${tracks.length * 64}px`, // only over tracks
-						gridColumn: "2 / 3",
-					}}
-					onMouseDown={handlePlayheadMouseDown}
-				/>
+					{/* Playhead (absolute, only over tracks) */}
+					<div
+						className="absolute w-[2px] bg-primary cursor-ew-resize z-10 hover:bg-primary/80"
+						style={{
+							left: `${currentTime * zoom}px`,
+							top: `24px`,
+							height: `${tracks.length * 64}px`,
+							gridColumn: "2 / 3",
+						}}
+						onMouseDown={handlePlayheadMouseDown}
+					/>
+				</div>
 			</div>
 		</div>
 	);

@@ -122,6 +122,12 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+
+	/* Make scrollbars look good */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-ring) transparent;
+	}
 }
 
 .three-bg {
