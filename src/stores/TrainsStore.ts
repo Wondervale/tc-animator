@@ -12,9 +12,9 @@ import {
 	type SavedTrainProperties,
 } from "@/schemas/SavedTrainPropertiesSchema";
 
-import { create } from "zustand";
-import { parse } from "yaml";
 import { toast } from "sonner";
+import { parse } from "yaml";
+import { create } from "zustand";
 
 interface TrainStore {
 	trains: SavedTrainProperties;
@@ -31,7 +31,7 @@ interface TrainStore {
 	reset: () => void;
 }
 
-export const useTrainsStore = create<TrainStore>((set) => ({
+export const useTrainsStore = create<TrainStore>((set, _, store) => ({
 	trains: {},
 	currentTrain: undefined,
 
@@ -77,10 +77,5 @@ export const useTrainsStore = create<TrainStore>((set) => ({
 	setCurrentTrain: (train) => set({ currentTrain: train }),
 	clearCurrentTrain: () => set({ currentTrain: undefined }),
 
-	reset: () =>
-		set({
-			trains: {},
-			currentTrain: undefined,
-			parseErrors: undefined,
-		}),
+	reset: () => set(store.getInitialState()),
 }));

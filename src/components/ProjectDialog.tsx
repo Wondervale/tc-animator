@@ -38,7 +38,14 @@ import { fileOpen } from "browser-fs-access";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-function LegacyNewProjectDialog() {
+import { parse } from "yaml";
+import { z } from "zod";
+import {
+	CartSchema,
+	type SavedTrain,
+} from "../schemas/SavedTrainPropertiesSchema";
+
+function NewProjectDialog() {
 	const projectStore = useProjectStore();
 	const trainsStore = useTrainsStore();
 
@@ -47,6 +54,27 @@ function LegacyNewProjectDialog() {
 	const [projectName, setProjectName] = useState(
 		projectStore.metadata.projectName,
 	);
+
+	const trainCount = Object.keys(trainsStore.trains).length;
+
+	useEffect(() => {
+		if (trainsStore.currentTrain) {
+			setCurrentTrain(trainsStore.currentTrain);
+		}
+	}, [trainsStore.currentTrain]);
+
+	useEffect(() => {
+		if (projectStore.cart) {
+			setCurrentCart(projectStore.cart);
+		}
+	}, [projectStore.cart]);
+
+	useEffect(() => {
+		if (currentTrain && currentTrain.carts) {
+			const firstCart = Object.values(currentTrain.carts)[0];
+			setCurrentCart(firstCart);
+		}
+	}, [currentTrain]);
 
 	return (
 		<AlertDialog open={true}>
@@ -72,35 +100,53 @@ function LegacyNewProjectDialog() {
 								one.
 							</p>
 
-							<Label htmlFor="train">Train</Label>
-							<Select
-								onValueChange={(value) => {
-									const train = trainsStore.trains[value];
-									if (train) {
-										setCurrentTrain(train);
-										setCurrentCart(null);
-									}
-								}}
-							>
-								<SelectTrigger className="w-full" id="train">
-									<SelectValue placeholder="Select a train" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel>Trains</SelectLabel>
-										{Object.values(trainsStore.trains)
-											.filter((train) => train.carts)
-											.map((train) => (
-												<SelectItem
-													key={train.savedName}
-													value={train.savedName}
-												>
-													{train.savedName}
-												</SelectItem>
-											))}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
+							{trainCount > 1 && currentTrain == null && (
+								<>
+									<Label htmlFor="train">Train</Label>
+									<Select
+										onValueChange={(value) => {
+											const train =
+												trainsStore.trains[value];
+											if (train) {
+												setCurrentTrain(train);
+												setCurrentCart(null);
+											}
+										}}
+									>
+										<SelectTrigger
+											className="w-full"
+											id="train"
+										>
+											<SelectValue placeholder="Select a train" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectLabel>
+													Trains
+												</SelectLabel>
+												{Object.values(
+													trainsStore.trains,
+												)
+													.filter(
+														(train) => train.carts,
+													)
+													.map((train) => (
+														<SelectItem
+															key={
+																train.savedName
+															}
+															value={
+																train.savedName
+															}
+														>
+															{train.savedName}
+														</SelectItem>
+													))}
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+								</>
+							)}
 
 							<Label htmlFor="cart" className="mt-4">
 								Cart
@@ -163,6 +209,8 @@ function LegacyNewProjectDialog() {
 								projectStore.setCart(currentCart);
 
 								await projectStore.saveProject();
+
+								trainsStore.reset();
 							}
 						}}
 						disabled={!(projectName && currentTrain && currentCart)}
@@ -209,13 +257,116 @@ function ProjectDialog() {
 
 	const handleImportFromUrl = useCallback(
 		async (importUrl?: string) => {
-			const targetUrl = importUrl ?? url;
-			if (!targetUrl) return;
-			// TODO: Implement import from URL
+			setLoading(true);
 
-			alert(`Import from URL is not implemented yet. URL: ${targetUrl}`);
+			const inner = async () => {
+				const targetUrl = importUrl ?? url;
+				if (!targetUrl) return;
+				// TODO: Implement import from URL
+
+				const whitelistedDomains = [
+					"paste.traincarts.net",
+					"hastebin.com",
+					"paste.foxxite.com",
+				];
+
+				const urlObj = new URL(targetUrl);
+				if (!whitelistedDomains.includes(urlObj.hostname)) {
+					toast.error(
+						"The provided URL is not from a supported domain.",
+					);
+					return;
+				}
+
+				const toastId = toast.loading("Importing data...");
+
+				// Fetch the content from the URL, we know these are either hastebin or pastebin
+				// Both return the raw content directly when accessing the URL
+				// Example: https://paste.traincarts.net/raw/abcd1234
+
+				// Step 1: Ensure the URL points to the raw content
+				if (!urlObj.pathname.includes("/raw/")) {
+					urlObj.pathname = `/raw${urlObj.pathname}`;
+				}
+
+				const response = await fetch(urlObj.toString(), {
+					method: "GET",
+					headers: {
+						"Content-Type": "text/plain",
+					},
+				}).catch((error) => {
+					toast.error(`Failed to fetch data: ${error.message}`, {
+						id: toastId,
+					});
+					return null;
+				});
+
+				if (!response) return;
+
+				if (!response.ok) {
+					toast.error(
+						`Failed to fetch data: ${response.status} ${response.statusText}`,
+					);
+					return;
+				}
+
+				const text = await response.text();
+
+				try {
+					const parsedData = parse(text);
+
+					if (!parsedData || typeof parsedData !== "object") {
+						toast.error(
+							"The fetched data is not a valid YAML object.",
+							{ id: toastId },
+						);
+						return;
+					}
+
+					// Check for a carts property
+					if (!("carts" in parsedData)) {
+						toast.error(
+							"The fetched data does not appear to be a valid TrainCarts export.",
+							{ id: toastId },
+						);
+						return;
+					}
+
+					const unsafeCarts = (
+						parsedData as unknown as { carts?: unknown }
+					).carts;
+
+					const carts = z
+						.record(z.string(), CartSchema)
+						.parse(unsafeCarts);
+
+					const tempTrain: SavedTrain = {
+						savedName: "TemporaryTrain",
+						carts,
+					};
+
+					trainsStore.setTrains({
+						TemporaryTrain: tempTrain,
+					});
+					trainsStore.setCurrentTrain(tempTrain);
+				} catch (error) {
+					toast.error(`Failed to parse YAML: ${error}`, {
+						id: toastId,
+					});
+					return;
+				}
+
+				toast.success("Data imported successfully!", { id: toastId });
+			};
+
+			await inner().catch((error) => {
+				console.error("Error during import:", error);
+				toast.error(`Import failed: ${error}`, { id: "import-error" });
+			});
+
+			setLoading(false);
 		},
-		[url],
+		[url, trainsStore],
 	);
 
 	const loadProjectFromFile = async () => {
@@ -332,7 +483,7 @@ function ProjectDialog() {
 		Object.entries(trainsStore.trains).length > 0 &&
 		!projectStore.metadata.createdAt
 	) {
-		return <LegacyNewProjectDialog />;
+		return <NewProjectDialog />;
 	}
 
 	return (
