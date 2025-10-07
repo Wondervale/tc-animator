@@ -7,7 +7,7 @@
 
 import { useTexture } from "@react-three/drei";
 
-import { forwardRef, useMemo, useState, type JSX } from "react";
+import { forwardRef, useMemo, type JSX } from "react";
 import { Mesh, NearestFilter, Vector3 } from "three";
 
 import missingTexture from "/src/assets/textures/missing.png";
@@ -54,8 +54,6 @@ const Cube = forwardRef<Mesh, JSX.IntrinsicElements["mesh"]>((props, ref) => {
 	// Assign a pastel color once when component mounts
 	const pastelColor = useMemo(() => getUniquePastelColor(), []);
 
-	const [hovered, setHovered] = useState(false);
-
 	const origin = new Vector3(0, 0.5, 0); // Center of the cube
 	const position =
 		props.position instanceof Vector3
@@ -73,19 +71,9 @@ const Cube = forwardRef<Mesh, JSX.IntrinsicElements["mesh"]>((props, ref) => {
 			castShadow
 			receiveShadow
 			position={adjustedPosition} // Shift origin to lower corner
-			onPointerOver={(e) => {
-				e.stopPropagation();
-				setHovered(true);
-			}}
-			onPointerOut={() => setHovered(false)}
 		>
 			<boxGeometry args={[1, 1, 1]} />
-			<meshStandardMaterial
-				map={texture}
-				color={pastelColor}
-				emissive={hovered ? pastelColor : "#000"}
-				emissiveIntensity={hovered ? 0.5 : 0}
-			/>
+			<meshStandardMaterial map={texture} color={pastelColor} />
 		</mesh>
 	);
 });
