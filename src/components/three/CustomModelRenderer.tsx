@@ -84,6 +84,14 @@ function CustomModelRenderer({ jsonPath }: { jsonPath: string }) {
 		return Array.from(models);
 	}, [jsonPath, cart]);
 
+	if (selectedAttachmentModels.length === 0) {
+		return (
+			<>
+				<Cube />
+			</>
+		);
+	}
+
 	return (
 		<>
 			{selectedAttachmentModels.map((modelId) => {
@@ -150,6 +158,7 @@ function ModelRenderer({
 	position?: Vector3;
 }) {
 	const { scene } = useGLTF(blobUrl);
+
 	const customModel = useMemo(() => {
 		if (!scene) return null;
 
