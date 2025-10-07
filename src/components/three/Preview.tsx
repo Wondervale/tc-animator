@@ -33,7 +33,8 @@ import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
 import CartRender from "@/components/three/CartRender";
 import MeshOutline from "@/components/three/MeshOutline";
-import AngleSlider from "@/components/ui/AngleSlider";
+import AngleSlider from "@/components/three/controls/AngleSlider";
+import DistanceSlider from "@/components/three/controls/DistanceSlider";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { degreeToRadian } from "@/lib/utils";
@@ -376,6 +377,13 @@ function Preview() {
 						<kbd className="text-muted-foreground ml-1">R</kbd>
 					</TooltipContent>
 				</Tooltip>
+
+				{transformMode === "translate" && (
+					<DistanceSlider
+						value={preferences.distanceSnap}
+						onChange={preferences.setDistanceSnap}
+					/>
+				)}
 
 				{transformMode === "rotate" && (
 					<AngleSlider

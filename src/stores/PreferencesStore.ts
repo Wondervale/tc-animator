@@ -48,7 +48,7 @@ export const usePreferences = create<PreferencesStore>()(
 			controlDamping: false,
 
 			angleSnap: 11.25,
-			distanceSnap: 0.25,
+			distanceSnap: 1 / 16,
 
 			setTheme: (theme) => set({ theme }),
 			setSaveInterval: (interval) => set({ saveInterval: interval }),
