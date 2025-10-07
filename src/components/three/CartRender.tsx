@@ -86,6 +86,30 @@ function CartRender({
 	);
 }
 
+function AttachmentRender({
+	attachments,
+	onSelect,
+	onHover,
+	jsonPath,
+}: {
+	attachments: Attachment | Model;
+	onSelect: (obj: Object3D) => void;
+	onHover: (obj: Object3D | null) => void;
+	jsonPath: string;
+}) {
+	return Object.entries(attachments.attachments || {}).map(
+		([key, attachment]) => (
+			<AttachmentItem
+				key={key}
+				attachment={attachment}
+				onSelect={onSelect}
+				onHover={onHover}
+				jsonPath={`${jsonPath}.attachments.${key}`}
+			/>
+		),
+	);
+}
+
 function AttachmentItem({
 	attachment,
 	onSelect,
@@ -231,30 +255,6 @@ function AttachmentItem({
 				/>
 			)}
 		</group>
-	);
-}
-
-function AttachmentRender({
-	attachments,
-	onSelect,
-	onHover,
-	jsonPath,
-}: {
-	attachments: Attachment | Model;
-	onSelect: (obj: Object3D) => void;
-	onHover: (obj: Object3D | null) => void;
-	jsonPath: string;
-}) {
-	return Object.entries(attachments.attachments || {}).map(
-		([key, attachment]) => (
-			<AttachmentItem
-				key={key}
-				attachment={attachment}
-				onSelect={onSelect}
-				onHover={onHover}
-				jsonPath={`${jsonPath}.attachments.${key}`}
-			/>
-		),
 	);
 }
 
