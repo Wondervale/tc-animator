@@ -9,8 +9,7 @@ import { useProjectStore } from "@/stores/ProjectStore";
 import { useGLTF } from "@react-three/drei";
 import { JSONPath } from "jsonpath-plus";
 import { useEffect, useMemo, useState } from "react";
-import { Box3, Group, Mesh, Vector3 } from "three";
-import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+import { Group, Matrix4, Vector3 } from "three";
 
 const modelBlobUrlCache = new Map<
 	number,
@@ -162,47 +161,40 @@ function ModelRenderer({
 	const customModel = useMemo(() => {
 		if (!scene) return null;
 
-		const cloned = clone(scene);
-		cloned.updateWorldMatrix(true, true);
+		const model = scene.clone(true);
 
-		// Compute bounding box of the entire model
-		const box = new Box3().setFromObject(cloned);
-		const center = new Vector3();
-		box.getCenter(center);
+		// Ensure world matrices are up to date
+		model.updateWorldMatrix(true, true);
 
-		const size = new Vector3();
-		box.getSize(size);
+		// The root group in Blockbench GLBs often has an offset transform
+		// that matches the Blockbench "group origin". Minecraft ignores that.
+		// We apply the inverse transform so that (0,0,0) is the Minecraft origin.
+		const inverse = new Matrix4().copy(model.matrixWorld).invert();
+		model.traverse((child) => child.applyMatrix4(inverse));
 
-		// Bottom center: X and Z from center, Y at min
-		const bottomCenter = new Vector3(center.x, box.min.y, center.z);
+		// Clear transforms so the model now truly sits at origin
+		model.position.set(-0.5, -0.5, -0.5);
+		model.rotation.set(0, 0, 0);
+		model.scale.set(1, 1, 1);
 
-		const pivot = new Group();
+		const root = new Group();
+		root.add(model);
+		root.scale.setScalar(1); // 16 units = 1 block by default
 
-		// Shift all meshes so bottom center aligns with origin
-		cloned.traverse((child) => {
-			if ((child as Mesh).isMesh) {
-				(child as Mesh).position.sub(bottomCenter);
-			}
-		});
-
-		pivot.add(cloned);
-
-		return pivot;
+		return root;
 	}, [scene]);
 
 	if (!customModel) return <Cube key={modelId} />;
 
 	return (
-		<>
+		<group scale={scale} position={position}>
 			<primitive
 				object={customModel}
-				scale={scale}
-				position={position}
 				rotation={[0, degreeToRadian(180), 0]}
 				castShadow
 				receiveShadow
 			/>
-		</>
+		</group>
 	);
 }
 
