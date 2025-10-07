@@ -6,7 +6,6 @@
  */
 
 import Cube from "@/components/three/Cube";
-import { degreeToRadian } from "@/lib/utils";
 import { useGLTF } from "@react-three/drei";
 import { useMemo } from "react";
 import { Vector3 } from "three";
@@ -39,7 +38,6 @@ function Dummy({
 			position={position}
 			castShadow
 			receiveShadow
-			rotation={[0, degreeToRadian(180), 0]}
 		/>
 	);
 }
