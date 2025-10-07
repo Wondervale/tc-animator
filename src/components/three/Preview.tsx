@@ -220,12 +220,8 @@ function Preview() {
 					castShadow
 				/>
 
-				<Suspense fallback={<Html center>Loading...</Html>}>
-					<CartRender onSelect={setSelected} onHover={setHovered} />
-				</Suspense>
-
 				<Grid
-					position={[0.5, -0.501, 0.5]}
+					position={[0.5, 0, 0.5]}
 					cellSize={1 / 16}
 					sectionSize={1}
 					cellThickness={0.5}
@@ -235,6 +231,47 @@ function Preview() {
 					infiniteGrid
 					side={THREEDoubleSide}
 				/>
+
+				{/* Simple lines to show 0,0,0 */}
+				<group position={[-0.5, 0, -0.5]}>
+					<line>
+						<bufferGeometry>
+							<bufferAttribute
+								attach="attributes-position"
+								args={[new Float32Array([0, 0, 0, 1, 0, 0]), 3]}
+								count={2}
+								itemSize={3}
+							/>
+						</bufferGeometry>
+						<lineBasicMaterial color={0xff0000} linewidth={2} />
+					</line>
+					<line>
+						<bufferGeometry>
+							<bufferAttribute
+								attach="attributes-position"
+								args={[new Float32Array([0, 0, 0, 0, 1, 0]), 3]}
+								count={2}
+								itemSize={3}
+							/>
+						</bufferGeometry>
+						<lineBasicMaterial color={0x00ff00} linewidth={2} />
+					</line>
+					<line>
+						<bufferGeometry>
+							<bufferAttribute
+								attach="attributes-position"
+								args={[new Float32Array([0, 0, 0, 0, 0, 1]), 3]}
+								count={2}
+								itemSize={3}
+							/>
+						</bufferGeometry>
+						<lineBasicMaterial color={0x0000ff} linewidth={2} />
+					</line>
+				</group>
+
+				<Suspense fallback={<Html center>Loading...</Html>}>
+					<CartRender onSelect={setSelected} onHover={setHovered} />
+				</Suspense>
 
 				{/* 🆕 Gizmos attach only if something is selected */}
 				{selected && (
