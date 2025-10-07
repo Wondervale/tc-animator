@@ -22,18 +22,22 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { ChevronLeft, ExternalLink, FolderOpen, Import } from "lucide-react";
+import {
+	ChevronLeft,
+	ExternalLink,
+	FolderOpen,
+	TrainFrontIcon,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useProjectStore } from "@/stores/ProjectStore";
+import { FILE_EXTENSION, useProjectStore } from "@/stores/ProjectStore";
 import { useTrainsStore } from "@/stores/TrainsStore";
-import { fileOpen } from "browser-fs-access";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-function NewProjectDialog() {
+function LegacyNewProjectDialog() {
 	const projectStore = useProjectStore();
 	const trainsStore = useTrainsStore();
 
@@ -175,42 +179,126 @@ function ProjectDialog() {
 	const trainsStore = useTrainsStore();
 
 	const [loading, setLoading] = useState(false);
+	const [url, setUrl] = useState("");
 
-	const loadTrainsFromFile = async () => {
-		setLoading(true);
+	// Ref to prevent duplicate triggers
+	const urlPasteHandled = useRef(false);
 
-		const fileHandle = await fileOpen({
-			description: "Select a YAML file",
-			mimeTypes: ["application/x-yaml", "text/yaml"],
-			extensions: [".yaml", ".yml"],
-			id: "load-saved-train-properties",
-			startIn: "documents",
-		}).catch(() => {
-			return null;
-		});
+	const handleImportFromUrl = useCallback(
+		async (importUrl?: string) => {
+			const targetUrl = importUrl ?? url;
+			if (!targetUrl) return;
+			// TODO: Implement import from URL
 
-		if (fileHandle) {
-			const text = await fileHandle.text();
-			trainsStore.setTrainsFromYml(text);
-			trainsStore.setCurrentTrain(Object.values(trainsStore.trains)[0]);
-		}
-
-		setLoading(false);
-	};
+			alert(`Import from URL is not implemented yet. URL: ${targetUrl}`);
+		},
+		[url],
+	);
 
 	const loadProjectFromFile = async () => {
 		setLoading(true);
 
 		await toast
-			.promise(projectStore.loadProjectFromFile(), {
+			.promise(projectStore.loadProjectFromFileDialog(), {
 				loading: "Loading project...",
 				success: "Project loaded successfully!",
 				error: "Failed to load project.",
 			})
-			.unwrap();
+			.unwrap()
+			.catch(() => {
+				projectStore.reset();
+			});
 
 		setLoading(false);
 	};
+
+	useEffect(() => {
+		const loadProjectFromFile = async (file: File) => {
+			setLoading(true);
+
+			// Check file extension
+			if (!file.name.endsWith(FILE_EXTENSION)) {
+				toast.error(
+					`Invalid file type. Please select a ${FILE_EXTENSION} file.`,
+				);
+				setLoading(false);
+				return;
+			}
+
+			try {
+				await toast.promise(
+					projectStore.loadProjectFromFileHandle(file),
+					{
+						loading: "Loading project...",
+						success: "Project loaded successfully!",
+						error: "Failed to load project.",
+					},
+				);
+			} catch {
+				projectStore.reset();
+			}
+			setLoading(false);
+		};
+
+		const handlePaste = (e: ClipboardEvent) => {
+			if (loading || projectStore.metadata.createdAt) return;
+
+			// Check for URL in clipboard
+			const urlText = e.clipboardData?.getData("text");
+			if (
+				urlText &&
+				/^https?:\/\/\S+$/i.test(urlText.trim()) &&
+				!urlPasteHandled.current
+			) {
+				urlPasteHandled.current = true;
+				handleImportFromUrl(urlText.trim());
+				setUrl(urlText.trim());
+				setTimeout(() => {
+					urlPasteHandled.current = false;
+				}, 500);
+				return;
+			}
+
+			// Check for file in clipboard
+			const items = e.clipboardData?.items;
+			if (items) {
+				for (const item of items) {
+					if (item.kind === "file") {
+						const file = item.getAsFile();
+						if (file) {
+							loadProjectFromFile(file);
+							return;
+						}
+					}
+				}
+			}
+		};
+
+		const handleDrop = (e: DragEvent) => {
+			e.preventDefault(); // ✅ Prevent default file opening behavior
+
+			if (loading || projectStore.metadata.createdAt) return;
+
+			if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+				const file = e.dataTransfer.files[0];
+				loadProjectFromFile(file);
+			}
+		};
+
+		const handleDragOver = (e: DragEvent) => {
+			e.preventDefault(); // ✅ Necessary to allow drop
+		};
+
+		window.addEventListener("paste", handlePaste);
+		window.addEventListener("drop", handleDrop);
+		window.addEventListener("dragover", handleDragOver);
+
+		return () => {
+			window.removeEventListener("paste", handlePaste);
+			window.removeEventListener("drop", handleDrop);
+			window.removeEventListener("dragover", handleDragOver);
+		};
+	}, [loading, handleImportFromUrl, projectStore]);
 
 	if (loading) {
 		return (
@@ -222,52 +310,88 @@ function ProjectDialog() {
 		Object.entries(trainsStore.trains).length > 0 &&
 		!projectStore.metadata.createdAt
 	) {
-		return <NewProjectDialog />;
+		return <LegacyNewProjectDialog />;
 	}
 
 	return (
 		<AlertDialog open={!projectStore.metadata.createdAt}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Welcome to TC Animator!</AlertDialogTitle>
+					<AlertDialogTitle className="text-3xl font-bold text-center">
+						Welcome to TC Animator!
+					</AlertDialogTitle>
 
 					<AlertDialogDescription asChild>
-						<div className="flex flex-col items-center gap-4">
-							<h3 className="text-lg">
-								Please import a SavedTrainProperties YAML file
-								or open an existing project to get started.
-							</h3>
+						<div className="space-y-4 pt-2">
+							<p className="text-muted-foreground text-center text-balance leading-relaxed">
+								Please import a train exported from TrainCarts
+								or open an existing TCA-Project.
+							</p>
 
-							<div className="grid grid-cols-2 gap-4">
-								<Button
-									variant="secondary"
-									className="aspect-square w-full h-auto flex flex-col"
-									onClick={loadTrainsFromFile}
-								>
-									<Import className="block size-24 mx-auto" />
-									Import SavedTrainProperties
-								</Button>
-								<Button
-									variant="secondary"
-									className="aspect-square w-full h-auto flex flex-col"
-									onClick={loadProjectFromFile}
-								>
-									<FolderOpen className="block size-24 mx-auto" />
-									Open TCA-Project
-								</Button>
+							<div className="flex flex-col gap-4">
+								{/* Import from URL Option */}
+								<div className="space-y-4 p-6 rounded-lg border border-zinc-300 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-950/50 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-colors">
+									<div className="flex items-center gap-3">
+										<div className="p-2 rounded-lg bg-blue-500/10">
+											<TrainFrontIcon className="w-5 h-5 text-blue-400" />
+										</div>
+										<h2 className="text-lg font-semibold">
+											Import from TrainCarts
+										</h2>
+									</div>
+
+									<div className="space-y-3">
+										<Input
+											type="url"
+											value={url}
+											onChange={(e) =>
+												setUrl(e.target.value)
+											}
+											placeholder="https://paste.traincarts.net/"
+										/>
+										<Button
+											onClick={() =>
+												handleImportFromUrl()
+											}
+											className="w-full"
+										>
+											Import from TrainCarts
+										</Button>
+									</div>
+								</div>
+
+								{/* Open TCA-Project Option */}
+								<div className="space-y-4 p-6 rounded-lg border border-zinc-300 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-950/50 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-colors">
+									<div className="flex items-center gap-3">
+										<div className="p-2 rounded-lg bg-blue-500/10">
+											<FolderOpen className="w-5 h-5 text-emerald-400" />
+										</div>
+										<h2 className="text-lg font-semibold">
+											Open TCA-Project
+										</h2>
+									</div>
+
+									<Button
+										className="bg-emerald-500 hover:bg-emerald-500/90 dark:bg-emerald-700  dark:hover:bg-emerald-700/90 w-full"
+										onClick={loadProjectFromFile}
+									>
+										Browse files
+									</Button>
+								</div>
 							</div>
 						</div>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter className="text-sm text-muted-foreground">
+
+				<AlertDialogFooter className="sm:justify-center text-sm text-muted-foreground">
 					<a
 						href="https://foxxite.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-1"
+						className="flex items-center gap-1.5"
 					>
-						Made with ❤️ by Foxxite | Articca
-						<ExternalLink className="inline-block size-4" />
+						<span>Made with ❤️ by Foxxite | Articca</span>
+						<ExternalLink className="w-4 h-4" />
 					</a>
 				</AlertDialogFooter>
 			</AlertDialogContent>

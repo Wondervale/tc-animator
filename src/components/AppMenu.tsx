@@ -12,7 +12,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Info, Maximize, Minimize, X } from "lucide-react";
 import {
 	Menubar,
 	MenubarContent,
@@ -36,10 +35,11 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Info, Maximize, Minimize, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import ColorPicker from "@/components/ColorPicker";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -159,7 +159,9 @@ function AppMenu() {
 					<MenubarSeparator />
 					<MenubarItem
 						disabled={saving}
-						onClick={async () => projectStore.loadProjectFromFile()}
+						onClick={async () =>
+							projectStore.loadProjectFromFileDialog()
+						}
 					>
 						Load Project
 					</MenubarItem>

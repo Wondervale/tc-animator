@@ -21,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
 				debug: import.meta.env.MODE === "development",
 			}}
 		> */}
+
 		<CheckBrowserSupport />
 		<ProjectDialog />
 
