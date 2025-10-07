@@ -8,7 +8,7 @@
 import { useTexture } from "@react-three/drei";
 
 import { forwardRef, useMemo, useState, type JSX } from "react";
-import { Mesh, NearestFilter } from "three";
+import { Mesh, NearestFilter, Vector3 } from "three";
 
 import missingTexture from "/src/assets/textures/missing.png";
 
@@ -56,12 +56,23 @@ const Cube = forwardRef<Mesh, JSX.IntrinsicElements["mesh"]>((props, ref) => {
 
 	const [hovered, setHovered] = useState(false);
 
+	const origin = new Vector3(0, 0.5, 0); // Center of the cube
+	const position =
+		props.position instanceof Vector3
+			? props.position
+			: Array.isArray(props.position)
+				? new Vector3(...props.position)
+				: new Vector3(0, 0, 0);
+
+	const adjustedPosition = position.clone().add(origin);
+
 	return (
 		<mesh
 			ref={ref}
 			{...props}
 			castShadow
 			receiveShadow
+			position={adjustedPosition} // Shift origin to lower corner
 			onPointerOver={(e) => {
 				e.stopPropagation();
 				setHovered(true);
