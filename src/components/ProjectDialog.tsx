@@ -512,6 +512,15 @@ function ProjectDialog() {
 											Import from TrainCarts
 										</h2>
 									</div>
+									<h6 className="text-sm text-muted-foreground text-balance -mt-2">
+										Run{" "}
+										<code className="font-mono text-primary">
+											/train export
+										</code>{" "}
+										in your Minecraft server to get a
+										shareable link. Paste it here to import
+										your train.
+									</h6>
 
 									<div className="space-y-3">
 										<Input
@@ -547,6 +556,14 @@ function ProjectDialog() {
 											Open TCA-Project
 										</h2>
 									</div>
+									<h6 className="text-sm text-muted-foreground text-balance -mt-2">
+										Open a previously saved TCA-Project file
+										with the{" "}
+										<code className="font-mono text-primary">
+											{FILE_EXTENSION}
+										</code>{" "}
+										extension.
+									</h6>
 
 									<Button
 										className="bg-emerald-500 hover:bg-emerald-500/90 dark:bg-emerald-700  dark:hover:bg-emerald-700/90 w-full"
