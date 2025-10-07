@@ -34,6 +34,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FILE_EXTENSION, useProjectStore } from "@/stores/ProjectStore";
 import { useTrainsStore } from "@/stores/TrainsStore";
+import { fileOpen } from "browser-fs-access";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -184,6 +185,28 @@ function ProjectDialog() {
 	// Ref to prevent duplicate triggers
 	const urlPasteHandled = useRef(false);
 
+	const legacyLoadTrainsFromFile = async () => {
+		setLoading(true);
+
+		const fileHandle = await fileOpen({
+			description: "Select a YAML file",
+			mimeTypes: ["application/x-yaml", "text/yaml"],
+			extensions: [".yaml", ".yml"],
+			id: "load-saved-train-properties",
+			startIn: "documents",
+		}).catch(() => {
+			return null;
+		});
+
+		if (fileHandle) {
+			const text = await fileHandle.text();
+			trainsStore.setTrainsFromYml(text);
+			trainsStore.setCurrentTrain(Object.values(trainsStore.trains)[0]);
+		}
+
+		setLoading(false);
+	};
+
 	const handleImportFromUrl = useCallback(
 		async (importUrl?: string) => {
 			const targetUrl = importUrl ?? url;
@@ -252,7 +275,6 @@ function ProjectDialog() {
 			) {
 				urlPasteHandled.current = true;
 				handleImportFromUrl(urlText.trim());
-				setUrl(urlText.trim());
 				setTimeout(() => {
 					urlPasteHandled.current = false;
 				}, 500);
@@ -323,7 +345,7 @@ function ProjectDialog() {
 
 					<AlertDialogDescription asChild>
 						<div className="space-y-4 pt-2">
-							<p className="text-muted-foreground text-center text-balance leading-relaxed">
+							<p className="text-center text-balance leading-relaxed">
 								Please import a train exported from TrainCarts
 								or open an existing TCA-Project.
 							</p>
@@ -350,9 +372,13 @@ function ProjectDialog() {
 											placeholder="https://paste.traincarts.net/"
 										/>
 										<Button
-											onClick={() =>
-												handleImportFromUrl()
-											}
+											onClick={(e) => {
+												if (e.shiftKey) {
+													legacyLoadTrainsFromFile();
+												} else {
+													handleImportFromUrl();
+												}
+											}}
 											className="w-full"
 										>
 											Import from TrainCarts
