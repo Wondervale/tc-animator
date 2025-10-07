@@ -107,7 +107,7 @@ function collectModelIds(cart: Cart | null): number[] {
 	return Array.from(collected).sort((a, b) => a - b);
 }
 
-export const useProjectStore = create<ProjectStore>((setOrg, get) => {
+export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 	const set: typeof setOrg = (partial) => {
 		const update = typeof partial === "function" ? partial(get()) : partial;
 
@@ -380,16 +380,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 						);
 
 						// Reset self
-						set({
-							metadata: {
-								schemaVersion: SCHEMA_VERSION,
-								projectName: "",
-								createdAt: null,
-								lastModifiedAt: null,
-							},
-							cart: null,
-							fileHandle: undefined,
-						});
+						set(store.getInitialState());
 
 						continue;
 					}
@@ -413,16 +404,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 						);
 
 						// Reset self
-						set({
-							metadata: {
-								schemaVersion: SCHEMA_VERSION,
-								projectName: "",
-								createdAt: null,
-								lastModifiedAt: null,
-							},
-							cart: null,
-							fileHandle: undefined,
-						});
+						set(store.getInitialState());
 
 						continue;
 					}
@@ -456,17 +438,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get) => {
 			set({ saved: true, fileHandle: fileHandle.handle });
 		},
 
-		reset: () =>
-			set({
-				metadata: {
-					schemaVersion: SCHEMA_VERSION,
-					projectName: "",
-					createdAt: null,
-					lastModifiedAt: null,
-				},
-				cart: null,
-				fileHandle: undefined,
-			}),
+		reset: () => set(store.getInitialState()),
 
 		setModelFile: (modelId, data) => {
 			set((state) => {
