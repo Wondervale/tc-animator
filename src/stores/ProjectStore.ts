@@ -5,7 +5,7 @@
  * @format
  */
 
-import { fileOpen, fileSave } from "browser-fs-access";
+import { fileOpen, fileSave, type FileWithHandle } from "browser-fs-access";
 import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 
 import { MetadataSchema, type Metadata } from "@/schemas/ProjectSchema";
@@ -22,7 +22,8 @@ import { convertGltfToGlb } from "@/lib/gltf";
 import { toPureArrayBuffer } from "@/lib/utils";
 import equal from "fast-deep-equal";
 
-export const fileHeader = strToU8("🦊🚂🎬");
+export const FILE_EXTENSION = ".tcaproj";
+export const FILE_HEADER = strToU8("🦊🚂🎬");
 
 export const SCHEMA_VERSION = 0;
 
@@ -52,7 +53,10 @@ interface ProjectStore {
 
 	// Persistence
 	saveProject: (newFile?: boolean) => Promise<void>;
-	loadProjectFromFile: () => Promise<void>;
+
+	loadProjectFromFileDialog: () => Promise<void>;
+	loadProjectFromFileHandle: (handle: FileWithHandle) => Promise<void>;
+
 	reset: () => void;
 
 	// Model file logic
@@ -182,7 +186,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				throw new Error("No cart data to save.");
 			}
 
-			const fileName = `${projectStore.metadata.projectName || "TCA-Project"}.tcaproj`;
+			const fileName = `${projectStore.metadata.projectName || "TCA-Project"}${FILE_EXTENSION}`;
 
 			// Setup the metadata with the current date if not set
 			const localMetadata = {
@@ -227,10 +231,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 
 			// Prepend the file header
 			const header = new Uint8Array(
-				fileHeader.length + zipDataRaw.length,
+				FILE_HEADER.length + zipDataRaw.length,
 			);
-			header.set(fileHeader);
-			header.set(zipDataRaw, fileHeader.length);
+			header.set(FILE_HEADER);
+			header.set(zipDataRaw, FILE_HEADER.length);
 
 			const fixedBuffer = new Uint8Array(header.length);
 			fixedBuffer.set(header);
@@ -248,7 +252,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 						Promise.race([
 							fileSave(blob, {
 								fileName,
-								extensions: [".tcaproj"],
+								extensions: [FILE_EXTENSION],
 								mimeTypes: ["application/binary"],
 								id: "tca-project",
 							}),
@@ -280,7 +284,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 								...localMetadata,
 								lastModifiedAt: new Date(),
 								projectName: localFileHandle.name.replace(
-									/\.tcaproj$/,
+									FILE_EXTENSION,
 									"",
 								),
 							},
@@ -331,10 +335,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 			}
 		},
 
-		loadProjectFromFile: async () => {
+		loadProjectFromFileDialog: async () => {
 			const fileHandle = await fileOpen({
 				description: "Select a TCA-Project file",
-				extensions: [".tcaproj"],
+				extensions: [FILE_EXTENSION],
 				mimeTypes: ["application/binary"],
 				id: "tca-project",
 				startIn: "documents",
@@ -346,12 +350,22 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				throw new Error("No file selected.");
 			}
 
+			await get().loadProjectFromFileHandle(fileHandle);
+		},
+
+		loadProjectFromFileHandle: async (fileHandle) => {
+			if (!fileHandle) {
+				throw new Error("No file handle.");
+			}
+
+			await get().reset();
+
 			const buffer = await fileHandle.arrayBuffer();
 
-			const header = new Uint8Array(fileHeader.length);
-			header.set(fileHeader);
+			const header = new Uint8Array(FILE_HEADER.length);
+			header.set(FILE_HEADER);
 			const bufferHeader = new Uint8Array(
-				buffer.slice(0, fileHeader.length),
+				buffer.slice(0, FILE_HEADER.length),
 			);
 			if (
 				!bufferHeader.every(
@@ -361,7 +375,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				throw new Error("Invalid TCA-Project file format.");
 			}
 
-			const zipData = new Uint8Array(buffer.slice(fileHeader.length));
+			const zipData = new Uint8Array(buffer.slice(FILE_HEADER.length));
 			const unzipped = await unzipSync(zipData);
 
 			for (const [filename, fileData] of Object.entries(unzipped)) {
@@ -380,7 +394,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 						);
 
 						// Reset self
-						set(store.getInitialState());
+						get().reset();
 
 						continue;
 					}
@@ -404,7 +418,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 						);
 
 						// Reset self
-						set(store.getInitialState());
+						get().reset();
 
 						continue;
 					}
