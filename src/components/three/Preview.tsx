@@ -42,6 +42,8 @@ import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
+import { debounce } from "lodash";
+
 function RestoreOrbitControls({
 	controlsRef,
 }: {
@@ -73,7 +75,7 @@ function RestoreOrbitControls({
 		const controls = controlsRef.current;
 		if (!controls) return;
 
-		const handleChange = () => {
+		const handleChange = debounce(() => {
 			projectStore.setMetadata({
 				...projectStore.metadata,
 				orbitControls: {
@@ -82,7 +84,7 @@ function RestoreOrbitControls({
 					zoom: camera.zoom,
 				},
 			});
-		};
+		}, 200);
 
 		controls.addEventListener("change", handleChange);
 		return () => controls.removeEventListener("change", handleChange);
