@@ -109,9 +109,9 @@ function ModelControl() {
 	return (
 		<>
 			{/* Explainer */}
-			<p className="text-muted-foreground mb-4">
+			<p className="mb-4 text-balance">
 				You can replace the default cubes with your own 3D models to
-				make the cart look like it would in-game with a resourcepack.
+				make the cart look like it would *in-game with a resourcepack.
 				<br />
 				<br />
 				Models must be in <b>GLTF</b> or <b>GLB</b> format. These can be
@@ -121,7 +121,7 @@ function ModelControl() {
 						Blockbench
 					</TooltipTrigger>
 					<TooltipContent>
-						<p className="mb-2">
+						<p className="mb-2 text-lg">
 							Use these settings when exporting from Blockbench:
 						</p>
 
@@ -138,6 +138,11 @@ function ModelControl() {
 				attachments. Select an attachment in the 3D view to highlight
 				the corresponding ID if it has one. Upload your model next to
 				the matching ID to apply it in TC Animator.
+			</p>
+
+			<p className="text-xs text-muted-foreground text-balance">
+				* Models are shown just like Item Display Entities in Minecraft.
+				Any automatic scaling based on display mode is not applied here.
 			</p>
 
 			<hr className="my-4" />
