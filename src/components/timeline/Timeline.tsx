@@ -260,7 +260,12 @@ const Timeline: React.FC = () => {
 	};
 	const onPlayheadMove = useCallback(
 		(e: MouseEvent) => {
-			if (!isDraggingPlayhead || !timelineRef.current) return;
+			if (
+				!isDraggingPlayhead ||
+				!timelineRef.current ||
+				!timelineScrollRef.current
+			)
+				return;
 			const rect = timelineRef.current.getBoundingClientRect();
 			let x = e.clientX - rect.left - LABEL_WIDTH;
 			x = Math.max(0, x);
@@ -268,6 +273,26 @@ const Timeline: React.FC = () => {
 			t = Math.max(0, Math.min(duration, t));
 			setCurrentTime(t);
 			wavesurferRef.current?.seekTo(t / duration);
+
+			// Scroll if near edge of visible area
+			const scrollEl = timelineScrollRef.current;
+			const playheadX = LABEL_WIDTH + t * zoom;
+			const visibleStart = scrollEl.scrollLeft + LABEL_WIDTH;
+			const visibleEnd =
+				visibleStart + scrollEl.clientWidth - LABEL_WIDTH;
+			const edgeThreshold = 40; // px
+
+			if (playheadX < visibleStart + edgeThreshold) {
+				scrollEl.scrollLeft = Math.max(
+					0,
+					playheadX - LABEL_WIDTH - edgeThreshold,
+				);
+			} else if (playheadX > visibleEnd - edgeThreshold) {
+				scrollEl.scrollLeft = Math.min(
+					duration * zoom - scrollEl.clientWidth,
+					playheadX - scrollEl.clientWidth + edgeThreshold,
+				);
+			}
 		},
 		[isDraggingPlayhead, zoom, duration],
 	);
