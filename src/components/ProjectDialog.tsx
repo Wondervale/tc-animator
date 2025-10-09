@@ -532,6 +532,7 @@ function ProjectDialog() {
 											placeholder="https://paste.traincarts.net/"
 										/>
 										<Button
+											disabled={!url.trim()}
 											onClick={(e) => {
 												if (e.shiftKey) {
 													legacyLoadTrainsFromFile();
