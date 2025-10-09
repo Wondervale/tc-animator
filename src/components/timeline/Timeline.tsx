@@ -67,6 +67,7 @@ const Timeline: React.FC = () => {
 	const [duration, setDuration] = useState(5);
 	const [isDraggingPlayhead, setIsDraggingPlayhead] = useState(false);
 	const [isPlaying, setIsPlaying] = useState(false);
+
 	// Preference: zoom to mouse
 	const [zoomToMouseEnabled, setZoomToMouseEnabled] = useState(true);
 
@@ -140,11 +141,13 @@ const Timeline: React.FC = () => {
 	// --- Jump Playhead ---
 	const jumpTo = (clientX: number) => {
 		if (!timelineRef.current) return;
+
 		const rect = timelineRef.current.getBoundingClientRect();
 		let x = clientX - rect.left - LABEL_WIDTH;
 		x = Math.max(0, x);
 		let t = x / zoom;
 		t = Math.max(0, Math.min(duration, t));
+
 		setCurrentTime(t);
 		wavesurferRef.current?.seekTo(t / duration);
 	};
@@ -296,6 +299,7 @@ const Timeline: React.FC = () => {
 		},
 		[isDraggingPlayhead, zoom, duration],
 	);
+
 	useEffect(() => {
 		if (isDraggingPlayhead) {
 			window.addEventListener("mousemove", onPlayheadMove);
@@ -408,10 +412,19 @@ const Timeline: React.FC = () => {
 					</label>
 				</div>
 				<div className="flex-1 flex items-center justify-center">
-					<p className="text-sm text-muted-foreground">
-						{format(currentTime * 1000, "mm:ss.SS")} /{" "}
+					<time
+						dateTime={format(currentTime * 1000, "mm:ss.SS")}
+						className="font-mono w-20 text-right"
+					>
+						{format(currentTime * 1000, "mm:ss.SS")}
+					</time>
+					<span className="mx-1 text-muted-foreground">/</span>
+					<time
+						dateTime={format(duration * 1000, "mm:ss.SS")}
+						className="font-mono w-20 text-left"
+					>
 						{format(duration * 1000, "mm:ss.SS")}
-					</p>
+					</time>
 				</div>
 			</div>
 
