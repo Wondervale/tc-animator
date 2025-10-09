@@ -323,10 +323,10 @@ const Timeline: React.FC = () => {
 			marks.push(
 				<div
 					key={t}
-					className="absolute top-0 h-5 border-l border-border text-xs text-muted-foreground"
+					className="absolute top-0 h-full border-l border-border text-xs text-muted-foreground"
 					style={{ left: `${t * zoom}px` }}
 				>
-					<span className="absolute left-1 top-0">
+					<span className="absolute left-1 top-1/2 -translate-y-1/2">
 						{t.toFixed(step < 1 ? 2 : 1)}s
 					</span>
 				</div>,
@@ -334,7 +334,7 @@ const Timeline: React.FC = () => {
 		}
 		return (
 			<div
-				className="relative h-5 w-full cursor-pointer"
+				className="relative h-full w-full cursor-pointer select-none"
 				onClick={(e) => jumpTo(e.clientX)}
 			>
 				{marks}
@@ -409,8 +409,9 @@ const Timeline: React.FC = () => {
 						className="h-6 sticky left-0 bg-card z-20"
 						style={{ gridColumn: "1 / 2", gridRow: "1" }}
 					/>
+
 					<div
-						className="relative border-b border-border bg-card-foreground/10"
+						className="relative border-b border-border bg-card-foreground/10 w-full"
 						style={{ gridColumn: "2 / 3", gridRow: "1" }}
 					>
 						{renderRuler()}
@@ -484,14 +485,22 @@ const Timeline: React.FC = () => {
 
 					{/* Playhead */}
 					<div
-						className="absolute w-[2px] bg-primary cursor-ew-resize z-10 hover:bg-primary/80"
+						className="z-10 absolute w-[2px] bg-primary cursor-ew-resize hover:bg-primary/80 group"
 						style={{
-							left: `${LABEL_WIDTH + currentTime * zoom}px`, // ✅ offset by LABEL_WIDTH
-							top: `${HEADER_HEIGHT}px`,
-							height: `${tracks.length * ROW_HEIGHT}px`,
+							left: `${LABEL_WIDTH + currentTime * zoom}px`,
+							top: "8px",
+							height: `${HEADER_HEIGHT - 8 + tracks.length * ROW_HEIGHT}px`,
 						}}
 						onMouseDown={onPlayheadDown}
-					/>
+					>
+						<div
+							className="absolute left-1/2 w-4 h-4 bg-primary cursor-ew-resize group-hover:bg-primary/80"
+							style={{
+								transform:
+									"translate(-50%, -100%) rotate(45deg)",
+							}}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
