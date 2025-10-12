@@ -45,6 +45,7 @@
 
 :root {
 	--radius: 0rem;
+
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.141 0.005 285.823);
 	--card: oklch(1 0 0);
@@ -123,10 +124,31 @@
 		@apply bg-background text-foreground;
 	}
 
-	/* Make scrollbars look good */
+	/* Modern overlay scrollbars (don’t take up layout space) */
 	* {
-		scrollbar-width: thin;
+		scrollbar-width: thin; /* Firefox */
 		scrollbar-color: var(--color-ring) transparent;
+	}
+
+	/* For Chrome, Edge, Safari */
+	*::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+		background: transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: var(--color-ring);
+		border-radius: var(--radius);
+		background-clip: content-box;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	html {
+		overflow: overlay; /* Enables overlay scrollbars in supporting browsers */
 	}
 }
 
