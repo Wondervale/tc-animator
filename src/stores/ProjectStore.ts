@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2025 Foxxite | Articca
- *   All rights reserved.
+ * All rights reserved.
  *
  * @format
  */
@@ -8,56 +8,52 @@
 import { fileOpen, fileSave, type FileWithHandle } from "browser-fs-access";
 import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 
+import { convertGltfToGlb } from "@/lib/gltf";
+import { toPureArrayBuffer } from "@/lib/utils";
+import { type Guideline } from "@/schemas/GuidelineSchema";
 import { MetadataSchema, type Metadata } from "@/schemas/ProjectSchema";
 import {
 	CartSchema,
 	type Attachment,
 	type Cart,
 } from "@/schemas/SavedTrainPropertiesSchema";
+import equal from "fast-deep-equal";
 import { toast } from "sonner";
 import superjson from "superjson";
 import { create } from "zustand";
 
-import { convertGltfToGlb } from "@/lib/gltf";
-import { toPureArrayBuffer } from "@/lib/utils";
-import { useGuidelineStore } from "@/stores/GuidelineStore";
-import equal from "fast-deep-equal";
-
 export const FILE_EXTENSION = ".tcaproj";
 export const FILE_HEADER = strToU8("🦊🚂🎬");
-
 export const SCHEMA_VERSION = 0;
 
 interface ProjectStore {
 	// Core state
 	saved: boolean;
-
 	metadata: Metadata;
-
 	cart: Cart | null;
 
 	modelIds: number[];
 	modelFiles: Map<number, ArrayBuffer>;
-
 	fileHandle?: FileSystemFileHandle;
-
-	selectedObjectPath?: string; // JSON path to the selected object in the cart
+	selectedObjectPath?: string; // JSON path to selected object in cart
 
 	// Setters and actions
 	setMetadata: (metadata: ProjectStore["metadata"]) => void;
-
 	setProjectName: (name: string) => void;
 	setCart: (cart: Cart | null) => void;
 	clearCart: () => void;
-
 	setSelectedObjectPath: (path: string | undefined) => void;
+
+	// Guidelines logic (moved from GuidelineStore)
+	addGuideline: (guideline: Guideline) => void;
+	removeGuideline: (index: number) => void;
+	updateGuideline: (index: number, updated: Partial<Guideline>) => void;
+	resetGuidelines: () => void;
 
 	// Persistence
 	saveProject: (newFile?: boolean) => Promise<void>;
-
 	loadProjectFromFileDialog: () => Promise<void>;
 	loadProjectFromFileHandle: (handle: FileWithHandle) => Promise<void>;
-
 	reset: () => void;
 
 	// Model file logic
@@ -92,9 +88,7 @@ function collectModelIds(cart: Cart | null): number[] {
 	function traverseAttachments(attachments: Record<string, Attachment>) {
 		for (const key of Object.keys(attachments)) {
 			const attachment = attachments[key];
-
 			extractFromComponents(attachment.item?.components);
-
 			if (attachment.attachments) {
 				traverseAttachments(attachment.attachments);
 			}
@@ -103,10 +97,7 @@ function collectModelIds(cart: Cart | null): number[] {
 
 	if (cart.model) {
 		extractFromComponents(cart.model.item?.components);
-
-		if (cart.model.attachments) {
-			traverseAttachments(cart.model.attachments);
-		}
+		if (cart.model.attachments) traverseAttachments(cart.model.attachments);
 	}
 
 	return Array.from(collected).sort((a, b) => a - b);
@@ -115,61 +106,44 @@ function collectModelIds(cart: Cart | null): number[] {
 export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 	const set: typeof setOrg = (partial) => {
 		const update = typeof partial === "function" ? partial(get()) : partial;
-
-		// Only set saved = false if metadata changes (excluding orbitControls), cart, or modelIds change
 		const prevState = get();
 		const nextState: Partial<ProjectStore> = { ...update };
 
 		let shouldSetSavedFalse = false;
 
-		// Check if metadata is being updated (excluding orbitControls)
+		// Detect metadata changes (excluding orbitControls)
 		if ("metadata" in nextState && nextState.metadata) {
 			const prevMeta = { ...prevState.metadata };
 			const nextMeta = { ...nextState.metadata };
 			delete prevMeta.orbitControls;
 			delete nextMeta.orbitControls;
-
 			if (!equal(prevMeta, nextMeta)) {
 				shouldSetSavedFalse = true;
 			}
 		}
 
-		// If explicitly setting saved: true, honor it
 		if ("saved" in nextState && nextState.saved === true) {
 			nextState.saved = true;
 		} else if (shouldSetSavedFalse) {
 			nextState.saved = false;
 		}
 
-		// always do partial update -> omit replace
 		return setOrg(nextState);
 	};
 
-	useGuidelineStore.subscribe((state) => {
-		set({ metadata: { ...get().metadata, guidelines: state.guidelines } });
-	});
-
 	return {
 		saved: false,
-
 		metadata: {
 			schemaVersion: SCHEMA_VERSION,
-
 			projectName: "",
-
 			createdAt: null,
 			lastModifiedAt: null,
-
 			orbitControls: undefined,
-
-			guidelines: useGuidelineStore.getState().guidelines,
+			guidelines: [],
 		},
-
 		cart: null,
-
 		modelIds: [],
 		modelFiles: new Map<number, ArrayBuffer>(),
-
 		selectedObjectPath: undefined,
 
 		setSelectedObjectPath: (path) => set({ selectedObjectPath: path }),
@@ -183,19 +157,55 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 					projectName: name,
 				},
 			})),
+
 		setCart: (cart) => set({ cart, modelIds: collectModelIds(cart) }),
+
 		clearCart: () => set({ cart: null }),
 
-		saveProject: async (newFile) => {
-			const projectStore = useProjectStore.getState();
+		// --- Guideline actions moved here ---
+		addGuideline: (guideline) =>
+			set((state) => ({
+				metadata: {
+					...state.metadata,
+					guidelines: [...state.metadata.guidelines, guideline],
+				},
+			})),
 
-			if (!projectStore.cart) {
-				throw new Error("No cart data to save.");
-			}
+		removeGuideline: (index) =>
+			set((state) => ({
+				metadata: {
+					...state.metadata,
+					guidelines: state.metadata.guidelines.filter(
+						(_, i) => i !== index,
+					),
+				},
+			})),
+
+		updateGuideline: (index, updated) =>
+			set((state) => ({
+				metadata: {
+					...state.metadata,
+					guidelines: state.metadata.guidelines.map((g, i) =>
+						i === index ? { ...g, ...updated } : g,
+					),
+				},
+			})),
+
+		resetGuidelines: () =>
+			set((state) => ({
+				metadata: {
+					...state.metadata,
+					guidelines: [],
+				},
+			})),
+		// -----------------------------------
+
+		saveProject: async (newFile) => {
+			const projectStore = get();
+			if (!projectStore.cart) throw new Error("No cart data to save.");
 
 			const fileName = `${projectStore.metadata.projectName || "TCA-Project"}${FILE_EXTENSION}`;
 
-			// Setup the metadata with the current date if not set
 			const localMetadata = {
 				...projectStore.metadata,
 				createdAt: projectStore.metadata.createdAt || new Date(),
@@ -206,25 +216,21 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				"cart.json": strToU8(superjson.stringify(projectStore.cart)),
 			};
 
-			// add .gltf and .glb models to a "models/" folder
 			for (const modelId of projectStore.modelIds) {
-				// 1. Check if the file is a .glb or .gltf
 				const data = projectStore.modelFiles.get(modelId);
 				if (!data) continue;
 
-				// 2. Determine file type by checking the first few bytes
 				const header = new Uint8Array(data.slice(0, 4));
-				let extension = ".gltf"; // default
+				let extension = ".gltf";
 				if (
-					header[0] === 0x67 && // 'g'
-					header[1] === 0x6c && // 'l'
-					header[2] === 0x54 && // 'T'
-					header[3] === 0x46 // 'F'
+					header[0] === 0x67 &&
+					header[1] === 0x6c &&
+					header[2] === 0x54 &&
+					header[3] === 0x46
 				) {
 					extension = ".glb";
 				}
 
-				// 3. If it's a .gltf, convert to .glb
 				if (extension === ".gltf") {
 					const glbData = await convertGltfToGlb(data);
 					zipFiles[`models/${modelId}.glb`] = glbData;
@@ -233,43 +239,29 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				}
 			}
 
-			// Create the zip file with fflate
 			const zipDataRaw = zipSync(zipFiles, { level: 9, mem: 8 });
-
-			// Prepend the file header
 			const header = new Uint8Array(
 				FILE_HEADER.length + zipDataRaw.length,
 			);
 			header.set(FILE_HEADER);
 			header.set(zipDataRaw, FILE_HEADER.length);
-
 			const fixedBuffer = new Uint8Array(header.length);
 			fixedBuffer.set(header);
 
 			const blob = new Blob([fixedBuffer], {
 				type: "application/binary",
 			});
-
 			const fileHandle = projectStore.fileHandle;
 
 			if (!fileHandle || newFile) {
-				// Save using browser-fs-access
 				const localFileHandle = await toast
 					.promise(
-						Promise.race([
-							fileSave(blob, {
-								fileName,
-								extensions: [FILE_EXTENSION],
-								mimeTypes: ["application/binary"],
-								id: "tca-project",
-							}),
-							new Promise<never>((_, reject) =>
-								setTimeout(
-									() => reject(new Error("Save timed out.")),
-									15000,
-								),
-							),
-						]),
+						fileSave(blob, {
+							fileName,
+							extensions: [FILE_EXTENSION],
+							mimeTypes: ["application/binary"],
+							id: "tca-project",
+						}),
 						{
 							loading: "Saving project...",
 							success: "Project saved successfully!",
@@ -284,43 +276,14 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 						fileHandle: localFileHandle,
 						metadata: { ...localMetadata },
 					});
-
-					if (localFileHandle.name !== fileName) {
-						set({
-							metadata: {
-								...localMetadata,
-								lastModifiedAt: new Date(),
-								projectName: localFileHandle.name.replace(
-									FILE_EXTENSION,
-									"",
-								),
-							},
-						});
-					}
 				}
 			} else {
-				// Save to the existing file handle
-				const success = await toast
+				await toast
 					.promise(
-						Promise.race([
-							fileHandle
-								.createWritable()
-								.then(async (writer) => {
-									await writer.write(fixedBuffer);
-									await writer.close();
-
-									return true;
-								})
-								.catch(() => {
-									return false;
-								}),
-							new Promise<never>((_, reject) =>
-								setTimeout(
-									() => reject(new Error("Save timed out.")),
-									15000,
-								),
-							),
-						]),
+						fileHandle.createWritable().then(async (writer) => {
+							await writer.write(fixedBuffer);
+							await writer.close();
+						}),
 						{
 							loading: "Saving project...",
 							success: "Project saved successfully!",
@@ -329,16 +292,14 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 					)
 					.unwrap();
 
-				if (success) {
-					set({
-						saved: true,
-						fileHandle,
-						metadata: {
-							...localMetadata,
-							lastModifiedAt: new Date(),
-						},
-					});
-				}
+				set({
+					saved: true,
+					fileHandle,
+					metadata: {
+						...localMetadata,
+						lastModifiedAt: new Date(),
+					},
+				});
 			}
 		},
 
@@ -349,91 +310,50 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				mimeTypes: ["application/binary"],
 				id: "tca-project",
 				startIn: "documents",
-			}).catch(() => {
-				return null;
-			});
+			}).catch(() => null);
 
-			if (!fileHandle) {
-				throw new Error("No file selected.");
-			}
-
+			if (!fileHandle) throw new Error("No file selected.");
 			await get().loadProjectFromFileHandle(fileHandle);
 		},
 
 		loadProjectFromFileHandle: async (fileHandle) => {
-			if (!fileHandle) {
-				throw new Error("No file handle.");
-			}
+			if (!fileHandle) throw new Error("No file handle.");
 
 			await get().reset();
-
 			const buffer = await fileHandle.arrayBuffer();
-
-			const header = new Uint8Array(FILE_HEADER.length);
-			header.set(FILE_HEADER);
 			const bufferHeader = new Uint8Array(
 				buffer.slice(0, FILE_HEADER.length),
 			);
-			if (
-				!bufferHeader.every(
-					(value: number, index: number) => value === header[index],
-				)
-			) {
+			if (!bufferHeader.every((v, i) => v === FILE_HEADER[i])) {
 				throw new Error("Invalid TCA-Project file format.");
 			}
 
 			const zipData = new Uint8Array(buffer.slice(FILE_HEADER.length));
-			const unzipped = await unzipSync(zipData);
+			const unzipped = unzipSync(zipData);
 
 			for (const [filename, fileData] of Object.entries(unzipped)) {
 				if (filename === "metadata.json") {
-					const data = superjson.parse(strFromU8(fileData));
-
-					const parsed = MetadataSchema.safeParse(data);
-					if (!parsed.success) {
-						console.error(
-							"Invalid metadata in project:",
-							parsed.error,
-						);
-						toast.error(
-							"We couldn't load your project. The metadata is invalid. See the browser console for more details.",
-							{ duration: 10000 },
-						);
-
-						// Reset self
+					const parsed = MetadataSchema.safeParse(
+						superjson.parse(strFromU8(fileData)),
+					);
+					if (parsed.success) set({ metadata: parsed.data });
+					else {
+						toast.error("Invalid metadata in project file.");
 						get().reset();
-
-						continue;
 					}
-
-					set({
-						metadata: parsed.data,
-					});
 				} else if (filename === "cart.json") {
-					const data = superjson.parse(strFromU8(fileData)) as Cart;
-
-					const parsed = CartSchema.safeParse(data);
-
-					if (!parsed.success) {
-						console.error(
-							"Invalid cart data in project:",
-							parsed.error,
-						);
-						toast.error(
-							"We couldn't load your project. The cart data is invalid. See the browser console for more details.",
-							{ duration: 10000 },
-						);
-
-						// Reset self
+					const parsed = CartSchema.safeParse(
+						superjson.parse(strFromU8(fileData)),
+					);
+					if (parsed.success)
+						set({
+							cart: parsed.data,
+							modelIds: collectModelIds(parsed.data),
+						});
+					else {
+						toast.error("Invalid cart data in project file.");
 						get().reset();
-
-						continue;
 					}
-
-					set({
-						cart: parsed.data,
-						modelIds: collectModelIds(parsed.data),
-					});
 				} else if (
 					filename.startsWith("models/") &&
 					filename.endsWith(".glb")
@@ -451,8 +371,6 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 							return { modelFiles: newMap };
 						});
 					}
-				} else {
-					console.warn(`Unknown file in TCA-Project: ${filename}`);
 				}
 			}
 
@@ -461,29 +379,21 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 
 		reset: () => set(store.getInitialState()),
 
-		setModelFile: (modelId, data) => {
+		setModelFile: (modelId, data) =>
 			set((state) => {
 				const newMap = new Map(state.modelFiles);
-				if (data) {
-					newMap.set(modelId, data);
-				} else {
-					newMap.delete(modelId);
-				}
+				if (data) newMap.set(modelId, data);
+				else newMap.delete(modelId);
 				return { modelFiles: newMap, saved: false };
-			});
-		},
-		removeModelFile: (modelId) => {
+			}),
+
+		removeModelFile: (modelId) =>
 			set((state) => {
 				const newMap = new Map(state.modelFiles);
 				newMap.delete(modelId);
 				return { modelFiles: newMap, saved: false };
-			});
-		},
+			}),
 
-		// Debug
-		logState: () => {
-			const state = get();
-			console.log("ProjectStore state:", state);
-		},
+		logState: () => console.log("ProjectStore state:", get()),
 	};
 });

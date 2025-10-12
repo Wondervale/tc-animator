@@ -18,11 +18,11 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { useGuidelineStore } from "@/stores/GuidelineStore";
+import { useProjectStore } from "@/stores/ProjectStore";
 import { Separator } from "@radix-ui/react-menubar";
 
 function ObjectControls() {
-	const guidelineStore = useGuidelineStore();
+	const projectStore = useProjectStore();
 
 	return (
 		<ResizablePanelGroup
@@ -60,52 +60,54 @@ function ObjectControls() {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{guidelineStore.guidelines.map((guideline, index) => (
-							<TableRow key={index}>
-								<TableCell>{guideline.plane}</TableCell>
-								<TableCell>
-									{`[${guideline.position
-										.map((v) => v.toFixed(2))
-										.join(", ")}]`}
-								</TableCell>
-								<TableCell>
-									{guideline.cellSize.toFixed(4)}
-								</TableCell>
-								<TableCell>
-									{guideline.sectionSize.toFixed(4)}
-								</TableCell>
-								<TableCell>
-									<ColorPicker
-										defaultColor={guideline.cellColor}
-										onChangeComplete={(color) =>
-											guidelineStore.updateGuideline(
-												index,
-												{ cellColor: color },
-											)
-										}
-									></ColorPicker>
-								</TableCell>
-								<TableCell className="text-right">
-									<button
-										className="rounded bg-red-600 px-2 py-1 text-sm font-medium text-white hover:bg-red-700"
-										onClick={() =>
-											guidelineStore.removeGuideline(
-												index,
-											)
-										}
-									>
-										Delete
-									</button>
-								</TableCell>
-							</TableRow>
-						))}
+						{projectStore.metadata.guidelines.map(
+							(guideline, index) => (
+								<TableRow key={index}>
+									<TableCell>{guideline.plane}</TableCell>
+									<TableCell>
+										{`[${guideline.position
+											.map((v) => v.toFixed(2))
+											.join(", ")}]`}
+									</TableCell>
+									<TableCell>
+										{guideline.cellSize.toFixed(4)}
+									</TableCell>
+									<TableCell>
+										{guideline.sectionSize.toFixed(4)}
+									</TableCell>
+									<TableCell>
+										<ColorPicker
+											defaultColor={guideline.cellColor}
+											onChangeComplete={(color) =>
+												projectStore.updateGuideline(
+													index,
+													{ cellColor: color },
+												)
+											}
+										></ColorPicker>
+									</TableCell>
+									<TableCell className="text-right">
+										<button
+											className="rounded bg-red-600 px-2 py-1 text-sm font-medium text-white hover:bg-red-700"
+											onClick={() =>
+												projectStore.removeGuideline(
+													index,
+												)
+											}
+										>
+											Delete
+										</button>
+									</TableCell>
+								</TableRow>
+							),
+						)}
 					</TableBody>
 				</Table>
 
 				<button
 					className="mb-2 rounded bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700"
 					onClick={() =>
-						guidelineStore.addGuideline({
+						projectStore.addGuideline({
 							plane: "XZ",
 							position: [0.5, 0, 0.5],
 							cellSize: 1 / 16,
