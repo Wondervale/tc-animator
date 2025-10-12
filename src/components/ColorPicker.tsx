@@ -24,7 +24,7 @@ function ColorPicker({
 	defaultColor: string;
 	onChangeComplete: (color: string) => void;
 }) {
-	const [color, setColor] = useState(defaultColor);
+	const [color, setColor] = useState(Color(defaultColor).hex());
 
 	// Memoize the debounced function so it doesn't recreate on every render
 	const onColorChange = useMemo(
@@ -42,7 +42,7 @@ function ColorPicker({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="secondary">
+				<Button variant="secondary" className="w-full">
 					<div
 						className="h-full w-full rounded-md"
 						style={{ background: color }}
@@ -51,7 +51,7 @@ function ColorPicker({
 			</PopoverTrigger>
 			<PopoverContent asChild>
 				<ShadColorPicker
-					className="rounded-md border w-full"
+					className="rounded-md border w-full shadow-md"
 					defaultValue={color}
 					onChange={onColorChange}
 				>

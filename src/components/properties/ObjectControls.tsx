@@ -4,6 +4,7 @@
  */
 
 // import ColorPicker from "@/components/ColorPicker";
+import ColorPicker from "@/components/ColorPicker";
 import {
 	ResizableHandle,
 	ResizablePanel,
@@ -52,8 +53,6 @@ function ObjectControls() {
 							<TableHead>Position</TableHead>
 							<TableHead>Cell Size</TableHead>
 							<TableHead>Section Size</TableHead>
-							<TableHead>Cell Thickness</TableHead>
-							<TableHead>Section Thickness</TableHead>
 							<TableHead>Cell Color</TableHead>
 							<TableHead className="text-right">
 								Actions
@@ -76,21 +75,15 @@ function ObjectControls() {
 									{guideline.sectionSize.toFixed(4)}
 								</TableCell>
 								<TableCell>
-									{guideline.cellThickness.toFixed(2)}
-								</TableCell>
-								<TableCell>
-									{guideline.sectionThickness.toFixed(2)}
-								</TableCell>
-								<TableCell>
-									{/* <ColorPicker
+									<ColorPicker
 										defaultColor={guideline.cellColor}
 										onChangeComplete={(color) =>
 											guidelineStore.updateGuideline(
 												index,
-												{ cellColor: color.hex },
+												{ cellColor: color },
 											)
 										}
-									></ColorPicker> */}
+									></ColorPicker>
 								</TableCell>
 								<TableCell className="text-right">
 									<button
@@ -117,8 +110,7 @@ function ObjectControls() {
 							position: [0.5, 0, 0.5],
 							cellSize: 1 / 16,
 							sectionSize: 1,
-							cellThickness: 0.5,
-							sectionThickness: 1.5,
+							cellColor: "#ff0000",
 						})
 					}
 				>

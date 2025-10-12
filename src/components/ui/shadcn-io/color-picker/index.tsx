@@ -137,16 +137,32 @@ export type ColorPickerSelectionProps = HTMLAttributes<HTMLDivElement>;
 export const ColorPickerSelection = memo(
 	({ className, ...props }: ColorPickerSelectionProps) => {
 		const containerRef = useRef<HTMLDivElement>(null);
+
+		const { hue, saturation, lightness, setSaturation, setLightness } =
+			useColorPicker();
+
 		const [isDragging, setIsDragging] = useState(false);
 		const [positionX, setPositionX] = useState(0);
 		const [positionY, setPositionY] = useState(0);
-		const { hue, setSaturation, setLightness } = useColorPicker();
 
 		const backgroundGradient = useMemo(() => {
 			return `linear-gradient(0deg, rgba(0,0,0,1), rgba(0,0,0,0)),
 			linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0)),
 			hsl(${hue}, 100%, 50%)`;
 		}, [hue]);
+
+		// Update positionX/Y when saturation/lightness change
+		useEffect(() => {
+			// Map saturation (0-100) to X (0-1)
+			const x = saturation / 100;
+
+			// Map lightness (0-100) to Y (0-1) using the same formula as your click handler
+			const topLightness = x < 0.01 ? 100 : 50 + 50 * (1 - x);
+			const y = 1 - lightness / topLightness;
+
+			setPositionX(x);
+			setPositionY(y);
+		}, [saturation, lightness]);
 
 		const updateColorFromPointer = useCallback(
 			(
@@ -166,9 +182,11 @@ export const ColorPickerSelection = memo(
 					0,
 					Math.min(1, (event.clientY - rect.top) / rect.height),
 				);
+
 				setPositionX(x);
 				setPositionY(y);
 				setSaturation(x * 100);
+
 				const topLightness = x < 0.01 ? 100 : 50 + 50 * (1 - x);
 				const lightness = topLightness * (1 - y);
 				setLightness(lightness);
