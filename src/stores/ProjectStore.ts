@@ -145,6 +145,10 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 		return setOrg(nextState);
 	};
 
+	useGuidelineStore.subscribe((state) => {
+		set({ metadata: { ...get().metadata, guidelines: state.guidelines } });
+	});
+
 	return {
 		saved: false,
 
