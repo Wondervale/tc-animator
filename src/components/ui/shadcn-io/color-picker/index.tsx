@@ -146,8 +146,8 @@ export const ColorPickerSelection = memo(
 		const [positionY, setPositionY] = useState(0);
 
 		const backgroundGradient = useMemo(() => {
-			return `linear-gradient(0deg, rgba(0,0,0,1), rgba(0,0,0,0)),
-			linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0)),
+			return `linear-gradient(0deg, oklch(0 0 0), oklch(0 0 0 / 0%)),
+			linear-gradient(90deg, oklch(1 0 0), oklch(1 0 0 / 0%)),
 			hsl(${hue}, 100%, 50%)`;
 		}, [hue]);
 
