@@ -290,7 +290,7 @@ function PreferencesPanel({
 									<ColorPicker
 										defaultColor={preferences.gridColor}
 										onChangeComplete={(color) => {
-											preferences.setGridColor(color.hex);
+											preferences.setGridColor(color);
 										}}
 									/>
 								</div>
