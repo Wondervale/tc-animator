@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, lazy, useMemo } from "react";
 
 import ModelControl from "@/components/properties/ModelControl";
+import ObjectControls from "@/components/properties/ObjectControls";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjectStore } from "@/stores/ProjectStore";
@@ -38,8 +39,8 @@ function PropertiesPanels() {
 				<TabsTrigger value="project-debug">Project Debug</TabsTrigger>
 			</TabsList>
 
-			<TabsContent value="object-controls" className="px-4">
-				W.I.P.
+			<TabsContent value="object-controls">
+				<ObjectControls />
 			</TabsContent>
 
 			<TabsContent value="custom-models" className="px-4">

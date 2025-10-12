@@ -20,6 +20,7 @@ import { create } from "zustand";
 
 import { convertGltfToGlb } from "@/lib/gltf";
 import { toPureArrayBuffer } from "@/lib/utils";
+import { useGuidelineStore } from "@/stores/GuidelineStore";
 import equal from "fast-deep-equal";
 
 export const FILE_EXTENSION = ".tcaproj";
@@ -156,6 +157,8 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 			lastModifiedAt: null,
 
 			orbitControls: undefined,
+
+			guidelines: useGuidelineStore.getState().guidelines,
 		},
 
 		cart: null,

@@ -3,6 +3,7 @@
  *   All rights reserved.
  */
 
+import { GuidelineSchema } from "@/schemas/GuidelineSchema";
 import { z } from "zod";
 
 export const MetadataSchema = z.object({
@@ -20,5 +21,8 @@ export const MetadataSchema = z.object({
 			zoom: z.number().optional(),
 		})
 		.optional(),
+
+	guidelines: z.array(GuidelineSchema).default([]),
 });
+
 export type Metadata = z.infer<typeof MetadataSchema>;
