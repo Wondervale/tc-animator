@@ -16,5 +16,7 @@ export const GuidelineSchema = z.object({
 		.string()
 		.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid hex color")
 		.default("#ff0000"),
+	visible: z.boolean().default(true),
 });
+
 export type Guideline = z.infer<typeof GuidelineSchema>;

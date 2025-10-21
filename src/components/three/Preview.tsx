@@ -37,7 +37,7 @@ import AngleSlider from "@/components/three/controls/AngleSlider";
 import DistanceSlider from "@/components/three/controls/DistanceSlider";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
-import { degreeToRadian } from "@/lib/utils";
+import { degreeToRadian, makeColorDarker, planeToRotation } from "@/lib/utils";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -271,6 +271,29 @@ function Preview() {
 						<lineBasicMaterial color={0x0000ff} linewidth={2} />
 					</line>
 				</group>
+
+				{/* Guidelines */}
+				{projectStore.metadata.guidelines?.map(
+					(guideline, index) =>
+						guideline.visible && (
+							<Grid
+								key={index}
+								position={guideline.position}
+								cellSize={guideline.cellSize}
+								sectionSize={guideline.sectionSize}
+								cellThickness={0.5}
+								sectionThickness={1.5}
+								cellColor={guideline.cellColor}
+								sectionColor={makeColorDarker(
+									guideline.cellColor,
+									0.5,
+								)}
+								infiniteGrid
+								side={THREEDoubleSide}
+								rotation={planeToRotation(guideline.plane)}
+							/>
+						),
+				)}
 
 				<Suspense fallback={<Html center>Loading...</Html>}>
 					<CartRender onSelect={setSelected} onHover={setHovered} />

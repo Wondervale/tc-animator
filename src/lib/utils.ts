@@ -1,10 +1,23 @@
 /** @format */
 
 import { clsx, type ClassValue } from "clsx";
+import Color, { type ColorInstance } from "color";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export function makeColorDarker(
+	hexColor: string | ColorInstance,
+	amount: number = 0.5,
+): string {
+	const color = Color(hexColor);
+	return color.darken(amount).hex();
+}
+
+export function clamp(value: number, min: number, max: number): number {
+	return Math.min(Math.max(value, min), max);
 }
 
 export function degreeToRadian(degree: number): number {
@@ -42,4 +55,26 @@ export function floatAsFraction(value: number): string {
 		b = 1 / (b - a);
 	} while (Math.abs(value - h1 / k1) > value * tolerance);
 	return `${h1}/${k1}`;
+}
+
+export function isPowerOfTwo(value: number): boolean {
+	return (value & (value - 1)) === 0 && value !== 0;
+}
+
+export function planeToRotation(
+	plane: "XY" | "XZ" | "YZ",
+): [number, number, number] {
+	switch (plane) {
+		case "XZ":
+			// No rotation needed: XZ plane (Y is up)
+			return [0, 0, 0];
+		case "XY":
+			// Rotate -Math.PI / 2 around X to make Y up (XY plane)
+			return [-Math.PI / 2, 0, 0];
+		case "YZ":
+			// Rotate Math.PI / 2 around Z to make Y up (YZ plane)
+			return [0, 0, Math.PI / 2];
+		default:
+			return [0, 0, 0];
+	}
 }

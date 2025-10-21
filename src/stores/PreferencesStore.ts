@@ -7,7 +7,7 @@
 
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import Color from "color";
+import { makeColorDarker } from "@/lib/utils";
 import { create } from "zustand";
 
 interface PreferencesStore {
@@ -62,8 +62,7 @@ export const usePreferences = create<PreferencesStore>()(
 			setDistanceSnap: (distance) => set({ distanceSnap: distance }),
 
 			getComplementaryGridColor: () => {
-				const color = Color(get().gridColor);
-				return color.darken(0.5).hex();
+				return makeColorDarker(get().gridColor, 0.5);
 			},
 		}),
 		{
