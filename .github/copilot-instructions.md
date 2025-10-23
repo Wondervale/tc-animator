@@ -66,4 +66,4 @@
 
 ---
 
-For more details, see `README.md` and the `src/` directory structure. Use context7 more up-to-date docs and code examples.
+For more details, see `README.md` and the `src/` directory structure. Use context7 for more up-to-date docs and code examples.
