@@ -1,10 +1,5 @@
-/*
- *   Copyright (c) 2025 Foxxite | Articca
- *   All rights reserved.
- */
-
 import { useDrag } from "@use-gesture/react";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 
 import type { Keyframe } from "./Timeline";
 
@@ -21,37 +16,39 @@ function DraggableKeyframe({
 	zoom,
 	onUpdate,
 }: DraggableKeyframeProps) {
-	const [x, setX] = useState(keyframe.time * zoom);
+	const ref = useRef<HTMLDivElement>(null);
+	const xRef = useRef(keyframe.time * zoom);
 
-	// Update position if keyframe or zoom changes
-	useEffect(() => {
-		setX(keyframe.time * zoom);
-	}, [keyframe.time, zoom]);
+	const bind = useDrag(({ movement: [mx], first, last }) => {
+		if (first) xRef.current = keyframe.time * zoom;
 
-	const bind = useDrag(
-		({ movement: [mx], memo, first, last }) => {
-			if (first) {
-				memo = keyframe.time * zoom;
-			}
-			let newX = memo + mx;
-			newX = Math.max(0, newX);
+		let newX = xRef.current + mx;
+		newX = Math.max(0, newX);
+
+		if (ref.current) {
+			ref.current.style.transform = `translateX(${newX - keyframe.time * zoom}px)`;
+		}
+
+		if (last) {
 			const snappedTime = Math.round((newX / zoom) * 10) / 10;
-			setX(snappedTime * zoom);
-			if (last) {
-				onUpdate(trackId, keyframe.id, snappedTime);
+			onUpdate(trackId, keyframe.id, snappedTime);
+
+			if (ref.current) {
+				ref.current.style.transform = `translateX(0px)`;
 			}
-			return memo;
-		},
-		{ filterTaps: true },
-	);
+		}
+
+		return xRef.current;
+	});
 
 	return (
 		<div
+			ref={ref}
 			{...bind()}
-			className="absolute top-2 w-4 h-4 bg-blue-500 rounded cursor-grab"
+			className="absolute top-1/2 w-4 h-4 bg-blue-500 rounded cursor-grab -translate-y-1/2"
 			style={{
-				transform: `translateX(${x}px)`,
 				transition: "transform 0.02s ease",
+				left: `${keyframe.time * zoom}px`,
 			}}
 		/>
 	);

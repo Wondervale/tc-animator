@@ -72,7 +72,7 @@ const Timeline: React.FC = () => {
 	const [zoomToMouseEnabled, setZoomToMouseEnabled] = useState(true);
 
 	const waveformRef = useRef<HTMLDivElement>(null);
-	const wavesurferRef = useRef<WaveSurfer | null>(null);
+	const wavesurferRef = useRef<WaveSurfer>(null);
 	const timelineScrollRef = useRef<HTMLDivElement>(null);
 	const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -152,45 +152,53 @@ const Timeline: React.FC = () => {
 		wavesurferRef.current?.seekTo(t / duration);
 	};
 
+	const audioTrackUrl = tracks.find((t) => t.type === "audio")?.audioUrl;
+
 	// --- Load Waveform ---
 	useEffect(() => {
-		const audioTrack = tracks.find((t) => t.type === "audio");
-		if (!audioTrack?.audioUrl || !waveformRef.current) return;
+		if (!audioTrackUrl || !waveformRef.current) return;
 
-		const waveColor =
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--waveform-color")
-				.trim() || "#888";
-		const progressColor =
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--waveform-progress-color")
-				.trim() || "#f0f";
-
-		wavesurferRef.current = WaveSurfer.create({
-			container: waveformRef.current,
-			waveColor,
-			progressColor,
+		let mounted = true;
+		const ws = WaveSurfer.create({
+			container: waveformRef.current!,
+			waveColor: "#888",
+			progressColor: "#f0f",
 			height: 55,
 			barWidth: 2,
 			cursorColor: "transparent",
 		});
 
-		wavesurferRef.current.load(audioTrack.audioUrl);
-		wavesurferRef.current.on("ready", () =>
-			setDuration(wavesurferRef.current!.getDuration()),
+		wavesurferRef.current = ws;
+		ws.load(audioTrackUrl);
+
+		ws.on("ready", () => mounted && setDuration(ws.getDuration()));
+		ws.on(
+			"interaction",
+			() => mounted && setCurrentTime(ws.getCurrentTime()),
 		);
-		wavesurferRef.current.on("interaction", () =>
-			setCurrentTime(wavesurferRef.current!.getCurrentTime()),
-		);
-		wavesurferRef.current.on("audioprocess", () =>
-			setCurrentTime(wavesurferRef.current!.getCurrentTime()),
+		ws.on(
+			"audioprocess",
+			() => mounted && setCurrentTime(ws.getCurrentTime()),
 		);
 
 		return () => {
-			wavesurferRef.current?.destroy();
-			wavesurferRef.current = null;
+			mounted = false;
+			if (wavesurferRef.current) {
+				try {
+					wavesurferRef.current.destroy();
+				} catch (e: unknown) {
+					if (e instanceof Error) {
+						// Rethrow unexpected errors, ignore AbortError which is expected when cancelling loads
+						if (e.name !== "AbortError") throw e;
+					} else {
+						// If it's not an Error instance, rethrow to avoid swallowing unknown exceptions
+						throw e;
+					}
+				}
+				wavesurferRef.current = null;
+			}
 		};
-	}, [tracks]);
+	}, [audioTrackUrl]);
 
 	// --- Keep Playhead in View ---
 	useEffect(() => {
@@ -209,24 +217,23 @@ const Timeline: React.FC = () => {
 	}, [currentTime, zoom, isPlaying]);
 
 	// --- Keyframe Update ---
-	const updateKeyframe = (
-		trackId: string,
-		keyframeId: string,
-		time: number,
-	) => {
-		setTracks((prev) =>
-			prev.map((t) =>
-				t.id === trackId
-					? {
-							...t,
-							keyframes: t.keyframes?.map((kf) =>
-								kf.id === keyframeId ? { ...kf, time } : kf,
-							),
-						}
-					: t,
-			),
-		);
-	};
+	const updateKeyframe = useCallback(
+		(trackId: string, keyframeId: string, time: number) => {
+			setTracks((prev) =>
+				prev.map((t) =>
+					t.id === trackId
+						? {
+								...t,
+								keyframes: t.keyframes?.map((kf) =>
+									kf.id === keyframeId ? { ...kf, time } : kf,
+								),
+							}
+						: t,
+				),
+			);
+		},
+		[],
+	);
 
 	// --- Play Controls ---
 	const play = () => {
@@ -498,23 +505,13 @@ const Timeline: React.FC = () => {
 										/>
 									) : (
 										track.keyframes?.map((kf) => (
-											<div
+											<DraggableKeyframe
 												key={kf.id}
-												style={{
-													position: "absolute",
-													left: `${kf.time * zoom}px`,
-													top: "50%",
-													transform:
-														"translateY(-50%)",
-												}}
-											>
-												<DraggableKeyframe
-													keyframe={kf}
-													trackId={track.id}
-													zoom={zoom}
-													onUpdate={updateKeyframe}
-												/>
-											</div>
+												keyframe={kf}
+												trackId={track.id}
+												zoom={zoom}
+												onUpdate={updateKeyframe}
+											/>
 										))
 									)}
 								</div>
@@ -523,7 +520,7 @@ const Timeline: React.FC = () => {
 
 					{/* Playhead */}
 					<div
-						className="z-10 absolute w-[2px] bg-primary cursor-ew-resize hover:bg-primary/80 group"
+						className="z-10 absolute w-0.5 bg-primary cursor-ew-resize hover:bg-primary/80 group"
 						style={{
 							left: `${LABEL_WIDTH + currentTime * zoom}px`,
 							top: "8px",
