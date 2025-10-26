@@ -38,12 +38,19 @@ import { fileOpen } from "browser-fs-access";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { Badge } from "@/components/ui/badge";
 import { parse } from "yaml";
 import { z } from "zod";
 import {
 	CartSchema,
 	type SavedTrain,
 } from "../schemas/SavedTrainPropertiesSchema";
+
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 function NewProjectDialog() {
 	const projectStore = useProjectStore();
@@ -509,7 +516,41 @@ function ProjectDialog() {
 											<TrainFrontIcon className="w-5 h-5 text-blue-400" />
 										</div>
 										<h2 className="text-lg font-semibold">
-											Import from TrainCarts
+											Import from TrainCarts{" "}
+											<HoverCard>
+												<HoverCardTrigger asChild>
+													<Badge variant="secondary">
+														1.21.10-v1
+													</Badge>
+												</HoverCardTrigger>
+												<HoverCardContent className="w-fit max-w-sm">
+													<p className="text-balance">
+														TC Animator is
+														proprietary donationware
+														originally created for{" "}
+														<a
+															href="https://wondervalepark.com"
+															target="_blank"
+															rel="noopener noreferrer"
+															className="text-blue-500 underline hover:text-blue-600"
+														>
+															Wondervale
+														</a>
+														. It has been released
+														publicly, but it is
+														designed specifically to
+														support the version of
+														TrainCarts used on
+														Wondervale's servers.
+														Other versions might
+														work, but they are{" "}
+														<strong>
+															not officially
+															supported.
+														</strong>
+													</p>
+												</HoverCardContent>
+											</HoverCard>
 										</h2>
 									</div>
 									<h6 className="text-sm text-muted-foreground text-balance -mt-2">
