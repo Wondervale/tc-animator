@@ -107,7 +107,7 @@ function ModelControl() {
 	};
 
 	return (
-		<>
+		<div className="overflow-y-auto">
 			{/* Explainer */}
 			<p className="mb-4 text-balance">
 				You can replace the default cubes with your own 3D models to
@@ -189,7 +189,7 @@ function ModelControl() {
 					</TableBody>
 				</Table>
 			)}
-		</>
+		</div>
 	);
 }
 

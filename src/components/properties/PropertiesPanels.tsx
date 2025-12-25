@@ -29,7 +29,7 @@ function PropertiesPanels() {
 	}, [projectStore]);
 
 	return (
-		<Tabs defaultValue="object-controls" className="-mt-4 h-full w-full">
+		<Tabs defaultValue="object-controls" className="-mt-4 h-full w-full overflow-auto">
 			<TabsList className="w-full rounded-none">
 				<TabsTrigger value="object-controls">
 					Object Controls
@@ -39,15 +39,15 @@ function PropertiesPanels() {
 				<TabsTrigger value="project-debug">Project Debug</TabsTrigger>
 			</TabsList>
 
-			<TabsContent value="object-controls">
+			<TabsContent value="object-controls" className="overflow-auto">
 				<ObjectControls />
 			</TabsContent>
 
-			<TabsContent value="custom-models" className="px-4">
+			<TabsContent value="custom-models" className="px-4 overflow-auto">
 				<ModelControl />
 			</TabsContent>
 
-			<TabsContent value="cart-debug">
+			<TabsContent value="cart-debug"  className="overflow-auto">
 				<Suspense fallback={<Skeleton className="h-full w-full" />}>
 					<Editor
 						language="json"
@@ -75,7 +75,7 @@ function PropertiesPanels() {
 				</Suspense>
 			</TabsContent>
 
-			<TabsContent value="project-debug">
+			<TabsContent value="project-debug"  className="overflow-auto">
 				<Suspense fallback={<Skeleton className="h-full w-full" />}>
 					<Button
 						className="mb-2 block w-full"
