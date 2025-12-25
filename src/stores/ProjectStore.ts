@@ -26,6 +26,12 @@ export const FILE_EXTENSION = ".tcaproj";
 export const FILE_HEADER = strToU8("🦊🚂🎬");
 export const SCHEMA_VERSION = 0;
 
+interface ModelFile {
+	arrayBuffer: ArrayBuffer;
+	blob: Blob;
+	url: string;
+}
+
 interface ProjectStore {
 	// Core state
 	saved: boolean;
@@ -33,7 +39,7 @@ interface ProjectStore {
 	cart: Cart | null;
 
 	modelIds: number[];
-	modelFiles: Map<number, ArrayBuffer>;
+	modelFiles: Map<number, ModelFile>;
 	fileHandle?: FileSystemFileHandle;
 	selectedObjectPath?: string; // JSON path to selected object in cart
 
@@ -103,6 +109,27 @@ function collectModelIds(cart: Cart | null): number[] {
 	return Array.from(collected).sort((a, b) => a - b);
 }
 
+function getArrayBufferGLBMimeType(arrayBuffer: ArrayBuffer): string {
+	const header = new Uint8Array(arrayBuffer.slice(0, 4));
+	if (
+		header[0] === 0x67 && // 'g'
+		header[1] === 0x6c && // 'l'
+		header[2] === 0x54 && // 'T'
+		header[3] === 0x46 // 'F'
+	) {
+		return "model/gltf-binary";
+	}
+	return "model/gltf+json";
+}
+
+function gltArrayBufferToModelFile(arrayBuffer: ArrayBuffer): ModelFile {
+	const blob = new Blob([arrayBuffer], {
+		type: getArrayBufferGLBMimeType(arrayBuffer),
+	});
+	const url = URL.createObjectURL(blob);
+	return { arrayBuffer, blob, url };
+}
+
 export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 	const set: typeof setOrg = (partial) => {
 		const update = typeof partial === "function" ? partial(get()) : partial;
@@ -143,7 +170,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 		},
 		cart: null,
 		modelIds: [],
-		modelFiles: new Map<number, ArrayBuffer>(),
+		modelFiles: new Map<number, ModelFile>(),
 		selectedObjectPath: undefined,
 
 		setSelectedObjectPath: (path) => set({ selectedObjectPath: path }),
@@ -220,22 +247,19 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 				const data = projectStore.modelFiles.get(modelId);
 				if (!data) continue;
 
-				const header = new Uint8Array(data.slice(0, 4));
-				let extension = ".gltf";
-				if (
-					header[0] === 0x67 &&
-					header[1] === 0x6c &&
-					header[2] === 0x54 &&
-					header[3] === 0x46
-				) {
-					extension = ".glb";
-				}
+				const extension =
+					getArrayBufferGLBMimeType(data.arrayBuffer) ===
+					"model/gltf-binary"
+						? ".glb"
+						: ".gltf";
 
 				if (extension === ".gltf") {
-					const glbData = await convertGltfToGlb(data);
+					const glbData = await convertGltfToGlb(data.arrayBuffer);
 					zipFiles[`models/${modelId}.glb`] = glbData;
 				} else {
-					zipFiles[`models/${modelId}.glb`] = new Uint8Array(data);
+					zipFiles[`models/${modelId}.glb`] = new Uint8Array(
+						data.arrayBuffer,
+					);
 				}
 			}
 
@@ -366,7 +390,9 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 							const newMap = new Map(state.modelFiles);
 							newMap.set(
 								modelId,
-								toPureArrayBuffer(fileData.buffer),
+								gltArrayBufferToModelFile(
+									toPureArrayBuffer(fileData.buffer),
+								),
 							);
 							return { modelFiles: newMap };
 						});
@@ -382,7 +408,7 @@ export const useProjectStore = create<ProjectStore>((setOrg, get, store) => {
 		setModelFile: (modelId, data) =>
 			set((state) => {
 				const newMap = new Map(state.modelFiles);
-				if (data) newMap.set(modelId, data);
+				if (data) newMap.set(modelId, gltArrayBufferToModelFile(data));
 				else newMap.delete(modelId);
 				return { modelFiles: newMap, saved: false };
 			}),

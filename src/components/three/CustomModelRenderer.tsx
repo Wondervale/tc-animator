@@ -8,36 +8,8 @@ import { degreeToRadian } from "@/lib/utils";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { useGLTF } from "@react-three/drei";
 import { JSONPath } from "jsonpath-plus";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Group, Matrix4, Vector3 } from "three";
-
-const modelBlobUrlCache = new Map<
-	number,
-	{ buffer: ArrayBuffer; url: string }
->();
-
-function getOrCreateBlobUrl(modelId: number, buffer: ArrayBuffer): string {
-	const cached = modelBlobUrlCache.get(modelId);
-	if (cached && cached.buffer === buffer) {
-		return cached.url;
-	}
-	// Clean up old URL if buffer changed
-	if (cached) {
-		URL.revokeObjectURL(cached.url);
-	}
-	const blob = new Blob([buffer]);
-	const url = URL.createObjectURL(blob);
-	modelBlobUrlCache.set(modelId, { buffer, url });
-	return url;
-}
-
-function cleanupBlobUrl(modelId: number) {
-	const cached = modelBlobUrlCache.get(modelId);
-	if (cached) {
-		URL.revokeObjectURL(cached.url);
-		modelBlobUrlCache.delete(modelId);
-	}
-}
 
 function CustomModelRenderer({ jsonPath }: { jsonPath: string }) {
 	const { cart, modelFiles } = useProjectStore();
@@ -100,48 +72,20 @@ function CustomModelRenderer({ jsonPath }: { jsonPath: string }) {
 
 				const data = modelFiles.get(modelId);
 
-				if (!data) {
+				if (!data || !data.url) {
 					return <Cube key={modelId} />;
 				}
 
 				return (
-					<ModelInstance
+					<ModelRenderer
 						key={modelId}
 						modelId={modelId}
-						arrayBuffer={data}
+						blobUrl={data.url}
 					/>
 				);
 			})}
 		</>
 	);
-}
-
-function ModelInstance({
-	modelId,
-	arrayBuffer,
-}: {
-	modelId: number;
-	arrayBuffer?: ArrayBuffer;
-}) {
-	const [blobUrl, setBlobUrl] = useState<string | undefined>(undefined);
-
-	useEffect(() => {
-		if (!arrayBuffer) {
-			setBlobUrl(undefined);
-			cleanupBlobUrl(modelId);
-			return;
-		}
-		const url = getOrCreateBlobUrl(modelId, arrayBuffer);
-		setBlobUrl(url);
-
-		return () => {
-			// Only cleanup if this is the last reference
-			cleanupBlobUrl(modelId);
-		};
-	}, [modelId, arrayBuffer]);
-
-	if (!blobUrl) return <Cube key={modelId} />;
-	return <ModelRenderer modelId={modelId} blobUrl={blobUrl} />;
 }
 
 function ModelRenderer({
