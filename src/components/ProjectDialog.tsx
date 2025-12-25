@@ -269,7 +269,6 @@ function ProjectDialog() {
 			const inner = async () => {
 				const targetUrl = importUrl ?? url;
 				if (!targetUrl) return;
-				// TODO: Implement import from URL
 
 				const whitelistedDomains = [
 					"paste.traincarts.net",
@@ -520,7 +519,7 @@ function ProjectDialog() {
 											<HoverCard>
 												<HoverCardTrigger asChild>
 													<Badge variant="secondary">
-														1.21.10-v1
+														1.21.11-v1
 													</Badge>
 												</HoverCardTrigger>
 												<HoverCardContent className="w-fit max-w-sm">

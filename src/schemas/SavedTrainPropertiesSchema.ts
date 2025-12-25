@@ -41,7 +41,9 @@ const ItemSchema = z.union([
 				return parsed;
 			})
 			.optional(),
-		schema_version: z.number(),
+		schema_version: z.literal(1, {
+			message: "Only schema_version 1 is supported",
+		}),
 	}),
 	z.looseObject({
 		"==": z.literal("org.bukkit.inventory.ItemStack"),
@@ -49,7 +51,9 @@ const ItemSchema = z.union([
 		id: z.string(),
 		count: z.number(),
 		components: z.record(z.string(), z.unknown()).optional(),
-		schema_version: z.number(),
+		schema_version: z.literal(1, {
+			message: "Only schema_version 1 is supported",
+		}),
 	}),
 ]);
 
