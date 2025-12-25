@@ -7,12 +7,14 @@ import {
 } from "@/components/ui/resizable";
 
 import AppMenu from "@/components/AppMenu";
+import FallbackRender from "@/components/error/FallbackRender";
 import PropertiesPanels from "@/components/properties/PropertiesPanels";
 import Preview from "@/components/three/Preview";
 import Timeline from "@/components/timeline/Timeline";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
 import { useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 function App() {
 	const preferences = usePreferences();
@@ -79,7 +81,14 @@ function App() {
 						</ResizablePanel>
 						<ResizableHandle />
 						<ResizablePanel minSize={5} defaultSize={75}>
-							<Preview />
+							<ErrorBoundary
+								FallbackComponent={FallbackRender}
+								//   onReset={(details) => {
+								//     // Reset the state of your app so the error doesn't happen again
+								//   }}
+							>
+								<Preview />
+							</ErrorBoundary>
 						</ResizablePanel>
 					</ResizablePanelGroup>
 				</ResizablePanel>

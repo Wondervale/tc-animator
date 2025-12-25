@@ -22,6 +22,9 @@ import { convertGltfToGlb } from "@/lib/gltf";
 import { toPureArrayBuffer } from "@/lib/utils";
 import { fileOpen } from "browser-fs-access";
 
+import FallbackRender from "@/components/error/FallbackRender";
+import { ErrorBoundary } from "react-error-boundary";
+
 function ModelControl() {
 	const { modelIds, selectedObjectPath, cart, modelFiles, setModelFile } =
 		useProjectStore();
@@ -93,7 +96,6 @@ function ModelControl() {
 					alert(
 						"Failed to convert GLTF to GLB. See console for details.",
 					);
-					setModelFile(modelId, finalData as ArrayBuffer);
 				}
 			}
 
@@ -147,48 +149,57 @@ function ModelControl() {
 
 			<hr className="my-4" />
 
-			{/* Model list */}
-			{modelIds.length === 0 && (
-				<p className="text-muted-foreground text-sm">
-					No custom models required for this cart.
-				</p>
-			)}
-			{modelIds.length > 0 && (
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead>Custom Model ID</TableHead>
-							<TableHead>Upload Model</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{modelIds.map((id) => (
-							<TableRow key={id}>
-								<TableCell
-									className={
-										selectedAttachmentModels.includes(id)
-											? "font-bold text-yellow-500"
-											: ""
-									}
-								>
-									{id}
-								</TableCell>
-								<TableCell>
-									<Button
-										variant="secondary"
-										size="sm"
-										onClick={() => loadModelFile(id)}
-									>
-										{modelFiles.get(id)
-											? "Change Model"
-											: "Upload Model"}
-									</Button>
-								</TableCell>
+			<ErrorBoundary
+				FallbackComponent={FallbackRender}
+				//   onReset={(details) => {
+				//     // Reset the state of your app so the error doesn't happen again
+				//   }}
+			>
+				{/* Model list */}
+				{modelIds.length === 0 && (
+					<p className="text-muted-foreground text-sm">
+						No custom models required for this cart.
+					</p>
+				)}
+				{modelIds.length > 0 && (
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>Custom Model ID</TableHead>
+								<TableHead>Upload Model</TableHead>
 							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			)}
+						</TableHeader>
+						<TableBody>
+							{modelIds.map((id) => (
+								<TableRow key={id}>
+									<TableCell
+										className={
+											selectedAttachmentModels.includes(
+												id,
+											)
+												? "font-bold text-primary"
+												: ""
+										}
+									>
+										{id}
+									</TableCell>
+									<TableCell>
+										<Button
+											variant="secondary"
+											size="sm"
+											onClick={() => loadModelFile(id)}
+										>
+											{modelFiles.get(id)
+												? "Change Model"
+												: "Upload Model"}
+										</Button>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				)}
+			</ErrorBoundary>
 		</div>
 	);
 }
