@@ -7,18 +7,12 @@ import { Slider } from "@/components/ui/slider";
 import { buildWaveformPoints } from "@/lib/audioData";
 import Color from "colorizr";
 import { format } from "date-fns";
-import {
-	memo,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-	type RefObject,
-} from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Group, Layer, Line, Rect, Stage, Text } from "react-konva";
 import { type TimelineRenderSettings, type TimelineRow } from "./timelineTypes";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { nanoid } from "nanoid";
 
@@ -64,7 +58,7 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	const [currentTime, setCurrentTime] = useState(0); // ms
 	const [isPlaying, setIsPlaying] = useState(false);
 
-	const [audioUrl] = useState<string | null>("./laxed.mp3");
+	const [audioUrl, setAudioUrl] = useState<string | null>("./laxed.mp3");
 	const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
 
 	/* -----------------------------
@@ -134,16 +128,24 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		[staticSettings, themeSettings, rowNameWidth],
 	);
 
-	const canvasHeight = useMemo(
-		() =>
-			computedRows.length * renderSettings.rowHeight +
-			renderSettings.rowHeight,
-		[computedRows.length, renderSettings.rowHeight],
-	);
-
 	const darkGridColor = useMemo(
 		() => new Color(renderSettings.gridColor).darken(0.2),
 		[renderSettings.gridColor],
+	);
+
+	const rowOffsets = useMemo(() => {
+		const offsets: number[] = [];
+		let y = renderSettings.rowHeight;
+		for (const row of computedRows) {
+			offsets.push(y);
+			y += renderSettings.rowHeight * (row.isAudio ? 2 : 1);
+		}
+		return offsets;
+	}, [computedRows, renderSettings.rowHeight]);
+
+	const canvasHeight = useMemo(
+		() => rowOffsets[rowOffsets.length - 1] + renderSettings.rowHeight,
+		[rowOffsets, renderSettings.rowHeight],
 	);
 
 	/* -----------------------------
@@ -194,10 +196,19 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		return () => cancelAnimationFrame(animationFrameId);
 	}, [isPlaying]);
 
+	useEffect(() => {
+		if (!audioUrl) return;
+
+		if (audioPlayerRef.current) {
+			audioPlayerRef.current.src = audioUrl;
+			audioPlayerRef.current.load();
+			seekAudio(0);
+		}
+	}, [audioUrl]);
+
 	/* -----------------------------
 	 * Seek helper
 	 * ----------------------------- */
-
 	const seekAudio = (ms: number) => {
 		if (!audioPlayerRef.current) return;
 		audioPlayerRef.current.currentTime = ms / 1000;
@@ -241,6 +252,8 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 				<p>Time Scale: {timeScale.toFixed(2)} px/ms</p>
 				<p>Current Time: {(currentTime / 1000).toFixed(2)} s</p>
 
+				<DebugMusicUpload setAudioUrl={setAudioUrl} />
+
 				{/* Debug render settings */}
 				<p className="mt-2 text-sm w-full font-bold">
 					Render Settings:
@@ -254,11 +267,11 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 			<Stage width={canvasWidth} height={canvasHeight}>
 				{/* Row headers */}
 				<Layer listening={false} perfectDrawEnabled={false}>
-					{computedRows.map((row, rowIndex) => (
+					{computedRows.map((row, i) => (
 						<RowHeader
-							key={row.id ?? row.title ?? rowIndex}
+							key={row.id ?? row.title ?? i}
 							row={row}
-							y={(rowIndex + 1) * renderSettings.rowHeight}
+							y={rowOffsets[i]}
 							settings={renderSettings}
 							canvasWidth={canvasWidth}
 						/>
@@ -281,25 +294,31 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							}}
 						/>
 
-						{/* Waveform */}
-						<Waveform
-							audioPlayerRef={audioPlayerRef}
-							timeScale={timeScale}
-							renderSettings={renderSettings}
-						/>
-
 						{/* Keyframes */}
 						{computedRows.map((row, rowIndex) => (
 							<KeyframeRow
 								key={row.id ?? row.title ?? rowIndex}
 								row={row}
-								y={(rowIndex + 1) * renderSettings.rowHeight}
+								y={rowOffsets[rowIndex]}
 								settings={renderSettings}
 								canvasWidth={canvasWidth}
 								darkGridColor={darkGridColor}
 								timeScale={timeScale}
 							/>
 						))}
+
+						{/* Only render waveform for audio row */}
+						{computedRows[0].isAudio && (
+							<Waveform
+								audioUrl={audioUrl || ""}
+								timeScale={timeScale}
+								renderSettings={{
+									...renderSettings,
+									rowHeight: renderSettings.rowHeight * 2,
+								}}
+								y={rowOffsets[0]}
+							/>
+						)}
 					</Group>
 				</Layer>
 			</Stage>
@@ -327,7 +346,7 @@ const RowHeader = memo(function RowHeader({
 				x={0}
 				y={y + 1}
 				width={settings.rowNameWidth}
-				height={settings.rowHeight - 1}
+				height={settings.rowHeight * (row.isAudio ? 2 : 1) - 1}
 				fill={settings.primaryColor}
 				stroke={settings.primaryColor}
 				strokeWidth={1}
@@ -335,7 +354,7 @@ const RowHeader = memo(function RowHeader({
 			/>
 			<Text
 				x={8}
-				y={y + settings.rowHeight / 2 - 7}
+				y={y + (settings.rowHeight * (row.isAudio ? 2 : 1)) / 2 - 7}
 				text={row.title || row.id}
 				fontSize={14}
 				fill={settings.textColor}
@@ -346,9 +365,9 @@ const RowHeader = memo(function RowHeader({
 			<Line
 				points={[
 					0,
-					y + settings.rowHeight,
+					y + settings.rowHeight * (row.isAudio ? 2 : 1),
 					canvasWidth,
-					y + settings.rowHeight,
+					y + settings.rowHeight * (row.isAudio ? 2 : 1),
 				]}
 				stroke={settings.textColor}
 				strokeWidth={1}
@@ -391,7 +410,7 @@ const KeyframeRow = memo(function KeyframeRow({
 				x={settings.rowNameWidth}
 				y={y}
 				width={canvasWidth}
-				height={settings.rowHeight}
+				height={settings.rowHeight * (row.isAudio ? 2 : 1)}
 				fill={settings.gridColor}
 				stroke={darkGridColor}
 				strokeWidth={1}
@@ -507,13 +526,15 @@ const KeyframeRow = memo(function KeyframeRow({
  * Waveform Component
  * ----------------------------- */
 function Waveform({
-	audioPlayerRef,
+	audioUrl,
 	timeScale,
 	renderSettings,
+	y,
 }: {
-	audioPlayerRef: RefObject<HTMLAudioElement | null>;
+	audioUrl: string;
 	timeScale: number;
 	renderSettings: TimelineRenderSettings;
+	y: number;
 }) {
 	const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
 
@@ -522,9 +543,9 @@ function Waveform({
 		setAudioBuffer(null);
 
 		async function loadAudio() {
-			if (!audioPlayerRef.current) return;
+			if (!audioUrl) return;
 			try {
-				const response = await fetch(audioPlayerRef.current.src);
+				const response = await fetch(audioUrl);
 				const arrayBuffer = await response.arrayBuffer();
 
 				const ctx = new AudioContext();
@@ -540,14 +561,14 @@ function Waveform({
 		return () => {
 			cancelled = true;
 		};
-	}, [audioPlayerRef]);
+	}, [audioUrl]);
 
 	const points = useMemo(() => {
 		if (!audioBuffer) return [];
 		const { points } = buildWaveformPoints(
 			audioBuffer,
 			timeScale,
-			renderSettings.rowHeight,
+			renderSettings.rowHeight * 0.9,
 		);
 		return points;
 	}, [audioBuffer, timeScale, renderSettings.rowHeight]);
@@ -556,7 +577,7 @@ function Waveform({
 		<Group listening={false} perfectDrawEnabled={false}>
 			<Line
 				x={renderSettings.rowNameWidth + renderSettings.timelinePadding}
-				y={renderSettings.rowHeight}
+				y={y + renderSettings.rowHeight * 0.05}
 				points={points}
 				stroke={renderSettings.keyframeColor}
 				strokeWidth={1}
@@ -596,11 +617,14 @@ function TimelineRuler({
 					strokeWidth={1}
 					onClick={(e) => {
 						const mouseX = e.evt.offsetX;
-						const newTime =
+						let newTime =
 							(mouseX -
 								rowNameOffset -
 								renderSettings.timelinePadding) /
 							timeScale;
+
+						if (newTime < 0) newTime = 0;
+
 						setCurrentTime(newTime);
 					}}
 				/>
@@ -692,24 +716,24 @@ function TimelineRuler({
 						}
 					}}
 					draggable
-					dragBoundFunc={(pos) => {
-						const xMin =
+					onDragMove={(e) => {
+						const offsetX =
 							renderSettings.rowNameWidth +
 							renderSettings.timelinePadding;
-						const xMax = canvasWidth;
-						return {
-							x: Math.min(Math.max(pos.x, xMin), xMax),
-							y: renderSettings.rowHeight * 0.5,
-						};
-					}}
-					onDragMove={(e) => {
-						const newX = e.target.x();
-						const newTime =
-							(newX -
-								renderSettings.rowNameWidth -
-								renderSettings.timelinePadding) /
-							timeScale;
-						setCurrentTime(newTime);
+						let newX = e.target.x();
+						if (newX < offsetX) newX = offsetX;
+
+						const rawValMs = (newX - offsetX) / timeScale;
+						const snapMs = 50;
+						const snappedValMs =
+							Math.round(rawValMs / snapMs) * snapMs;
+						let snappedX = offsetX + snappedValMs * timeScale;
+						snappedX = Math.round(snappedX);
+
+						e.target.x(snappedX);
+						e.target.y(renderSettings.rowHeight * 0.5);
+
+						setCurrentTime(snappedValMs);
 					}}
 				/>
 				<Line
@@ -728,6 +752,28 @@ function TimelineRuler({
 				/>
 			</Group>
 		</>
+	);
+}
+
+function DebugMusicUpload({
+	setAudioUrl,
+}: {
+	setAudioUrl: (url: string | null) => void;
+}) {
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			const url = URL.createObjectURL(file);
+			setAudioUrl(url);
+		} else {
+			setAudioUrl(null);
+		}
+	};
+
+	return (
+		<div>
+			<Input type="file" accept="audio/*" onChange={handleFileChange} />
+		</div>
 	);
 }
 
