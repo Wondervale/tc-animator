@@ -22,7 +22,7 @@ function TimelineRuler({
 	timeScale: number;
 }) {
 	return (
-		<Layer>
+		<Layer listening={false} perfectDrawEnabled={false}>
 			<Group>
 				<Rect
 					x={rowNameOffset}

@@ -18,12 +18,14 @@ export type TimelineEase =
 	| "bounce";
 
 export type Keyframe = {
+	id?: string;
 	val: number;
 	easeStart?: TimelineEase;
 	easeEnd?: TimelineEase;
 };
 
 export type TimelineRow = {
+	id?: string;
 	title?: string;
 	isAudio?: boolean;
 	keyframes: Keyframe[];
@@ -39,5 +41,7 @@ export type TimelineRenderSettings = {
 	primaryColor: string;
 	textColor: string;
 	keyframeColor: string;
+	keyframeSelectedColor: string;
+	keyframeHighlightedColor: string;
 	gridColor: string;
 };
