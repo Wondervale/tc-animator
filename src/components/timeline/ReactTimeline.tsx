@@ -5,7 +5,7 @@ import {
 	type TimelineRow,
 	type TimelineRowStyle,
 } from "animation-timeline-js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface TimelineRowWithTitle extends TimelineRow {
 	title?: string;
@@ -19,8 +19,9 @@ function ReactTimeline(props: ContainerProps) {
 	const [_timeline, setTimeline] = useState<Timeline | null>(null);
 	const [options, setOptions] = useState<TimelineOptions | null>(null);
 	const [scrollHeight, setScrollHeight] = useState<number>();
-	const [scrollContainerDiv, setScrollContainerDiv] =
-		useState<HTMLDivElement | null>();
+	const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+	const [scrollContainerReady, setScrollContainerReady] =
+		useState<boolean>(false);
 
 	const [maxTrackNameWidth, setMaxTrackNameWidth] = useState<number>(20);
 
@@ -61,97 +62,53 @@ function ReactTimeline(props: ContainerProps) {
 		}
 
 		// Functionality
-		if (scrollContainerDiv) {
+		const sc = scrollContainerRef.current;
+		let wheelHandler: ((e: WheelEvent) => void) | null = null;
+		let keydownHandler: ((args: globalThis.KeyboardEvent) => void) | null =
+			null;
+
+		if (sc) {
 			// Using the built in listener over Reacts onScroll
 			// allows a workaround in being able to hide the left
 			// scrollbar while maintaining functionality
-			scrollContainerDiv.addEventListener("wheel", (e) => {
+			wheelHandler = (e: WheelEvent) => {
 				_timeline?._handleWheelEvent(e);
-			});
+			};
+			sc.addEventListener("wheel", wheelHandler);
 
 			_timeline?.onScroll((e) => {
-				scrollContainerDiv.scrollTop = e.scrollTop;
+				if (scrollContainerRef.current) {
+					scrollContainerRef.current.scrollTop = e.scrollTop;
+				}
 			});
 		}
 
 		// Select all elements on key down
 		if (_timeline) {
-			document.addEventListener("keydown", function (args) {
-				// Ctrl + a || Ctrl + A
+			keydownHandler = function (args: globalThis.KeyboardEvent) {
+				// Ctrl + a
 				if (
-					(args.which === 65 || args.which === 97) &&
+					args.key &&
+					args.key.toLowerCase() === "a" &&
 					_timeline._controlKeyPressed(args)
 				) {
 					_timeline.selectAllKeyframes();
 					args.preventDefault();
 				}
-			});
+			};
+			document.addEventListener("keydown", keydownHandler);
 		}
-
-		// Logging
-		// const logMessage = function (message: string, log = 1) {
-		// 	if (message) {
-		// 		let el = document.getElementById("output" + log);
-		// 		if (el) {
-		// 			el.innerHTML = message + "<br/>" + el.innerHTML;
-		// 		}
-		// 	}
-		// };
-
-		// const logDraggingMessage = function (object: any, eventName: string) {
-		// 	if (object.elements) {
-		// 		logMessage(
-		// 			"Keyframe value: " +
-		// 				object.elements[0].val +
-		// 				". Selected (" +
-		// 				object.elements.length +
-		// 				")." +
-		// 				eventName,
-		// 		);
-		// 	}
-		// };
-
-		// if (_timeline) {
-		// 	_timeline.onTimeChanged(function (event) {
-		// 		logMessage(event.val + "ms source:" + event.source, 2);
-		// 	});
-		// 	_timeline.onSelected(function (obj) {
-		// 		logMessage(
-		// 			"selected :" +
-		// 				obj.selected.length +
-		// 				". changed :" +
-		// 				obj.changed.length,
-		// 			2,
-		// 		);
-		// 	});
-		// 	_timeline.onDragStarted(function (obj) {
-		// 		logDraggingMessage(obj, "dragstarted");
-		// 	});
-		// 	_timeline.onDrag(function (obj) {
-		// 		logDraggingMessage(obj, "drag");
-		// 	});
-		// 	_timeline.onKeyframeChanged(function (obj) {
-		// 		console.log("keyframe: " + obj.val);
-		// 	});
-		// 	_timeline.onDragFinished(function (obj) {
-		// 		logDraggingMessage(obj, "dragfinished");
-		// 	});
-		// 	_timeline.onMouseDown(function (obj) {
-		// 		const type = obj.target ? obj.target.type : "";
-		// 		logMessage("mousedown:" + obj.val + ".  elements:" + type, 2);
-		// 	});
-		// 	_timeline.onDoubleClick(function (obj) {
-		// 		const type = obj.target ? obj.target.type : "";
-		// 		logMessage("doubleclick:" + obj.val + ".  elements:" + type, 2);
-		// 	});
-		// }
 
 		// Cleanup
 		return () => {
-			scrollContainerDiv?.removeEventListener("wheel", () => {});
-			document.removeEventListener("keydown", function () {});
+			if (sc && wheelHandler) {
+				sc.removeEventListener("wheel", wheelHandler);
+			}
+			if (keydownHandler) {
+				document.removeEventListener("keydown", keydownHandler);
+			}
 		};
-	}, [scrollContainerDiv]);
+	}, [scrollContainerReady, _timeline, props.rows]);
 
 	return (
 		<>
@@ -178,7 +135,10 @@ function ReactTimeline(props: ContainerProps) {
 					></div>
 
 					<div
-						ref={(ref) => setScrollContainerDiv(ref)}
+						ref={(ref) => {
+							scrollContainerRef.current = ref;
+							setScrollContainerReady(!!ref);
+						}}
 						className="overflow-y-auto"
 						id="track-names"
 					>
