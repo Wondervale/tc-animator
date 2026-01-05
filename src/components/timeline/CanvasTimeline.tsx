@@ -7,10 +7,19 @@ import TimelineRuler from "@/components/timeline/TimelineRuler";
 import { Slider } from "@/components/ui/slider";
 import { buildWaveformPoints } from "@/lib/audioData";
 import Color from "colorizr";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import {
+	memo,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	type RefObject,
+} from "react";
 import { Group, Layer, Line, Rect, Stage, Text } from "react-konva";
 import { type TimelineRenderSettings, type TimelineRow } from "./timelineTypes";
 
+import { Button } from "@/components/ui/button";
+import { PauseIcon, PlayIcon } from "lucide-react";
 import { nanoid } from "nanoid";
 
 /* -----------------------------
@@ -51,6 +60,12 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const [canvasWidth, setCanvasWidth] = useState(800);
 	const [timeScale, setTimeScale] = useState(0.1); // pixels per ms
+
+	const [currentTime, setCurrentTime] = useState(0);
+	const [isPlaying, setIsPlaying] = useState(false);
+
+	const [audioUrl] = useState<string | null>("./laxed.mp3");
+	const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
 
 	/* -----------------------------
 	 * Static settings
@@ -127,6 +142,14 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	);
 
 	/* -----------------------------
+	 * Precompute darkened grid color
+	 * ----------------------------- */
+	const darkGridColor = useMemo(
+		() => new Color(renderSettings.gridColor).darken(0.2),
+		[renderSettings.gridColor],
+	);
+
+	/* -----------------------------
 	 * Resize handling
 	 * ----------------------------- */
 	useEffect(() => {
@@ -150,12 +173,47 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	}, []);
 
 	/* -----------------------------
-	 * Precompute darkened grid color
+	 * Playback handling
 	 * ----------------------------- */
-	const darkGridColor = useMemo(
-		() => new Color(renderSettings.gridColor).darken(0.2),
-		[renderSettings.gridColor],
-	);
+	useEffect(() => {
+		if (!isPlaying) return;
+		let animationFrameId: number;
+		let lastTimestamp: number | null = null;
+		const step = (timestamp: number) => {
+			if (lastTimestamp !== null) {
+				const delta = timestamp - lastTimestamp;
+				setCurrentTime((prev) => prev + delta);
+			}
+			lastTimestamp = timestamp;
+			animationFrameId = requestAnimationFrame(step);
+		};
+		animationFrameId = requestAnimationFrame(step);
+		return () => {
+			cancelAnimationFrame(animationFrameId);
+		};
+	}, [isPlaying]);
+
+	useEffect(() => {
+		if (audioPlayerRef.current && !isPlaying) {
+			audioPlayerRef.current.currentTime = currentTime / 1000;
+		}
+	}, [currentTime, isPlaying]);
+
+	const currentTimeRef = useRef(currentTime);
+	useEffect(() => {
+		currentTimeRef.current = currentTime;
+	}, [currentTime]);
+
+	useEffect(() => {
+		if (!audioPlayerRef.current) return;
+
+		if (isPlaying) {
+			audioPlayerRef.current.currentTime = currentTimeRef.current / 1000;
+			audioPlayerRef.current.play();
+		} else {
+			audioPlayerRef.current.pause();
+		}
+	}, [isPlaying]);
 
 	/* -----------------------------
 	 * Render
@@ -165,11 +223,18 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 			className="w-full h-full overflow-y-auto overflow-x-hidden relative"
 			ref={containerRef}
 		>
-			<div className="w-full p-2 bg-card sticky top-0 z-10">
+			<audio
+				ref={audioPlayerRef}
+				src={audioUrl || undefined}
+				preload="auto"
+			/>
+
+			<div className="w-full p-2 bg-card sticky top-0 z-10 flex flex-row gap-2 flex-wrap">
 				<p>
 					Timeline Toolbar Placeholder Width: {canvasWidth}px, Height:{" "}
 					{canvasHeight}px
 				</p>
+
 				<Slider
 					value={[timeScale]}
 					onValueChange={(value) => setTimeScale(Number(value[0]))}
@@ -177,7 +242,24 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 					max={1}
 					step={0.01}
 				/>
-				{JSON.stringify(renderSettings)}
+
+				<Button
+					onClick={() => setIsPlaying((prev) => !prev)}
+					size="icon"
+				>
+					{isPlaying ? <PauseIcon /> : <PlayIcon />}
+				</Button>
+				<p>Time Scale: {timeScale.toFixed(2)} px/ms</p>
+				<p>Current Time: {(currentTime / 1000).toFixed(2)} s</p>
+
+				{/* Debug render settings */}
+				<p className="mt-2 text-sm w-full font-bold">
+					Render Settings:
+				</p>
+
+				<p className="mt-2 text-sm w-full">
+					{JSON.stringify(renderSettings)}
+				</p>
 			</div>
 
 			<Stage width={canvasWidth} height={canvasHeight}>
@@ -205,7 +287,7 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 
 				{/* Waveform */}
 				<Waveform
-					audioUrl="./sample.mp3"
+					audioPlayerRef={audioPlayerRef}
 					timeScale={timeScale}
 					renderSettings={renderSettings}
 				/>
@@ -223,6 +305,41 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							timeScale={timeScale}
 						/>
 					))}
+				</Layer>
+
+				{/* Playhead */}
+				<Layer listening={false} perfectDrawEnabled={false}>
+					<Group>
+						<Rect
+							x={
+								renderSettings.rowNameWidth +
+								renderSettings.timelinePadding +
+								0 * timeScale -
+								2.5 +
+								currentTime * timeScale
+							}
+							y={renderSettings.rowHeight * 0.5}
+							width={5}
+							height={15}
+							fill="red"
+						/>
+						<Line
+							points={[
+								renderSettings.rowNameWidth +
+									renderSettings.timelinePadding +
+									0 * timeScale +
+									currentTime * timeScale,
+								renderSettings.rowHeight * 0.8,
+								renderSettings.rowNameWidth +
+									renderSettings.timelinePadding +
+									0 * timeScale +
+									currentTime * timeScale,
+								canvasHeight,
+							]}
+							stroke="red"
+							strokeWidth={2}
+						/>
+					</Group>
 				</Layer>
 			</Stage>
 		</div>
@@ -407,16 +524,24 @@ const KeyframeRow = memo(function KeyframeRow({
 							// Here you would typically update the keyframe value in state
 						}}
 						onDragMove={(e) => {
-							const newX = e.target.x();
-							if (
-								newX <
-								settings.rowNameWidth + settings.timelinePadding
-							) {
-								e.target.x(
-									settings.rowNameWidth +
-										settings.timelinePadding,
-								);
-							}
+							const offsetX =
+								settings.rowNameWidth +
+								settings.timelinePadding;
+							let newX = e.target.x();
+							if (newX < offsetX) newX = offsetX;
+
+							// Compute raw value in ms, snap to 50ms increments
+							const rawValMs = (newX - offsetX) / timeScale;
+							const snapMs = 50;
+							const snappedValMs =
+								Math.round(rawValMs / snapMs) * snapMs;
+
+							// Convert snapped ms back to X. Ensure whole-pixel X when needed.
+							let snappedX = offsetX + snappedValMs * timeScale;
+							// "Full numbers on X based on the timescale" -> avoid sub-pixel positions
+							snappedX = Math.round(snappedX);
+
+							e.target.x(snappedX);
 
 							e.target.y(ky);
 						}}
@@ -431,42 +556,44 @@ const KeyframeRow = memo(function KeyframeRow({
  * Waveform Component
  * ----------------------------- */
 function Waveform({
-	audioUrl,
+	audioPlayerRef,
 	timeScale,
 	renderSettings,
 }: {
-	audioUrl: string;
+	audioPlayerRef: RefObject<HTMLAudioElement | null>;
 	timeScale: number;
 	renderSettings: TimelineRenderSettings;
 }) {
 	const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
 
-	/* Load audio once */
+	/* Load audio once and store in state */
 	useEffect(() => {
 		let cancelled = false;
 		setAudioBuffer(null);
 
 		async function loadAudio() {
-			if (!audioUrl) return;
+			if (!audioPlayerRef || !audioPlayerRef.current) return;
 			try {
-				const res = await fetch(audioUrl);
-				const arrayBuffer = await res.arrayBuffer();
+				// Get audio data from the audio element
+				const response = await fetch(audioPlayerRef.current.src);
+				const arrayBuffer = await response.arrayBuffer();
+
 				const ctx = new AudioContext();
-				const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+				const decoded = await ctx.decodeAudioData(arrayBuffer);
 				await ctx.close?.();
-				if (!cancelled) setAudioBuffer(audioBuffer);
+				if (!cancelled) setAudioBuffer(decoded);
 			} catch {
 				// ignore
 			}
 		}
-		loadAudio();
 
+		loadAudio();
 		return () => {
 			cancelled = true;
 		};
-	}, [audioUrl]);
+	}, [audioPlayerRef]);
 
-	/* Build waveform points */
+	/* Build waveform points when buffer or scale changes */
 	const points = useMemo(() => {
 		if (!audioBuffer) return [];
 		const { points } = buildWaveformPoints(
@@ -475,7 +602,7 @@ function Waveform({
 			renderSettings.rowHeight,
 		);
 		return points;
-	}, [timeScale, renderSettings.rowHeight, audioBuffer]);
+	}, [audioBuffer, timeScale, renderSettings.rowHeight]);
 
 	return (
 		<Layer listening={false} perfectDrawEnabled={false}>
