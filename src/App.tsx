@@ -10,10 +10,10 @@ import AppMenu from "@/components/AppMenu";
 import FallbackRender from "@/components/error/FallbackRender";
 import PropertiesPanels from "@/components/properties/PropertiesPanels";
 import Preview from "@/components/three/Preview";
-import ReactTimeline from "@/components/timeline/ReactTimeline";
+import CanvasTimeline from "@/components/timeline/CanvasTimeline";
+import { rows } from "@/components/timeline/timelineTestData";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { rows } from "@/timelienTestData";
 import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -95,7 +95,7 @@ function App() {
 				</ResizablePanel>
 				<ResizableHandle />
 				<ResizablePanel minSize={5} defaultSize={20}>
-					<ReactTimeline rows={rows} />
+					<CanvasTimeline rows={rows} />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>

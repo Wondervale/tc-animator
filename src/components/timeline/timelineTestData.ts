@@ -3,13 +3,13 @@
  *   All rights reserved.
  */
 
-import { type TimelineRow } from "animation-timeline-js";
+import type { TimelineRow } from "@/components/timeline/timelineTypes";
 
-export const rows = [
+export const rows: TimelineRow[] = [
 	{
 		keyframes: [
 			{
-				val: 40,
+				val: 0,
 			},
 			{
 				val: 3000,
@@ -69,11 +69,4 @@ export const rows = [
 			},
 		],
 	},
-	{},
-	{},
-	{},
-	{},
-	{},
-	{},
-	{},
-] as TimelineRow[];
+];

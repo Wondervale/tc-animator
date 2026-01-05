@@ -3,6 +3,7 @@ packages: []
 minimumReleaseAge: 1440
 
 onlyBuiltDependencies:
+  - '@parcel/watcher'
   - '@tailwindcss/oxide'
   - core-js
   - core-js-pure
