@@ -10,9 +10,10 @@ import AppMenu from "@/components/AppMenu";
 import FallbackRender from "@/components/error/FallbackRender";
 import PropertiesPanels from "@/components/properties/PropertiesPanels";
 import Preview from "@/components/three/Preview";
-import Timeline from "@/components/timeline/Timeline";
+import ReactTimeline from "@/components/timeline/ReactTimeline";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
+import { rows } from "@/timelienTestData";
 import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -94,7 +95,7 @@ function App() {
 				</ResizablePanel>
 				<ResizableHandle />
 				<ResizablePanel minSize={5} defaultSize={20}>
-					<Timeline />
+					<ReactTimeline rows={rows} />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>
