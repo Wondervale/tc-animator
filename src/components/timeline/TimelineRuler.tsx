@@ -69,14 +69,14 @@ function TimelineRuler({
 
 				{/* Sub time markers, every 0.2s */}
 				{Array.from({
-					length: Math.ceil(canvasWidth / (timeScale * 200)),
+					length: Math.ceil(canvasWidth / (timeScale * 50)),
 				}).map((_, index) => {
 					const x =
-						index * timeScale * 200 +
+						index * timeScale * 50 +
 						renderSettings.timelinePadding +
 						rowNameOffset;
 
-					if (index % 5 === 0) {
+					if (index % 20 === 0) {
 						return null;
 					}
 

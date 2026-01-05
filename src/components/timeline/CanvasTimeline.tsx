@@ -4,10 +4,11 @@
  */
 
 import TimelineRuler from "@/components/timeline/TimelineRuler";
-import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { buildWaveformPoints } from "@/lib/audioData";
 import Color from "colorizr";
 import { useEffect, useRef, useState } from "react";
-import { Group, Layer, Rect, Stage, Text } from "react-konva";
+import { Group, Layer, Line, Rect, Stage, Text } from "react-konva";
 import { type TimelineRenderSettings, type TimelineRow } from "./timelineTypes";
 
 const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
@@ -136,7 +137,17 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 				rowNameWidth: Math.ceil(maxWidth + 20), // Add some padding
 			}));
 		}
-	}, [rows, renderSettings]);
+	}, [rows, renderSettings.rowHeight]);
+
+	useEffect(() => {
+		if (!rows || rows.length == 0) return;
+
+		// Add audio row if not present
+		const hasAudioRow = rows.some((row) => row.isAudio);
+		if (!hasAudioRow) {
+			rows.unshift({ title: "Audio", isAudio: true, keyframes: [] });
+		}
+	}, [rows]);
 
 	return (
 		<div
@@ -149,14 +160,14 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 					{canvasHeight}px{" "}
 				</p>
 
-				<Input
-					type="number"
-					value={timeScale * 1000}
-					onChange={(e) =>
-						setTimeScale(Number(e.target.value) / 1000)
-					}
-					min={1}
-					step={1}
+				<Slider
+					value={[timeScale]}
+					onValueChange={(value) => {
+						setTimeScale(Number(value[0]));
+					}}
+					min={0.04}
+					max={1}
+					step={0.01}
 				/>
 
 				{JSON.stringify(renderSettings)}
@@ -194,6 +205,13 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 						);
 					})}
 				</Layer>
+
+				<Waveform
+					audioUrl="./sample.mp3"
+					timeScale={timeScale}
+					renderSettings={renderSettings}
+				/>
+
 				<Layer>
 					{/* Keyframes */}
 					{rows.map((row, rowIndex) => {
@@ -263,5 +281,83 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		</div>
 	);
 };
+
+function Waveform({
+	audioUrl,
+	timeScale,
+	renderSettings,
+}: {
+	audioUrl: string;
+	timeScale: number;
+	renderSettings: TimelineRenderSettings;
+}) {
+	const [points, setPoints] = useState<number[]>([]);
+	const audioBufferRef = useRef<AudioBuffer | null>(null);
+	const [audioReady, setAudioReady] = useState(false);
+
+	/* ---------------------------------------------
+	 * 1. Fetch & decode audio
+	 * --------------------------------------------- */
+	useEffect(() => {
+		let cancelled = false;
+		setAudioReady(false);
+		audioBufferRef.current = null;
+
+		async function loadAudio() {
+			if (!audioUrl) return;
+
+			try {
+				const res = await fetch(audioUrl);
+				const arrayBuffer = await res.arrayBuffer();
+
+				const ctx = new AudioContext();
+				const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+				await ctx.close?.();
+
+				if (cancelled) return;
+
+				audioBufferRef.current = audioBuffer;
+				setAudioReady(true); // 🔑 trigger waveform effect
+			} catch {
+				// ignore
+			}
+		}
+
+		loadAudio();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [audioUrl]);
+
+	/* ---------------------------------------------
+	 * 2. Build waveform when ready or scale changes
+	 * --------------------------------------------- */
+	useEffect(() => {
+		if (!audioReady) return;
+
+		const buf = audioBufferRef.current;
+		if (!buf) return;
+
+		const height = renderSettings.rowHeight;
+
+		const { points } = buildWaveformPoints(buf, timeScale, height);
+
+		setPoints(points);
+	}, [audioReady, timeScale, renderSettings.rowHeight]);
+
+	return (
+		<Layer>
+			<Line
+				x={renderSettings.rowNameWidth + renderSettings.timelinePadding}
+				y={renderSettings.rowHeight}
+				points={points}
+				stroke={renderSettings.keyframeColor}
+				strokeWidth={1}
+				listening={false}
+			/>
+		</Layer>
+	);
+}
 
 export default CanvasTimeline;

@@ -25,6 +25,7 @@ export type Keyframe = {
 
 export type TimelineRow = {
 	title?: string;
+	isAudio?: boolean;
 	keyframes: Keyframe[];
 };
 
