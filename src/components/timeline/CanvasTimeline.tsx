@@ -198,6 +198,7 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							row={row}
 							y={(rowIndex + 1) * renderSettings.rowHeight}
 							settings={renderSettings}
+							canvasWidth={canvasWidth}
 						/>
 					))}
 				</Layer>
@@ -235,18 +236,20 @@ const RowHeader = memo(function RowHeader({
 	row,
 	y,
 	settings,
+	canvasWidth,
 }: {
 	row: TimelineRow;
 	y: number;
 	settings: TimelineRenderSettings;
+	canvasWidth: number;
 }) {
 	return (
 		<Group>
 			<Rect
 				x={0}
-				y={y}
+				y={y + 1}
 				width={settings.rowNameWidth}
-				height={settings.rowHeight}
+				height={settings.rowHeight - 1}
 				fill={settings.primaryColor}
 				stroke={settings.primaryColor}
 				strokeWidth={1}
@@ -259,6 +262,20 @@ const RowHeader = memo(function RowHeader({
 				fontSize={14}
 				fill={settings.textColor}
 				listening={false}
+			/>
+
+			{/* Add a bottom border to each row */}
+			<Line
+				points={[
+					0,
+					y + settings.rowHeight,
+					canvasWidth,
+					y + settings.rowHeight,
+				]}
+				stroke={settings.textColor}
+				strokeWidth={1}
+				listening={false}
+				opacity={0.3}
 			/>
 		</Group>
 	);
@@ -375,6 +392,19 @@ const KeyframeRow = memo(function KeyframeRow({
 									return prev ? [...prev, kf.id!] : [kf.id!];
 								}
 							});
+						}}
+						draggable
+						onDragEnd={(e) => {
+							const newX = e.target.x();
+							const newVal =
+								(newX -
+									settings.rowNameWidth -
+									settings.timelinePadding) /
+								timeScale;
+							console.log(
+								`Keyframe ${kf.id} moved to new val: ${newVal}`,
+							);
+							// Here you would typically update the keyframe value in state
 						}}
 					/>
 				);
