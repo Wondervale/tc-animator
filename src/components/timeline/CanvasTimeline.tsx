@@ -406,6 +406,20 @@ const KeyframeRow = memo(function KeyframeRow({
 							);
 							// Here you would typically update the keyframe value in state
 						}}
+						onDragMove={(e) => {
+							const newX = e.target.x();
+							if (
+								newX <
+								settings.rowNameWidth + settings.timelinePadding
+							) {
+								e.target.x(
+									settings.rowNameWidth +
+										settings.timelinePadding,
+								);
+							}
+
+							e.target.y(ky);
+						}}
 					/>
 				);
 			})}
