@@ -3,10 +3,10 @@
  *   All rights reserved.
  */
 
-import TimelineRuler from "@/components/timeline/TimelineRuler";
 import { Slider } from "@/components/ui/slider";
 import { buildWaveformPoints } from "@/lib/audioData";
 import Color from "colorizr";
+import { format } from "date-fns";
 import {
 	memo,
 	useEffect,
@@ -197,7 +197,7 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	/* -----------------------------
 	 * Seek helper
 	 * ----------------------------- */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 	const seekAudio = (ms: number) => {
 		if (!audioPlayerRef.current) return;
 		audioPlayerRef.current.currentTime = ms / 1000;
@@ -252,15 +252,6 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 			</div>
 
 			<Stage width={canvasWidth} height={canvasHeight}>
-				{/* Timeline ruler */}
-				<TimelineRuler
-					renderSettings={renderSettings}
-					canvasWidth={canvasWidth}
-					canvasHeight={canvasHeight}
-					rowNameOffset={renderSettings.rowNameWidth}
-					timeScale={timeScale}
-				/>
-
 				{/* Row headers */}
 				<Layer listening={false} perfectDrawEnabled={false}>
 					{computedRows.map((row, rowIndex) => (
@@ -274,56 +265,41 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 					))}
 				</Layer>
 
-				{/* Waveform */}
-				<Waveform
-					audioPlayerRef={audioPlayerRef}
-					timeScale={timeScale}
-					renderSettings={renderSettings}
-				/>
-
-				{/* Keyframes */}
-				<Layer listening={true} perfectDrawEnabled={false}>
-					{computedRows.map((row, rowIndex) => (
-						<KeyframeRow
-							key={row.id ?? row.title ?? rowIndex}
-							row={row}
-							y={(rowIndex + 1) * renderSettings.rowHeight}
-							settings={renderSettings}
+				<Layer>
+					<Group id="actual-timeline">
+						{/* Timeline ruler */}
+						<TimelineRuler
+							renderSettings={renderSettings}
 							canvasWidth={canvasWidth}
-							darkGridColor={darkGridColor}
+							canvasHeight={canvasHeight}
+							rowNameOffset={renderSettings.rowNameWidth}
 							timeScale={timeScale}
+							currentTime={currentTime}
+							setCurrentTime={(newTime) => {
+								setCurrentTime(newTime);
+								seekAudio(newTime);
+							}}
 						/>
-					))}
-				</Layer>
 
-				{/* Playhead */}
-				<Layer listening={false} perfectDrawEnabled={false}>
-					<Group>
-						<Rect
-							x={
-								renderSettings.rowNameWidth +
-								renderSettings.timelinePadding +
-								currentTime * timeScale
-							}
-							y={renderSettings.rowHeight * 0.5}
-							width={5}
-							height={15}
-							fill="red"
+						{/* Waveform */}
+						<Waveform
+							audioPlayerRef={audioPlayerRef}
+							timeScale={timeScale}
+							renderSettings={renderSettings}
 						/>
-						<Line
-							points={[
-								renderSettings.rowNameWidth +
-									renderSettings.timelinePadding +
-									currentTime * timeScale,
-								renderSettings.rowHeight * 0.8,
-								renderSettings.rowNameWidth +
-									renderSettings.timelinePadding +
-									currentTime * timeScale,
-								canvasHeight,
-							]}
-							stroke="red"
-							strokeWidth={2}
-						/>
+
+						{/* Keyframes */}
+						{computedRows.map((row, rowIndex) => (
+							<KeyframeRow
+								key={row.id ?? row.title ?? rowIndex}
+								row={row}
+								y={(rowIndex + 1) * renderSettings.rowHeight}
+								settings={renderSettings}
+								canvasWidth={canvasWidth}
+								darkGridColor={darkGridColor}
+								timeScale={timeScale}
+							/>
+						))}
 					</Group>
 				</Layer>
 			</Stage>
@@ -577,7 +553,7 @@ function Waveform({
 	}, [audioBuffer, timeScale, renderSettings.rowHeight]);
 
 	return (
-		<Layer listening={false} perfectDrawEnabled={false}>
+		<Group listening={false} perfectDrawEnabled={false}>
 			<Line
 				x={renderSettings.rowNameWidth + renderSettings.timelinePadding}
 				y={renderSettings.rowHeight}
@@ -586,7 +562,172 @@ function Waveform({
 				strokeWidth={1}
 				listening={false}
 			/>
-		</Layer>
+		</Group>
+	);
+}
+
+function TimelineRuler({
+	renderSettings,
+	canvasWidth,
+	canvasHeight,
+	rowNameOffset,
+	timeScale,
+	currentTime,
+	setCurrentTime,
+}: {
+	renderSettings: TimelineRenderSettings;
+	canvasWidth: number;
+	canvasHeight: number;
+	rowNameOffset: number;
+	timeScale: number;
+	currentTime: number;
+	setCurrentTime: (time: number) => void;
+}) {
+	return (
+		<>
+			<Group listening={true} perfectDrawEnabled={false}>
+				<Rect
+					x={rowNameOffset}
+					y={0}
+					width={canvasWidth}
+					height={renderSettings.rowHeight}
+					fill={renderSettings.primaryColor}
+					stroke={renderSettings.primaryColor}
+					strokeWidth={1}
+					onClick={(e) => {
+						const mouseX = e.evt.offsetX;
+						const newTime =
+							(mouseX -
+								rowNameOffset -
+								renderSettings.timelinePadding) /
+							timeScale;
+						setCurrentTime(newTime);
+					}}
+				/>
+
+				{/* Render time markers every second */}
+				{Array.from({
+					length: Math.ceil(canvasWidth / (timeScale * 1000)),
+				}).map((_, index) => {
+					const x =
+						index * timeScale * 1000 +
+						renderSettings.timelinePadding +
+						rowNameOffset;
+					return (
+						<Group key={index}>
+							<Line
+								points={[
+									x,
+									renderSettings.rowHeight / 2,
+									x,
+									canvasHeight,
+								]}
+								stroke={renderSettings.textColor}
+								strokeWidth={1}
+								dash={[4, 6]}
+							/>
+							<Text
+								x={x - 2}
+								y={2}
+								text={format(index * 1000, "mm:ss")}
+								fontSize={14}
+								fill={renderSettings.textColor}
+								align="center"
+							/>
+						</Group>
+					);
+				})}
+
+				{/* Sub time markers, every 0.2s */}
+				{Array.from({
+					length: Math.ceil(canvasWidth / (timeScale * 50)),
+				}).map((_, index) => {
+					const x =
+						index * timeScale * 50 +
+						renderSettings.timelinePadding +
+						rowNameOffset;
+
+					if (index % 20 === 0) {
+						return null;
+					}
+
+					return (
+						<Line
+							key={index}
+							points={[
+								x,
+								renderSettings.rowHeight * 0.75,
+								x,
+								renderSettings.rowHeight,
+							]}
+							stroke={renderSettings.textColor}
+							strokeWidth={1}
+						/>
+					);
+				})}
+			</Group>
+			{/* Playhead */}
+			<Group listening={true} perfectDrawEnabled={false}>
+				<Rect
+					x={
+						renderSettings.rowNameWidth +
+						renderSettings.timelinePadding +
+						currentTime * timeScale -
+						2.5
+					}
+					y={renderSettings.rowHeight * 0.5}
+					width={5}
+					height={15}
+					fill="red"
+					onMouseEnter={(e) => {
+						const container = e.target.getStage()?.container();
+						if (container) {
+							container.style.cursor = "w-resize";
+						}
+					}}
+					onMouseLeave={(e) => {
+						const container = e.target.getStage()?.container();
+						if (container) {
+							container.style.cursor = "default";
+						}
+					}}
+					draggable
+					dragBoundFunc={(pos) => {
+						const xMin =
+							renderSettings.rowNameWidth +
+							renderSettings.timelinePadding;
+						const xMax = canvasWidth;
+						return {
+							x: Math.min(Math.max(pos.x, xMin), xMax),
+							y: renderSettings.rowHeight * 0.5,
+						};
+					}}
+					onDragMove={(e) => {
+						const newX = e.target.x();
+						const newTime =
+							(newX -
+								renderSettings.rowNameWidth -
+								renderSettings.timelinePadding) /
+							timeScale;
+						setCurrentTime(newTime);
+					}}
+				/>
+				<Line
+					points={[
+						renderSettings.rowNameWidth +
+							renderSettings.timelinePadding +
+							currentTime * timeScale,
+						renderSettings.rowHeight * 0.8,
+						renderSettings.rowNameWidth +
+							renderSettings.timelinePadding +
+							currentTime * timeScale,
+						canvasHeight,
+					]}
+					stroke="red"
+					strokeWidth={2}
+				/>
+			</Group>
+		</>
 	);
 }
 
