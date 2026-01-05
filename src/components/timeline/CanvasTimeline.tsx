@@ -61,7 +61,7 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	const [canvasWidth, setCanvasWidth] = useState(800);
 	const [timeScale, setTimeScale] = useState(0.1); // pixels per ms
 
-	const [currentTime, setCurrentTime] = useState(0);
+	const [currentTime, setCurrentTime] = useState(0); // ms
 	const [isPlaying, setIsPlaying] = useState(false);
 
 	const [audioUrl] = useState<string | null>("./laxed.mp3");
@@ -141,9 +141,6 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		[computedRows.length, renderSettings.rowHeight],
 	);
 
-	/* -----------------------------
-	 * Precompute darkened grid color
-	 * ----------------------------- */
 	const darkGridColor = useMemo(
 		() => new Color(renderSettings.gridColor).darken(0.2),
 		[renderSettings.gridColor],
@@ -173,47 +170,39 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	}, []);
 
 	/* -----------------------------
-	 * Playback handling
+	 * Sync audio and timeline
 	 * ----------------------------- */
 	useEffect(() => {
-		if (!isPlaying) return;
-		let animationFrameId: number;
-		let lastTimestamp: number | null = null;
-		const step = (timestamp: number) => {
-			if (lastTimestamp !== null) {
-				const delta = timestamp - lastTimestamp;
-				setCurrentTime((prev) => prev + delta);
-			}
-			lastTimestamp = timestamp;
+		const audio = audioPlayerRef.current;
+		if (!audio) return;
+
+		let animationFrameId = 0;
+
+		const step = () => {
+			setCurrentTime(audio.currentTime * 1000); // ms
 			animationFrameId = requestAnimationFrame(step);
 		};
-		animationFrameId = requestAnimationFrame(step);
-		return () => {
-			cancelAnimationFrame(animationFrameId);
-		};
-	}, [isPlaying]);
-
-	useEffect(() => {
-		if (audioPlayerRef.current && !isPlaying) {
-			audioPlayerRef.current.currentTime = currentTime / 1000;
-		}
-	}, [currentTime, isPlaying]);
-
-	const currentTimeRef = useRef(currentTime);
-	useEffect(() => {
-		currentTimeRef.current = currentTime;
-	}, [currentTime]);
-
-	useEffect(() => {
-		if (!audioPlayerRef.current) return;
 
 		if (isPlaying) {
-			audioPlayerRef.current.currentTime = currentTimeRef.current / 1000;
-			audioPlayerRef.current.play();
+			audio.play();
+			step(); // start smooth updates
 		} else {
-			audioPlayerRef.current.pause();
+			audio.pause();
+			cancelAnimationFrame(animationFrameId);
 		}
+
+		return () => cancelAnimationFrame(animationFrameId);
 	}, [isPlaying]);
+
+	/* -----------------------------
+	 * Seek helper
+	 * ----------------------------- */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const seekAudio = (ms: number) => {
+		if (!audioPlayerRef.current) return;
+		audioPlayerRef.current.currentTime = ms / 1000;
+		setCurrentTime(ms);
+	};
 
 	/* -----------------------------
 	 * Render
@@ -314,8 +303,6 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							x={
 								renderSettings.rowNameWidth +
 								renderSettings.timelinePadding +
-								0 * timeScale -
-								2.5 +
 								currentTime * timeScale
 							}
 							y={renderSettings.rowHeight * 0.5}
@@ -327,12 +314,10 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							points={[
 								renderSettings.rowNameWidth +
 									renderSettings.timelinePadding +
-									0 * timeScale +
 									currentTime * timeScale,
 								renderSettings.rowHeight * 0.8,
 								renderSettings.rowNameWidth +
 									renderSettings.timelinePadding +
-									0 * timeScale +
 									currentTime * timeScale,
 								canvasHeight,
 							]}
@@ -500,8 +485,6 @@ const KeyframeRow = memo(function KeyframeRow({
 						onClick={() => {
 							if (!kf.id) return;
 
-							console.log("Click keyframe", kf.id);
-
 							setSelectedKeyframeIds((prev) => {
 								if (prev?.includes(kf.id!)) {
 									return prev.filter((id) => id !== kf.id);
@@ -513,15 +496,12 @@ const KeyframeRow = memo(function KeyframeRow({
 						draggable
 						onDragEnd={(e) => {
 							const newX = e.target.x();
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
 							const newVal =
 								(newX -
 									settings.rowNameWidth -
 									settings.timelinePadding) /
 								timeScale;
-							console.log(
-								`Keyframe ${kf.id} moved to new val: ${newVal}`,
-							);
-							// Here you would typically update the keyframe value in state
 						}}
 						onDragMove={(e) => {
 							const offsetX =
@@ -530,19 +510,14 @@ const KeyframeRow = memo(function KeyframeRow({
 							let newX = e.target.x();
 							if (newX < offsetX) newX = offsetX;
 
-							// Compute raw value in ms, snap to 50ms increments
 							const rawValMs = (newX - offsetX) / timeScale;
 							const snapMs = 50;
 							const snappedValMs =
 								Math.round(rawValMs / snapMs) * snapMs;
-
-							// Convert snapped ms back to X. Ensure whole-pixel X when needed.
 							let snappedX = offsetX + snappedValMs * timeScale;
-							// "Full numbers on X based on the timescale" -> avoid sub-pixel positions
 							snappedX = Math.round(snappedX);
 
 							e.target.x(snappedX);
-
 							e.target.y(ky);
 						}}
 					/>
@@ -566,15 +541,13 @@ function Waveform({
 }) {
 	const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
 
-	/* Load audio once and store in state */
 	useEffect(() => {
 		let cancelled = false;
 		setAudioBuffer(null);
 
 		async function loadAudio() {
-			if (!audioPlayerRef || !audioPlayerRef.current) return;
+			if (!audioPlayerRef.current) return;
 			try {
-				// Get audio data from the audio element
 				const response = await fetch(audioPlayerRef.current.src);
 				const arrayBuffer = await response.arrayBuffer();
 
@@ -593,7 +566,6 @@ function Waveform({
 		};
 	}, [audioPlayerRef]);
 
-	/* Build waveform points when buffer or scale changes */
 	const points = useMemo(() => {
 		if (!audioBuffer) return [];
 		const { points } = buildWaveformPoints(
