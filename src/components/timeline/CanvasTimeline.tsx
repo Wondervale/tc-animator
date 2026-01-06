@@ -262,6 +262,8 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 	}, [audioUrl]);
 
 	useEffect(() => {
+		if (!isPlaying) return;
+
 		const playheadX =
 			renderSettings.rowNameWidth +
 			renderSettings.timelinePadding +
@@ -270,7 +272,17 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		if (playheadX - scrollX > canvasWidth * 0.8) {
 			setScrollX(playheadX - canvasWidth * 0.8);
 		}
-	}, [currentTime, timeScale, canvasWidth, scrollX, renderSettings]);
+		if (playheadX - scrollX < canvasWidth * 0.2) {
+			setScrollX(Math.max(0, playheadX - canvasWidth * 0.2));
+		}
+	}, [
+		currentTime,
+		timeScale,
+		canvasWidth,
+		scrollX,
+		renderSettings,
+		isPlaying,
+	]);
 
 	/* -----------------------------
 	 * Seek helper
@@ -296,11 +308,6 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 			/>
 
 			<div className="w-full p-2 bg-card sticky top-0 z-10 flex flex-row gap-2 flex-wrap">
-				<p>
-					Timeline Toolbar Placeholder Width: {canvasWidth}px, Height:{" "}
-					{canvasHeight}px
-				</p>
-
 				<Slider
 					value={[timeScale]}
 					onValueChange={(value) => setTimeScale(Number(value[0]))}
@@ -329,7 +336,9 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 					{JSON.stringify(renderSettings)}
 				</p>
 				<p className="mt-2 text-sm w-full">
-					Timeline Width: {timelineWidth}px
+					Timeline Width: {timelineWidth}px - Canvas Width:{" "}
+					{canvasWidth}px, Canvas Height: {canvasHeight}px - ScrollX:{" "}
+					{scrollX}px
 				</p>
 			</div>
 
@@ -370,6 +379,7 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							canvasHeight={canvasHeight}
 							rowNameOffset={renderSettings.rowNameWidth}
 							timeScale={timeScale}
+							scrollX={scrollX}
 							currentTime={currentTime}
 							setCurrentTime={(newTime) => {
 								setCurrentTime(newTime);
@@ -692,11 +702,15 @@ function Waveform({
 	);
 }
 
+/* -----------------------------
+ * Timeline Ruler Component
+ * ----------------------------- */
 function TimelineRuler({
 	renderSettings,
 	canvasWidth,
 	canvasHeight,
 	rowNameOffset,
+	scrollX,
 	timeScale,
 	currentTime,
 	setCurrentTime,
@@ -705,6 +719,7 @@ function TimelineRuler({
 	canvasWidth: number;
 	canvasHeight: number;
 	rowNameOffset: number;
+	scrollX: number;
 	timeScale: number;
 	currentTime: number;
 	setCurrentTime: (time: number) => void;
@@ -721,7 +736,7 @@ function TimelineRuler({
 					stroke={renderSettings.primaryColor}
 					strokeWidth={1}
 					onClick={(e) => {
-						const mouseX = e.evt.offsetX;
+						const mouseX = e.evt.offsetX + scrollX;
 						let newTime =
 							(mouseX -
 								rowNameOffset -
