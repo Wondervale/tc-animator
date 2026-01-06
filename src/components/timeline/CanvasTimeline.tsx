@@ -594,15 +594,15 @@ const KeyframeRow = memo(function KeyframeRow({
 							});
 						}}
 						draggable
-						onDragEnd={(e) => {
-							const newX = e.target.x();
-							// eslint-disable-next-line @typescript-eslint/no-unused-vars
-							const newVal =
-								(newX -
-									settings.rowNameWidth -
-									settings.timelinePadding) /
-								timeScale;
-						}}
+						// onDragEnd={(e) => {
+						// 	const newX = e.target.x();
+						// 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+						// 	const newVal =
+						// 		(newX -
+						// 			settings.rowNameWidth -
+						// 			settings.timelinePadding) /
+						// 		timeScale;
+						// }}
 						onDragMove={(e) => {
 							const offsetX =
 								settings.rowNameWidth +

@@ -39,6 +39,10 @@ export default defineConfig({
 							return "three";
 						}
 
+						if (id.includes("konva")) {
+							return "konva";
+						}
+
 						if (id.includes("monaco")) {
 							return "monaco";
 						}
