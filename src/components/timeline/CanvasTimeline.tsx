@@ -37,6 +37,8 @@ function useThemeColors() {
 function getColors() {
 	const s = getComputedStyle(document.body);
 	return {
+		backgroundColor: new Color(s.getPropertyValue("--background") || "#fff")
+			.hex,
 		primaryColor: new Color(s.getPropertyValue("--secondary") || "#007bff")
 			.hex,
 		textColor: new Color(s.getPropertyValue("--foreground") || "#000").hex,
@@ -60,6 +62,8 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 
 	const [audioUrl, setAudioUrl] = useState<string | null>("./laxed.mp3");
 	const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+
+	const [scrollX, setScrollX] = useState(0);
 
 	/* -----------------------------
 	 * Static settings
@@ -148,6 +152,57 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		[rowOffsets, renderSettings.rowHeight],
 	);
 
+	// total timeline width in pixels (based on content)
+	const [audioDurationMs, setAudioDurationMs] = useState<number | null>(null);
+
+	useEffect(() => {
+		const audio = audioPlayerRef.current;
+		if (!audio) {
+			setAudioDurationMs(null);
+			return;
+		}
+
+		const updateDuration = () => {
+			const d = audio.duration;
+			if (!isNaN(d) && d > 0) setAudioDurationMs(d * 1000);
+			else setAudioDurationMs(0);
+		};
+
+		// If metadata already loaded, set immediately
+		updateDuration();
+
+		audio.addEventListener("loadedmetadata", updateDuration);
+		return () => {
+			audio.removeEventListener("loadedmetadata", updateDuration);
+		};
+	}, [audioUrl]);
+
+	const timelineWidth = useMemo(() => {
+		// assume max keyframe or audio length in ms
+		const maxKeyframeMs = Math.max(
+			...computedRows.flatMap((r) =>
+				r.keyframes.map((kf) => kf.val ?? 0),
+			),
+			0,
+		);
+
+		const maxAudioMs = audioDurationMs ?? 0;
+
+		const maxMs = Math.max(3 * 60 * 1000, maxKeyframeMs, maxAudioMs);
+
+		// add padding so playhead / waveform can extend
+		return (
+			renderSettings.rowNameWidth +
+			renderSettings.timelinePadding +
+			maxMs * timeScale +
+			500
+		);
+	}, [computedRows, timeScale, renderSettings, audioDurationMs]);
+
+	/* -----------------------------
+	 * Event handlers
+	 * ----------------------------- */
+
 	/* -----------------------------
 	 * Resize handling
 	 * ----------------------------- */
@@ -206,6 +261,17 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 		}
 	}, [audioUrl]);
 
+	useEffect(() => {
+		const playheadX =
+			renderSettings.rowNameWidth +
+			renderSettings.timelinePadding +
+			currentTime * timeScale;
+
+		if (playheadX - scrollX > canvasWidth * 0.8) {
+			setScrollX(playheadX - canvasWidth * 0.8);
+		}
+	}, [currentTime, timeScale, canvasWidth, scrollX, renderSettings]);
+
 	/* -----------------------------
 	 * Seek helper
 	 * ----------------------------- */
@@ -262,28 +328,45 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 				<p className="mt-2 text-sm w-full">
 					{JSON.stringify(renderSettings)}
 				</p>
+				<p className="mt-2 text-sm w-full">
+					Timeline Width: {timelineWidth}px
+				</p>
 			</div>
 
-			<Stage width={canvasWidth} height={canvasHeight}>
-				{/* Row headers */}
-				<Layer listening={false} perfectDrawEnabled={false}>
-					{computedRows.map((row, i) => (
-						<RowHeader
-							key={row.id ?? row.title ?? i}
-							row={row}
-							y={rowOffsets[i]}
-							settings={renderSettings}
-							canvasWidth={canvasWidth}
-						/>
-					))}
+			<Stage
+				width={canvasWidth}
+				height={canvasHeight}
+				onWheel={(e) => {
+					e.evt.preventDefault();
+					const deltaX =
+						e.evt.deltaX !== 0 ? e.evt.deltaX : e.evt.deltaY;
+					setScrollX((prev) => {
+						const next = prev + deltaX;
+						const maxScroll = Math.max(
+							0,
+							timelineWidth - canvasWidth,
+						);
+						return Math.min(Math.max(0, next), maxScroll);
+					});
+				}}
+			>
+				<Layer>
+					<Rect
+						x={0}
+						y={0}
+						width={canvasWidth}
+						height={canvasHeight}
+						fill={renderSettings.backgroundColor}
+						listening={false}
+					/>
 				</Layer>
 
 				<Layer>
-					<Group id="actual-timeline">
+					<Group id="actual-timeline" x={-scrollX}>
 						{/* Timeline ruler */}
 						<TimelineRuler
 							renderSettings={renderSettings}
-							canvasWidth={canvasWidth}
+							canvasWidth={timelineWidth}
 							canvasHeight={canvasHeight}
 							rowNameOffset={renderSettings.rowNameWidth}
 							timeScale={timeScale}
@@ -320,6 +403,28 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 							/>
 						)}
 					</Group>
+				</Layer>
+
+				{/* Row headers */}
+				<Layer listening={false} perfectDrawEnabled={false}>
+					<Rect
+						x={0}
+						y={0}
+						width={renderSettings.rowNameWidth}
+						height={renderSettings.rowHeight}
+						fill={renderSettings.backgroundColor}
+						listening={false}
+					/>
+
+					{computedRows.map((row, i) => (
+						<RowHeader
+							key={row.id ?? row.title ?? i}
+							row={row}
+							y={rowOffsets[i]}
+							settings={renderSettings}
+							canvasWidth={canvasWidth}
+						/>
+					))}
 				</Layer>
 			</Stage>
 		</div>

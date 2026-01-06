@@ -38,6 +38,7 @@ export type TimelineRenderSettings = {
 	timelinePadding: number;
 	keyframeRadius: number;
 
+	backgroundColor: string;
 	primaryColor: string;
 	textColor: string;
 	keyframeColor: string;
