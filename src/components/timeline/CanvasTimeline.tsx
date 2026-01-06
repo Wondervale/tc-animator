@@ -347,16 +347,55 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 				height={canvasHeight}
 				onWheel={(e) => {
 					e.evt.preventDefault();
-					const deltaX =
-						e.evt.deltaX !== 0 ? e.evt.deltaX : e.evt.deltaY;
-					setScrollX((prev) => {
-						const next = prev + deltaX;
-						const maxScroll = Math.max(
-							0,
-							timelineWidth - canvasWidth,
-						);
-						return Math.min(Math.max(0, next), maxScroll);
-					});
+
+					const deltaX = e.evt.deltaX ?? 0;
+					const deltaY = e.evt.deltaY ?? 0;
+					const delta = deltaX !== 0 ? deltaX : deltaY;
+
+					// If we have a horizontal delta, always update the timeline scroll
+					if (deltaX !== 0) {
+						setScrollX((prev) => {
+							const next = prev + deltaX;
+							const maxScroll = Math.max(
+								0,
+								timelineWidth - canvasWidth,
+							);
+							return Math.min(Math.max(0, next), maxScroll);
+						});
+						return;
+					}
+
+					// If Ctrl is held, scroll the parent container
+					if (e.evt.ctrlKey) {
+						const container = containerRef.current;
+						if (container) {
+							// scroll vertically by the wheel delta
+							container.scrollTop += deltaY;
+						}
+						return;
+					}
+
+					// If Alt is held, update zoom
+					if (e.evt.altKey) {
+						setTimeScale((prev) => {
+							const next = prev - delta * 0.001;
+							return Math.min(Math.max(0.04, next), 1);
+						});
+						return;
+					}
+
+					// If no modifier keys are pressed, update the timeline scroll
+					if (!e.evt.ctrlKey && !e.evt.altKey && !e.evt.shiftKey) {
+						setScrollX((prev) => {
+							const next = prev + delta;
+							const maxScroll = Math.max(
+								0,
+								timelineWidth - canvasWidth,
+							);
+							return Math.min(Math.max(0, next), maxScroll);
+						});
+						return;
+					}
 				}}
 			>
 				<Layer>
