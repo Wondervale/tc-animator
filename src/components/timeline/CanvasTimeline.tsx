@@ -3,11 +3,10 @@
  *   All rights reserved.
  */
 
-import { Slider } from "@/components/ui/slider";
 import { buildWaveformPoints } from "@/lib/audioData";
 import Color from "colorizr";
 import { format } from "date-fns";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Group, Layer, Line, Rect, Stage, Text } from "react-konva";
 import { type TimelineRenderSettings, type TimelineRow } from "./timelineTypes";
 
@@ -308,12 +307,21 @@ const CanvasTimeline = ({ rows }: { rows: TimelineRow[] }) => {
 			/>
 
 			<div className="w-full p-2 bg-card sticky top-0 z-10 flex flex-row gap-2 flex-wrap">
-				<Slider
+				{/* <Slider
 					value={[timeScale]}
 					onValueChange={(value) => setTimeScale(Number(value[0]))}
 					min={0.04}
 					max={1}
 					step={0.01}
+				/> */}
+
+				<TimelineScrollbar
+					canvasWidth={canvasWidth}
+					timelineWidth={timelineWidth}
+					scrollX={scrollX}
+					setScrollX={setScrollX}
+					timeScale={timeScale}
+					setTimeScale={setTimeScale}
 				/>
 
 				<Button
@@ -911,6 +919,112 @@ function TimelineRuler({
 				/>
 			</Group>
 		</>
+	);
+}
+
+function TimelineScrollbar({
+	canvasWidth,
+	timelineWidth,
+	scrollX,
+	setScrollX,
+	timeScale,
+	setTimeScale,
+}: {
+	canvasWidth: number;
+	timelineWidth: number;
+	scrollX: number;
+	setScrollX: (x: number) => void;
+	timeScale: number;
+	setTimeScale: (scale: number) => void;
+}) {
+	const scrollbarRef = useRef<HTMLDivElement | null>(null);
+	const [isDragging, setIsDragging] = useState(false);
+	const [startX, setStartX] = useState(0);
+	const [startScroll, setStartScroll] = useState(0);
+
+	// Width of the visible window in the scrollbar (like Premiere Pro)
+	const visibleWidth = Math.min(
+		canvasWidth,
+		(canvasWidth / timelineWidth) * canvasWidth,
+	);
+
+	const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsDragging(true);
+		setStartX(e.clientX);
+		setStartScroll(scrollX);
+	};
+
+	const handleMouseMove = useCallback(
+		(e: MouseEvent) => {
+			if (!isDragging) return;
+			const delta = e.clientX - startX;
+			const maxScroll = timelineWidth - canvasWidth;
+			const newScroll = Math.min(
+				Math.max(
+					0,
+					startScroll + (delta * timelineWidth) / canvasWidth,
+				),
+				maxScroll,
+			);
+			setScrollX(newScroll);
+		},
+		[
+			isDragging,
+			startX,
+			startScroll,
+			timelineWidth,
+			canvasWidth,
+			setScrollX,
+		],
+	);
+
+	const handleMouseUp = useCallback(() => setIsDragging(false), []);
+
+	useEffect(() => {
+		if (isDragging) {
+			window.addEventListener("mousemove", handleMouseMove);
+			window.addEventListener("mouseup", handleMouseUp);
+		} else {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		}
+
+		return () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		};
+	}, [isDragging, handleMouseMove, handleMouseUp]);
+
+	// Zoom with Ctrl + scroll
+	const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+		e.preventDefault();
+
+		if (e.altKey) {
+			const delta = e.deltaY * -0.001;
+			setTimeScale(Math.min(Math.max(0.04, timeScale + delta), 1));
+		} else {
+			const newX = scrollX + (e.deltaX || e.deltaY);
+			const maxScroll = timelineWidth - canvasWidth;
+			setScrollX(Math.min(Math.max(0, newX), maxScroll));
+		}
+	};
+
+	return (
+		<div
+			ref={scrollbarRef}
+			className="relative w-full h-6 bg-gray-200 mt-1 rounded"
+			onMouseDown={handleMouseDown}
+			onWheel={handleWheel}
+		>
+			<div
+				className="absolute h-full bg-gray-500 rounded"
+				style={{
+					width: `${(visibleWidth / canvasWidth) * 100}%`,
+					left: `${(scrollX / timelineWidth) * 100}%`,
+					cursor: "grab",
+				}}
+			/>
+		</div>
 	);
 }
 
