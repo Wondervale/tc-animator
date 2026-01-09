@@ -14,7 +14,7 @@ import CanvasTimeline from "@/components/timeline/CanvasTimeline";
 import { rows } from "@/components/timeline/timelineTestData";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 function App() {
@@ -95,7 +95,9 @@ function App() {
 				</ResizablePanel>
 				<ResizableHandle />
 				<ResizablePanel minSize={5} defaultSize={20}>
-					<CanvasTimeline rows={rows} />
+					<Suspense fallback={<div>Loading Timeline...</div>}>
+						<CanvasTimeline rows={rows} />
+					</Suspense>
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>
