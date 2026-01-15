@@ -25,9 +25,18 @@ export default defineConfig({
 	},
 	build: {
 		target: "esnext",
+		chunkSizeWarningLimit: 1000,
+		minify: "terser",
 
 		rollupOptions: {
-			treeshake: false,
+			treeshake: true,
+			external: (id) => {
+				// Exclude unused Three.js modules
+				if (id.includes("three/src/loaders/")) return false;
+				if (id.includes("three/src/controls/")) return false;
+				if (id.includes("three/src/exporters/")) return false;
+				return false;
+			},
 			output: {
 				manualChunks(id) {
 					if (id.includes("node_modules")) {
@@ -36,7 +45,26 @@ export default defineConfig({
 						}
 
 						if (id.includes("three")) {
-							return "three";
+							// Split Three.js into smaller chunks
+							if (id.includes("three/examples/jsm/")) {
+								return "three-examples";
+							}
+							if (id.includes("three/src/math/")) {
+								return "three-math";
+							}
+							if (id.includes("three/src/renderers/")) {
+								return "three-renderers";
+							}
+							if (id.includes("three/src/scenes/")) {
+								return "three-scenes";
+							}
+							if (id.includes("three/src/materials/")) {
+								return "three-materials";
+							}
+							if (id.includes("three/src/geometries/")) {
+								return "three-geometries";
+							}
+							return "three-core";
 						}
 
 						if (id.includes("konva") && !id.includes("react")) {
@@ -48,7 +76,11 @@ export default defineConfig({
 						}
 
 						if (id.includes("lucide")) {
-							return "lucide";
+							// Split Lucide icons by category
+							if (id.includes("lucide-react/icons/")) {
+								return "lucide-icons";
+							}
+							return "lucide-core";
 						}
 
 						if (id.includes("tailwind")) {

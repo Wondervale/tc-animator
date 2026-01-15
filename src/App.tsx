@@ -5,17 +5,23 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import AppMenu from "@/components/AppMenu";
-import FallbackRender from "@/components/error/FallbackRender";
-import PropertiesPanels from "@/components/properties/PropertiesPanels";
-import Preview from "@/components/three/Preview";
-import CanvasTimeline from "@/components/timeline/CanvasTimeline";
 import { rows } from "@/components/timeline/timelineTestData";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+
+const AppMenu = lazy(() => import("@/components/AppMenu"));
+const FallbackRender = lazy(() => import("@/components/error/FallbackRender"));
+const PropertiesPanels = lazy(
+	() => import("@/components/properties/PropertiesPanels"),
+);
+const Preview = lazy(() => import("@/components/three/Preview"));
+const CanvasTimeline = lazy(
+	() => import("@/components/timeline/CanvasTimeline"),
+);
 
 function App() {
 	const preferences = usePreferences();
@@ -76,9 +82,17 @@ function App() {
 							defaultSize={25}
 							className="bg-card flex flex-col gap-4"
 						>
-							<AppMenu />
+							<Suspense
+								fallback={<Skeleton className="h-12 w-full" />}
+							>
+								<AppMenu />
+							</Suspense>
 
-							<PropertiesPanels />
+							<Suspense
+								fallback={<Skeleton className="h-64 w-full" />}
+							>
+								<PropertiesPanels />
+							</Suspense>
 						</ResizablePanel>
 						<ResizableHandle />
 						<ResizablePanel minSize={5} defaultSize={75}>
@@ -88,16 +102,31 @@ function App() {
 								//     // Reset the state of your app so the error doesn't happen again
 								//   }}
 							>
-								<Preview />
+								<Suspense
+									fallback={
+										<Skeleton className="h-full w-full" />
+									}
+								>
+									<Preview />
+								</Suspense>
 							</ErrorBoundary>
 						</ResizablePanel>
 					</ResizablePanelGroup>
 				</ResizablePanel>
 				<ResizableHandle />
 				<ResizablePanel minSize={5} defaultSize={20}>
-					<Suspense fallback={<div>Loading Timeline...</div>}>
-						<CanvasTimeline rows={rows} />
-					</Suspense>
+					<ErrorBoundary
+						FallbackComponent={FallbackRender}
+						//   onReset={(details) => {
+						//     // Reset the state of your app so the error doesn't happen again
+						//   }}
+					>
+						<Suspense
+							fallback={<Skeleton className="h-24 w-full" />}
+						>
+							<CanvasTimeline rows={rows} />
+						</Suspense>
+					</ErrorBoundary>
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</div>

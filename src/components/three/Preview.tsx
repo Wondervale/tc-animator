@@ -31,16 +31,23 @@ import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
-import CartRender from "@/components/three/CartRender";
-import MeshOutline from "@/components/three/MeshOutline";
-import AngleSlider from "@/components/three/controls/AngleSlider";
-import DistanceSlider from "@/components/three/controls/DistanceSlider";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Toggle } from "@/components/ui/toggle";
 import { degreeToRadian, makeColorDarker, planeToRotation } from "@/lib/utils";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
+import { lazy } from "react";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+
+const CartRender = lazy(() => import("@/components/three/CartRender"));
+const MeshOutline = lazy(() => import("@/components/three/MeshOutline"));
+const AngleSlider = lazy(
+	() => import("@/components/three/controls/AngleSlider"),
+);
+const DistanceSlider = lazy(
+	() => import("@/components/three/controls/DistanceSlider"),
+);
 
 import { debounce } from "lodash";
 
@@ -295,7 +302,7 @@ function Preview() {
 						),
 				)}
 
-				<Suspense fallback={<Html center>Loading...</Html>}>
+				<Suspense fallback={<Html center>Loading Cart...</Html>}>
 					<CartRender onSelect={setSelected} onHover={setHovered} />
 				</Suspense>
 
@@ -330,24 +337,28 @@ function Preview() {
 				<RestoreOrbitControls controlsRef={controlsRef} />
 
 				{hovered && (
-					<MeshOutline
-						selection={hovered}
-						color={0xffa500}
-						scaleFactor={1.1}
-					/>
+					<Suspense fallback={null}>
+						<MeshOutline
+							selection={hovered}
+							color={0xffa500}
+							scaleFactor={1.1}
+						/>
+					</Suspense>
 				)}
 				{selected && (
-					<MeshOutline
-						selection={selected}
-						color={0x00ffff}
-						scaleFactor={1.1}
-					/>
+					<Suspense fallback={null}>
+						<MeshOutline
+							selection={selected}
+							color={0x00ffff}
+							scaleFactor={1.1}
+						/>
+					</Suspense>
 				)}
 			</Canvas>
 
 			<FpsDisplay />
 
-			<div className="absolute top-[8px] left-[8px] flex flex-row gap-[8px]">
+			<div className="absolute top-2 left-2 flex flex-row gap-2">
 				<Tooltip>
 					<Button
 						variant="secondary"
@@ -404,17 +415,21 @@ function Preview() {
 				</Tooltip>
 
 				{transformMode === "translate" && (
-					<DistanceSlider
-						value={preferences.distanceSnap}
-						onChange={preferences.setDistanceSnap}
-					/>
+					<Suspense fallback={<Skeleton className="h-8 w-24" />}>
+						<DistanceSlider
+							value={preferences.distanceSnap}
+							onChange={preferences.setDistanceSnap}
+						/>
+					</Suspense>
 				)}
 
 				{transformMode === "rotate" && (
-					<AngleSlider
-						value={preferences.angleSnap}
-						onChange={preferences.setAngleSnap}
-					/>
+					<Suspense fallback={<Skeleton className="h-8 w-24" />}>
+						<AngleSlider
+							value={preferences.angleSnap}
+							onChange={preferences.setAngleSnap}
+						/>
+					</Suspense>
 				)}
 			</div>
 		</div>
