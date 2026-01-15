@@ -27,7 +27,7 @@ export default defineConfig({
 		target: "esnext",
 
 		rollupOptions: {
-			treeshake: true,
+			treeshake: false,
 			output: {
 				manualChunks(id) {
 					if (id.includes("node_modules")) {
@@ -39,7 +39,7 @@ export default defineConfig({
 							return "three";
 						}
 
-						if (id.includes("konva")) {
+						if (id.includes("konva") && !id.includes("react")) {
 							return "konva";
 						}
 
@@ -63,7 +63,7 @@ export default defineConfig({
 							return "radix";
 						}
 
-						if (id.includes("zustand")) {
+						if (id.includes("zustand") && !id.includes("react")) {
 							return "zustand";
 						}
 
@@ -75,7 +75,12 @@ export default defineConfig({
 							return "nbt";
 						}
 
-						if (id.includes("react")) {
+						if (
+							id.includes("react") &&
+							!id.includes("react-konva") &&
+							!id.includes("react-three") &&
+							!id.includes("zustand")
+						) {
 							return "react";
 						}
 					}
