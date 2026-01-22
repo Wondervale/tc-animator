@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/resizable";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import FallbackRender from "@/components/error/FallbackRender";
 import { rows } from "@/components/timeline/timelineTestData";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
@@ -14,7 +15,6 @@ import { lazy, Suspense, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 const AppMenu = lazy(() => import("@/components/AppMenu"));
-const FallbackRender = lazy(() => import("@/components/error/FallbackRender"));
 const PropertiesPanels = lazy(
 	() => import("@/components/properties/PropertiesPanels"),
 );

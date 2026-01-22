@@ -32,9 +32,9 @@ export default defineConfig({
 			treeshake: true,
 			external: (id) => {
 				// Exclude unused Three.js modules
-				if (id.includes("three/src/loaders/")) return false;
-				if (id.includes("three/src/controls/")) return false;
-				if (id.includes("three/src/exporters/")) return false;
+				if (id.includes("three/src/loaders/")) return true;
+				if (id.includes("three/src/controls/")) return true;
+				if (id.includes("three/src/exporters/")) return true;
 				return false;
 			},
 			output: {
@@ -67,7 +67,17 @@ export default defineConfig({
 							return "three-core";
 						}
 
-						if (id.includes("konva") && !id.includes("react")) {
+						// Handle react-konva explicitly so it isn't accidentally left unchunked
+						if (id.includes("react-konva")) {
+							return "react-konva";
+						}
+
+						// Konva (core) - exclude react wrappers
+						if (
+							id.includes("konva") &&
+							!id.includes("react") &&
+							!id.includes("react-konva")
+						) {
 							return "konva";
 						}
 
@@ -93,6 +103,11 @@ export default defineConfig({
 
 						if (id.includes("radix")) {
 							return "radix";
+						}
+
+						// Ensure zustand/react helpers are grouped with zustand
+						if (id.includes("zustand/react")) {
+							return "zustand";
 						}
 
 						if (id.includes("zustand") && !id.includes("react")) {

@@ -28,7 +28,7 @@ import {
 	SSAO,
 } from "@react-three/postprocessing";
 import { Box, Globe, Move3D, Rotate3D } from "lucide-react";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Box3, Object3D, DoubleSide as THREEDoubleSide, Vector3 } from "three";
 
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,6 @@ import { Toggle } from "@/components/ui/toggle";
 import { degreeToRadian, makeColorDarker, planeToRotation } from "@/lib/utils";
 import { usePreferences } from "@/stores/PreferencesStore";
 import { useProjectStore } from "@/stores/ProjectStore";
-import { lazy } from "react";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 const CartRender = lazy(() => import("@/components/three/CartRender"));
